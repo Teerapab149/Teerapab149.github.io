@@ -15,11 +15,11 @@ node serve.js
 
 ## Deploy
 
-repo อยู่ที่ https://github.com/Teerapab149/portfolio · เปิด Pages ครั้งเดียวที่
+repo อยู่ที่ https://github.com/Teerapab149/Teerapab149.github.io · เปิด Pages ครั้งเดียวที่
 **Settings → Pages → Build and deployment → Source = GitHub Actions**
 จากนั้นทุกครั้งที่ push เข้า `main` workflow ใน `.github/workflows/deploy.yml` จะ publish ให้เอง
 
-เว็บจะอยู่ที่ https://teerapab149.github.io/portfolio/
+เว็บจะอยู่ที่ https://teerapab149.github.io/
 
 Cloudflare Pages / Netlify / Vercel ก็ใช้ได้เหมือนกัน — ไม่ต้องตั้ง build command
 กำหนด output directory เป็น root พอ

@@ -28,12 +28,12 @@
 | ตรวจ responsive 1440 / 1024 / 768 / 390 / 360 px — ไม่มี horizontal overflow | ✅ ผ่าน |
 | console error / รูปเสีย | ✅ ไม่มี |
 | GitHub Actions deploy workflow | ✅ เขียนไว้แล้ว |
-| push ขึ้น GitHub | ✅ เจ้าของ push แล้ว → `github.com/Teerapab149/portfolio` |
-| **เปิด GitHub Pages** | ❌ **ยังไม่เปิด — `teerapab149.github.io/portfolio/` ตอบ 404 (ดู §4)** |
+| push ขึ้น GitHub | ✅ เจ้าของ push แล้ว → `github.com/Teerapab149/Teerapab149.github.io` |
+| **เปิด GitHub Pages** | ❌ **ยังไม่เปิด — `teerapab149.github.io/` ตอบ 404 (ดู §4)** |
 | ลิงก์ GitHub / LinkedIn / อีเมล ใน footer | ✅ ครบแล้ว |
 | โปรเจกต์อื่นนอกจาก FMS-OVS | ❌ ยังไม่มี ตอนนี้เป็น case study เดี่ยว |
 
-remote คือ `https://github.com/Teerapab149/portfolio.git` (branch `main`)
+remote คือ `https://github.com/Teerapab149/Teerapab149.github.io.git` (branch `main`)
 เหลือขั้นตอนเดียวคือเปิด Pages ในหน้า Settings ของ repo
 
 ---
@@ -81,13 +81,13 @@ node serve.js
 workflow เขียนรอไว้แล้วที่ `.github/workflows/deploy.yml` — push ขึ้น branch `main` แล้วมันจะ
 publish ให้เอง ไม่ต้อง build อะไร
 
-repo ถูก push ขึ้นไปแล้วที่ **https://github.com/Teerapab149/portfolio**
+repo ถูก push ขึ้นไปแล้วที่ **https://github.com/Teerapab149/Teerapab149.github.io**
 เหลือขั้นตอนเดียวที่ต้องทำในเบราว์เซอร์ (AI ทำแทนไม่ได้ และไม่ควรทำแทน):
 
 > เปิด repo → **Settings → Pages → Build and deployment → Source = GitHub Actions** → Save
 
 จากนั้น workflow จะรันเอง (ดูได้ที่แท็บ Actions) รอ 1-2 นาที เว็บจะขึ้นที่
-**https://teerapab149.github.io/portfolio/**
+**https://teerapab149.github.io/**
 
 ถ้า push ใหม่แล้วเว็บไม่อัปเดต ให้ดูแท็บ Actions ว่า job `deploy` เขียวไหม
 · ถ้าไม่มี workflow รันเลย แปลว่ายังไม่ได้ตั้ง Source เป็น GitHub Actions
@@ -126,7 +126,8 @@ repo ถูก push ขึ้นไปแล้วที่ **https://github.com
 
 ## 6. TODO ที่ยังค้าง (เรียงตามความสำคัญ)
 
-1. **[เจ้าของ] push + เปิด GitHub Pages** ตาม §4 — นี่คือสิ่งเดียวที่ขวางไม่ให้ HR เข้าดูได้
+1. **[เจ้าของ] เปิด GitHub Pages** ตาม §4 — สิ่งเดียวที่ขวางไม่ให้ HR เข้าดูได้
+   (push เสร็จแล้ว · repo ถูกเปลี่ยนชื่อเป็น `Teerapab149.github.io` เพื่อให้เว็บอยู่ที่ root ไม่มี subpath)
 2. ~~**[เจ้าของ] ให้ URL GitHub / LinkedIn**~~ ✅ เสร็จ 2026-07-27 — footer มีครบสามช่องทางแล้ว:
    `Teerapab.bs@gmail.com` · `github.com/Teerapab149` ·
    `linkedin.com/in/teerapab-boonsri-bb2404394`
@@ -137,9 +138,8 @@ repo ถูก push ขึ้นไปแล้วที่ **https://github.com
    ถ้าขึ้น production แล้วต้องกลับมาแก้ประโยคนั้นและเปลี่ยนเป็น "ใช้งานจริงแล้ว"
 5. **ยังไม่มีภาพไดอะแกรม** — สถาปัตยกรรมกับ ballot lifecycle ตอนนี้วาดด้วย CSS ในหน้าเว็บเลย
    (ดีอยู่แล้ว ไม่ต้องมีภาพก็ได้) แต่ถ้าจะทำ OG image สวย ๆ ต้องวาดแยก
-6. **`og:image` / `og:url` ตั้งเป็น `https://teerapab149.github.io/portfolio/` ไว้แล้ว**
-   ซึ่งตรงกับ repo ชื่อ `portfolio` ตามคำสั่งใน §4 — **ถ้าตั้งชื่อ repo เป็นอย่างอื่น
-   (เช่น `Teerapab149.github.io`) ต้องแก้สองบรรทัดนี้ใน `<head>` ของ `index.html`**
+6. ~~**`og:image` / `og:url`**~~ ✅ ตั้งเป็น `https://teerapab149.github.io/` แล้ว ตรงกับชื่อ repo ปัจจุบัน
+   — **ถ้าเปลี่ยนชื่อ repo หรือย้ายไป custom domain ต้องแก้สองบรรทัดนี้ใน `<head>` ของ `index.html`**
    ไม่งั้นแชร์ลิงก์แล้วภาพพรีวิวจะไม่ขึ้น
 7. **เวอร์ชันภาษาอังกฤษ** — ตอนนี้เป็นไทยล้วน ถ้าจะสมัครงานต่างชาติต้องทำ `en/index.html`
    หรือทำสวิตช์ภาษา (เนื้อหาภาษาอังกฤษบางส่วนมีใน `docs/CONTENT-SOURCE.md` ข้อ 12 แล้ว)
