@@ -29,7 +29,7 @@
 | console error / รูปเสีย | ✅ ไม่มี |
 | GitHub Actions deploy workflow | ✅ เขียนไว้แล้ว ยังไม่ได้รัน |
 | **push ขึ้น GitHub + เปิด Pages** | ❌ **ยังไม่ทำ — เจ้าของต้องเป็นคนสั่งเอง (ดู §4)** |
-| ลิงก์ GitHub / LinkedIn ใน footer | ❌ ยังไม่มี — ยังไม่รู้ URL (ดู §6 TODO) |
+| ลิงก์ GitHub / LinkedIn / อีเมล ใน footer | ✅ ครบแล้ว |
 | โปรเจกต์อื่นนอกจาก FMS-OVS | ❌ ยังไม่มี ตอนนี้เป็น case study เดี่ยว |
 
 **ยังไม่เคย commit ขึ้น remote ใด ๆ** — repo นี้ init ไว้ในเครื่องแล้วเท่านั้น
@@ -126,17 +126,20 @@ gh repo create portfolio --public --source=. --remote=origin --push
 ## 6. TODO ที่ยังค้าง (เรียงตามความสำคัญ)
 
 1. **[เจ้าของ] push + เปิด GitHub Pages** ตาม §4 — นี่คือสิ่งเดียวที่ขวางไม่ให้ HR เข้าดูได้
-2. **[เจ้าของ] ให้ URL GitHub / LinkedIn** แล้วเติมใน footer ของ `index.html`
-   ตอนนี้มีแค่อีเมล `teerapab6273@gmail.com`
+2. ~~**[เจ้าของ] ให้ URL GitHub / LinkedIn**~~ ✅ เสร็จ 2026-07-27 — footer มีครบสามช่องทางแล้ว:
+   `Teerapab.bs@gmail.com` · `github.com/Teerapab149` ·
+   `linkedin.com/in/teerapab-boonsri-bb2404394`
+   (อีเมลติดต่อของเจ้าของคือ **Teerapab.bs@gmail.com** ไม่ใช่อันที่ผูกกับ git)
 3. **ปีการศึกษาในภาพเป็น 2570 / SAMO 50** เพราะเป็นข้อมูลจำลองของหน้าพรีวิว ไม่ใช่ SAMO 49 ที่เล่าในเนื้อหา
    ถ้าอยากให้ตรงกัน: แก้ `src/utils/editorDummyData.js` ในโปรเจกต์ต้นทาง แล้วแคปใหม่ (ดู §7)
 4. **สถานะ deploy ของระบบเลือกตั้ง** — หัวข้อ "บันทึกตรงไปตรงมา" เขียนว่ายังไม่ deploy จริง
    ถ้าขึ้น production แล้วต้องกลับมาแก้ประโยคนั้นและเปลี่ยนเป็น "ใช้งานจริงแล้ว"
 5. **ยังไม่มีภาพไดอะแกรม** — สถาปัตยกรรมกับ ballot lifecycle ตอนนี้วาดด้วย CSS ในหน้าเว็บเลย
    (ดีอยู่แล้ว ไม่ต้องมีภาพก็ได้) แต่ถ้าจะทำ OG image สวย ๆ ต้องวาดแยก
-6. **`og:image` ยังเป็น path แบบ relative** — เวลาแชร์ลิงก์ใน LINE/Facebook/Slack ภาพพรีวิวจะไม่ขึ้น
-   ต้องเปลี่ยนเป็น URL เต็มหลังรู้โดเมนจริง เช่น
-   `<meta property="og:image" content="https://<username>.github.io/portfolio/assets/img/desktop/01-original/1-home.webp">`
+6. **`og:image` / `og:url` ตั้งเป็น `https://teerapab149.github.io/portfolio/` ไว้แล้ว**
+   ซึ่งตรงกับ repo ชื่อ `portfolio` ตามคำสั่งใน §4 — **ถ้าตั้งชื่อ repo เป็นอย่างอื่น
+   (เช่น `Teerapab149.github.io`) ต้องแก้สองบรรทัดนี้ใน `<head>` ของ `index.html`**
+   ไม่งั้นแชร์ลิงก์แล้วภาพพรีวิวจะไม่ขึ้น
 7. **เวอร์ชันภาษาอังกฤษ** — ตอนนี้เป็นไทยล้วน ถ้าจะสมัครงานต่างชาติต้องทำ `en/index.html`
    หรือทำสวิตช์ภาษา (เนื้อหาภาษาอังกฤษบางส่วนมีใน `docs/CONTENT-SOURCE.md` ข้อ 12 แล้ว)
 8. **เพิ่มโปรเจกต์อื่น** — โครงหน้าออกแบบมาให้เป็น case study เดี่ยว ถ้าจะเพิ่มโปรเจกต์ที่ 2

@@ -315,10 +315,14 @@ tr:last-child td { border-bottom: 0; }
 .footer { padding-block: 56px 72px; border-top: 1px solid var(--line-soft); }
 .footer__row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between; }
 .footer a.link {
-  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-  border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .2s ease;
+  display: inline-flex; align-items: center; gap: 9px; text-decoration: none;
+  border-bottom: 1px solid var(--line); padding-bottom: 3px;
+  transition: border-color .2s ease, color .2s ease;
 }
-.footer a.link:hover { border-color: var(--brand); }
+.footer a.link:hover { border-color: var(--brand); color: var(--brand); }
+.footer a.link svg { flex: none; opacity: .7; }
+.footer a.link:hover svg { opacity: 1; }
+.contacts { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-size: .9375rem; }
 .footer small { color: var(--dim); font-size: .8125rem; line-height: 1.7; }
 
 /* ── lightbox ──────────────────────────────────────────────────────────── */
