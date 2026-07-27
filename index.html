@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMS Online Voting System — Teerapab Boonsri</title>
+<meta name="description" content="ระบบเลือกตั้งออนไลน์ของสโมสรนักศึกษา คณะวิทยาการจัดการ ม.อ. — บัตรลงคะแนนนิรนามที่ตรวจการแก้ไขได้ ระบบธีม 23 แบบ และการออกแบบเพื่อส่งมอบให้ทีมรุ่นถัดไป">
+<meta name="theme-color" content="#0a0a0e">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="FMS Online Voting System — case study">
+<meta property="og:description" content="ระบบเลือกตั้งออนไลน์ที่ออกแบบให้ผลคะแนนพิสูจน์ได้ว่าไม่ถูกแก้ และไม่มีใครสืบได้ว่าใครเลือกพรรคไหน">
+<meta property="og:image" content="assets/img/desktop/01-original/1-home.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- ── nav ─────────────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="#top">Teerapab Boonsri <span>· developer</span></a>
+    <nav class="nav__links">
+      <a href="#problem">โจทย์</a>
+      <a href="#architecture">สถาปัตยกรรม</a>
+      <a href="#ballot">ความปลอดภัย</a>
+      <a href="#templates">ระบบธีม</a>
+      <a href="#uxui">UX/UI</a>
+      <a href="#handover">การส่งมอบ</a>
+      <a href="#quality">คุณภาพ</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ── hero ────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Case study · 2026</p>
+    <h1>ระบบเลือกตั้งออนไลน์<br>ที่<em>พิสูจน์ได้</em>ว่าคะแนนไม่ถูกแก้</h1>
+    <p class="hero__sub">
+      FMS Online Voting System — ระบบลงคะแนนของสโมสรนักศึกษา คณะวิทยาการจัดการ
+      มหาวิทยาลัยสงขลานครินทร์ นักศึกษาเข้าระบบด้วย PSU Passport โหวตได้คนละหนึ่งครั้ง
+      บัตรทุกใบถูกเข้ารหัสแยกจากตัวตนผู้โหวต และร้อยเป็น hash chain ที่ตรวจย้อนหลังได้ทั้งตาราง
+    </p>
+    <div class="hero__meta">
+      <span class="chip">Next.js 14</span>
+      <span class="chip">PostgreSQL · Prisma</span>
+      <span class="chip">NextAuth · PSU SSO</span>
+      <span class="chip">Tailwind</span>
+      <span class="chip">Framer Motion</span>
+      <span class="chip">Playwright</span>
+      <span class="chip">Docker</span>
+    </div>
+
+    <figure class="hero__shot">
+      <img src="assets/img/desktop/01-original/1-home.webp" width="1600" height="1100"
+           alt="หน้าแรกของระบบเลือกตั้ง แสดงชื่องาน SAMO countdown และสถิติผู้ใช้สิทธิ์แบบ real-time">
+    </figure>
+  </div>
+</section>
+
+<!-- ── stats ───────────────────────────────────────────────────────────── -->
+<section id="stats">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b>587</b><span>commits ตลอด 7 เดือน<br>พัฒนาคนเดียว</span></div>
+      <div class="stat"><b>62,400</b><span>บรรทัดใน src/<br>283 ไฟล์</span></div>
+      <div class="stat"><b>23</b><span>ธีม ใน 6 ตระกูล<br>สลับได้จาก admin</span></div>
+      <div class="stat"><b>50</b><span>เทสต์อัตโนมัติ<br>smoke 15 + e2e 35</span></div>
+      <div class="stat"><b>125</b><span>บทเรียนที่บันทึกไว้<br>ใน DECISIONS.md</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── context + problem ───────────────────────────────────────────────── -->
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">01 — บริบทและโจทย์</p>
+      <h2>ทำไมระบบเลือกตั้งถึงไม่ใช่แค่ฟอร์มที่กดส่งได้</h2>
+      <p class="lede">
+        ผมรับผิดชอบทั้งโปรเจกต์คนเดียว ตั้งแต่คุยความต้องการกับคณะกรรมการเลือกตั้ง
+        ออกแบบฐานข้อมูล ออกแบบวิธีเก็บบัตรลงคะแนน ทำหน้าเว็บทั้งหมด ไปจนถึงเขียนเอกสารส่งมอบ
+        ให้ทีมสโมสรรุ่นถัดไปที่ไม่มีใครเป็นโปรแกรมเมอร์
+      </p>
+    </div>
+
+    <div class="grid grid--2">
+      <div class="card">
+        <span class="card__num">01</span>
+        <h3>ความน่าเชื่อถือของผล</h3>
+        <p>ถ้าคะแนนออกมาสูสี ต้องมีวิธีพิสูจน์ทางเทคนิคว่าไม่มีใครแก้ ไม่ใช่แค่ให้เชื่อกรรมการ</p>
+      </div>
+      <div class="card">
+        <span class="card__num">02</span>
+        <h3>ความลับของบัตร</h3>
+        <p>ระบบออนไลน์ที่เก็บ “user คนนี้เลือกพรรคนี้” ไว้แถวเดียวกัน แปลว่าใครเข้าถึงฐานข้อมูลได้ก็รู้หมด — ผิดหลักการเลือกตั้งลับ</p>
+      </div>
+      <div class="card">
+        <span class="card__num">03</span>
+        <h3>กันโหวตซ้ำจริง</h3>
+        <p>ต้องกันได้แม้ผู้ใช้กดพร้อมกันหลายแท็บ ไม่ใช่กันได้เฉพาะตอนเน็ตช้าและโชคดี</p>
+      </div>
+      <div class="card">
+        <span class="card__num">04</span>
+        <h3>ส่งต่อได้ทุกปี</h3>
+        <p>ทีมสโมสรเปลี่ยนทุกปีและไม่มีใครเขียนโค้ด ระบบต้องเปลี่ยนปี เปลี่ยนรายชื่อ เปลี่ยนหน้าตาเว็บได้โดยไม่แตะโค้ด</p>
+      </div>
+      <div class="card">
+        <span class="card__num">05</span>
+        <h3>หน้าตาที่คนอยากเข้า</h3>
+        <p>เว็บราชการแบบเดิมทำให้นักศึกษาไม่อยากกดเข้ามา ต้องดูร่วมสมัยและใช้บนมือถือได้จริง</p>
+      </div>
+      <div class="card">
+        <span class="card__num">06</span>
+        <h3>ผลคะแนนต้องปิดจนถึงเวลา</h3>
+        <p>คะแนนระหว่างทางชี้นำคนที่ยังไม่โหวต จึงต้องปิดตั้งแต่ชั้น API ไม่ใช่แค่ซ่อนปุ่มใน UI</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── architecture ────────────────────────────────────────────────────── -->
+<section id="architecture">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">02 — สถาปัตยกรรม</p>
+      <h2>แผนผังระบบ</h2>
+      <p class="lede">
+        Next.js App Router ตัวเดียวรับทั้งหน้าเว็บสาธารณะ หน้า admin และ API
+        ต่อ PostgreSQL ผ่าน Prisma และ deploy ด้วย Docker ใต้ subpath <code>/fms-ovs</code>
+      </p>
+    </div>
+
+    <div class="arch">
+      <p class="arch__label">ผู้ใช้</p>
+      <div class="arch__row">
+        <div class="arch__box"><b>นักศึกษา</b><span>เกือบทั้งหมดเข้าจากมือถือ</span></div>
+        <div class="arch__box"><b>เจ้าหน้าที่ / admin</b><span>คุมวันเวลา รายชื่อ ธีม และการเปิดผล</span></div>
+      </div>
+
+      <p class="arch__flow">↓</p>
+      <p class="arch__label">แอปพลิเคชัน — Next.js 14 (Docker, subpath /fms-ovs)</p>
+      <div class="arch__row">
+        <div class="arch__box"><b>NextAuth</b><span>PSU Passport (OIDC) + sync ผู้ใช้เข้า DB</span></div>
+        <div class="arch__box"><b>หน้าสาธารณะ</b><span>home · candidates · party · vote · results</span></div>
+        <div class="arch__box"><b>Admin console</b><span>chooser · dashboard · readiness · audit</span></div>
+        <div class="arch__box"><b>API routes (26)</b><span>vote · results · admin/*</span></div>
+        <div class="arch__box arch__box--brand"><b>Template engine</b><span>6 ตระกูล × 23 ธีม จาก token ชั้นเดียว</span></div>
+      </div>
+
+      <p class="arch__flow">↓</p>
+      <p class="arch__label">ฐานข้อมูล — PostgreSQL + Prisma (8 models)</p>
+      <div class="arch__row">
+        <div class="arch__box"><b>User</b><span>isVoted, votedAt — <em>ไม่มีคอลัมน์ว่าเลือกใคร</em></span></div>
+        <div class="arch__box arch__box--brand"><b>Ballot</b><span>ciphertext + prevHash + rowHash</span></div>
+        <div class="arch__box arch__box--brand"><b>ChainHead</b><span>ปลายโซ่ ใช้เป็น row lock ตอนโหวต</span></div>
+        <div class="arch__box"><b>Candidate.score</b><span>ผลรวมคะแนนที่ API เสิร์ฟ</span></div>
+        <div class="arch__box"><b>AdminAuditLog</b><span>ทุกคำสั่งของ admin</span></div>
+      </div>
+
+      <p class="arch__flow">↓ เฉพาะกรณีมีข้อพิพาท</p>
+      <div class="arch__row">
+        <div class="arch__box arch__box--accent"><b>เครื่อง offline ของกรรมการ</b><span>private key อยู่บนกระดาษ ไม่เคยอยู่บนเซิร์ฟเวอร์ — ใช้ recount เท่านั้น</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ballot security ─────────────────────────────────────────────────── -->
+<section id="ballot">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">03 — จุดที่ยากที่สุด</p>
+      <h2>บัตรลงคะแนนนิรนามที่ตรวจการแก้ไขได้</h2>
+      <p class="lede">
+        ออกแบบเองทั้งชุด ใช้ <code>node:crypto</code> ล้วน ไม่เพิ่ม dependency ใหม่แม้แต่ตัวเดียว
+        เป้าหมายคือสองอย่างที่ปกติขัดกัน — ตรวจสอบย้อนหลังได้ แต่สืบกลับหาคนโหวตไม่ได้
+      </p>
+    </div>
+
+    <div class="flow">
+      <div class="flow__step">
+        <div class="flow__dot">01</div>
+        <div>
+          <h3>แยกตัวตนออกจากตัวเลือก</h3>
+          <p>ตอนโหวต ระบบเขียนสองที่คนละตาราง — ตีตรา <code>isVoted</code> ที่ผู้ใช้ และหย่อนบัตรที่เข้ารหัสแล้วลงตาราง Ballot ไม่มีคีย์ใดเชื่อมสองสิ่งนี้เข้าหากัน คอลัมน์ที่เคยผูกไว้ถูกลบทิ้งอย่างตั้งใจ</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__dot">02</div>
+        <div>
+          <h3>เข้ารหัสบัตรด้วย RSA-OAEP + nonce</h3>
+          <p>ข้อความก่อนเข้ารหัสคือ <code>{ c: candidateId, n: nonce 128-bit }</code> — nonce ทำให้บัตรที่เลือกพรรคเดียวกันได้ ciphertext ไม่ซ้ำกัน ปิดช่องเดาแบบ dictionary บนช่วงค่า candidate id ที่มีอยู่ไม่กี่ค่า</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__dot">03</div>
+        <div>
+          <h3>ร้อยเป็น hash chain ด้วย HMAC</h3>
+          <p>บัตรทุกใบเก็บ <code>prevHash</code> และ <code>rowHash = HMAC(secret, prevHash‖payload‖seq)</code> ถ้ามีใครลบ แทรก หรือแก้บัตรกลางตาราง โซ่จะขาดที่จุดนั้นทันที ตรวจได้ทั้งตารางด้วยสคริปต์เดียว</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__dot">04</div>
+        <div>
+          <h3>เวลาก็เป็นข้อมูลรั่ว จึงเก็บแค่ระดับชั่วโมง</h3>
+          <p>ถ้าบัตรเก็บเวลาแบบละเอียด ก็เอาไป join กับเวลาที่ผู้ใช้กดโหวตเพื่อจับคู่กลับได้ ตาราง Ballot จึงเก็บแค่ช่วงชั่วโมงหยาบ ๆ ส่วนเวลาละเอียดอยู่กับผู้ใช้เองซึ่งไม่ใช่ความลับ</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__dot">05</div>
+        <div>
+          <h3>กุญแจถอดรหัสไม่เคยอยู่บนเซิร์ฟเวอร์</h3>
+          <p>ทำ key ceremony ปีละครั้งบนเครื่อง offline พิมพ์ private key ลงกระดาษแบ่งเก็บระหว่างเจ้าหน้าที่กับอาจารย์ที่ปรึกษา บนเซิร์ฟเวอร์มีแค่ public key — ต่อให้ยึดเซิร์ฟเวอร์ได้ก็ถอดรหัสบัตรไม่ได้</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__dot">06</div>
+        <div>
+          <h3>สิทธิ์ระดับฐานข้อมูล: แอปทำได้แค่ INSERT</h3>
+          <p>บน production รัน grants ให้ user ของแอปมีสิทธิ์แค่เพิ่มบัตร ไม่มี UPDATE ไม่มี DELETE — การเลือกตั้งที่จบแล้วจึงแก้ไม่ได้แม้ผ่านโค้ดของแอปเอง</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:28px">
+      <p>
+        <strong>Fail closed</strong> — ถ้าตัวแปรกุญแจบนเซิร์ฟเวอร์ไม่ครบ endpoint โหวตตอบ 503 ทันที
+        ไม่มี fallback ไปเก็บตัวเลือกแบบอ่านได้เด็ดขาด ระบบยอมปิดรับโหวต ดีกว่ายอมเก็บบัตรที่ไม่เป็นความลับ
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── one person one vote ─────────────────────────────────────────────── -->
+<section id="race">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">04 — concurrency</p>
+      <h2>หนึ่งคนหนึ่งเสียง ตอนที่สองคำขอมาถึงพร้อมกัน</h2>
+      <p class="lede">
+        วิธีเดิมคือ “เช็คว่าโหวตยัง แล้วค่อยบันทึก” ซึ่งมีช่องว่างระหว่างสองขั้น (TOCTOU)
+        ถ้าผู้ใช้กดสองแท็บพร้อมกัน ทั้งคู่อาจผ่านการเช็คแล้วบันทึกทั้งคู่
+        คำตอบคือธุรกรรมเดียวที่ให้การรับประกันสามอย่างพร้อมกัน
+      </p>
+    </div>
+
+    <div class="code">
+      <div class="code__bar">src/app/api/vote/route.js</div>
+<pre><span class="c">// (a) TOCTOU one-shot · (b) chain serialization · (c) tally — ในธุรกรรมเดียว</span>
+<span class="k">const</span> outcome = <span class="k">await</span> db.<span class="f">$transaction</span>(<span class="k">async</span> (tx) => {
+  <span class="c">// (a) compare-and-set: มีคำขอเดียวเท่านั้นที่พลิก flag ได้ → count === 1</span>
+  <span class="k">const</span> claim = <span class="k">await</span> tx.user.<span class="f">updateMany</span>({
+    where: { id: user.id, isVoted: <span class="k">false</span> },
+    data:  { isVoted: <span class="k">true</span>, votedAt },
+  });
+  <span class="k">if</span> (claim.count === 0) <span class="k">return</span> <span class="s">"ALREADY_VOTED"</span>;
+
+  <span class="c">// (b) SELECT ... FOR UPDATE บนแถว ChainHead — คำขอที่ชนกันเรียงคิวกัน</span>
+  <span class="c">//     ทุกใบจึงได้ prevHash ที่ถูกต้องจริง โซ่ไม่ขาดแม้โหวตพร้อมกันเป๊ะ</span>
+  <span class="k">await</span> <span class="f">appendBallotTx</span>(tx, { payload, hourBucket, chainSecret });
+
+  <span class="c">// (c) นับคะแนนแบบ atomic</span>
+  <span class="k">await</span> tx.candidate.<span class="f">update</span>({
+    where: { id: parsedId },
+    data:  { score: { increment: 1 } },
+  });
+  <span class="k">return</span> <span class="s">"OK"</span>;
+});</pre>
+    </div>
+
+    <div class="grid grid--3" style="margin-top:18px">
+      <div class="card">
+        <h3>เข้ารหัสก่อนเข้าธุรกรรม</h3>
+        <p>ciphertext ไม่ได้ขึ้นกับสถานะของโซ่ จึงคำนวณไว้ก่อนได้ ทำให้ถือ row lock สั้นที่สุดเท่าที่เป็นไปได้</p>
+      </div>
+      <div class="card">
+        <h3>พิสูจน์ด้วยเทสต์ ไม่ใช่ด้วยเหตุผล</h3>
+        <p>e2e ยิงสองคำขอพร้อมกันจากผู้ใช้คนเดียว ต้องสำเร็จหนึ่ง ปฏิเสธหนึ่ง และคะแนนรวมต้องเพิ่มขึ้นหนึ่ง</p>
+      </div>
+      <div class="card">
+        <h3>Rate limit ซ้อนอีกชั้น</h3>
+        <p>จำกัดจำนวนคำขอต่อผู้ใช้บน endpoint โหวตและ login เพื่อกันการยิงรัว แม้ตัวกันโหวตซ้ำจะรับมือได้อยู่แล้ว</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── template system ─────────────────────────────────────────────────── -->
+<section id="templates">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">05 — ระบบธีม</p>
+      <h2>หน้าตาเว็บทั้งระบบ เปลี่ยนได้จาก admin คลิกเดียว</h2>
+      <p class="lede">
+        6 ตระกูล 23 ธีม แต่ละตระกูลมี layout ของตัวเองครบทุกหน้า ไม่ใช่แค่เปลี่ยนสี
+        ทั้งหมดมาจากไฟล์ palette ไฟล์เดียวต่อตระกูล — เพิ่มธีมใหม่คือแก้ 3 จุด ที่เหลือไหลตามทั้งระบบ
+      </p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="เลือกตระกูลธีม">
+      <button class="tab" role="tab" aria-selected="true"  data-family="01-original">Original</button>
+      <button class="tab" role="tab" aria-selected="false" data-family="02-gumroad">Gumroad</button>
+      <button class="tab" role="tab" aria-selected="false" data-family="03-studio-dark">Studio Dark</button>
+      <button class="tab" role="tab" aria-selected="false" data-family="04-verdure">Verdure</button>
+      <button class="tab" role="tab" aria-selected="false" data-family="05-blossom">Blossom</button>
+      <button class="tab" role="tab" aria-selected="false" data-family="06-receipt">Receipt Paper</button>
+    </div>
+
+    <div class="shots" id="familyShots"><!-- filled by app.js, ทุกภาพมีอยู่จริงบนเซิร์ฟเวอร์ --></div>
+
+    <div class="section-head" style="margin-top:56px">
+      <h2>23 ธีม หน้าเดียวกัน</h2>
+      <p class="lede">ทุกภาพด้านล่างคือหน้าแรกเดียวกัน ต่างกันแค่ธีมที่ active — คลิกเพื่อดูเต็ม</p>
+    </div>
+    <div class="themes" id="themeGrid"></div>
+
+    <div class="grid grid--3" style="margin-top:40px">
+      <div class="card">
+        <h3>Token สองชั้น</h3>
+        <p>Layer 1 คือสีระดับธีม Layer 2 คือตัวแปรระดับ element โดยบังคับว่าตัวแปรที่เป็นสีต้องอ้าง token เสมอ ห้ามใส่ hex ตรง ๆ</p>
+      </div>
+      <div class="card">
+        <h3>พรีวิวต้องตรงกับของจริง</h3>
+        <p>ตัวที่ใช้พรีวิวกับตัวที่ render จริงต้อง map ค่าตรงกัน มี invariant คุมไว้ 7 ข้อ เพราะพรีวิวที่โกหกคือฟีเจอร์ที่อันตรายกว่าไม่มีพรีวิว</p>
+      </div>
+      <div class="card">
+        <h3>ลองก่อนเลือกได้จริง</h3>
+        <p>หน้าพรีวิวเดินได้ทั้ง flow (home → login → vote → success) โดยไม่แตะฐานข้อมูล คนที่ไม่ใช่ dev จึงตัดสินใจจากการลองใช้ ไม่ใช่จากภาพนิ่ง</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── UX / UI ─────────────────────────────────────────────────────────── -->
+<section id="uxui">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">06 — UX / UI</p>
+      <h2>เกณฑ์ที่ใช้ตัดสินงานออกแบบ</h2>
+      <p class="lede">
+        ตั้งเกณฑ์ไว้ก่อนลงมือ และทุกข้อต้องตรวจได้จริงไม่ใช่ความรู้สึก
+        หลักคือสวยจาก craft พื้นฐาน ไม่ใช่จาก gimmick — ไม่มี 3D ไม่มี particle ไม่มี loading ที่นานเพื่อความเท่
+      </p>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>มิติ</th><th>เกณฑ์ที่ต้องผ่าน</th></tr></thead>
+        <tbody>
+          <tr><td>Typography</td><td>ไม่เกิน 3 ระดับต่อวิว · line-height 1.1 หัวเรื่อง / 1.6 เนื้อหา · ตัวเลขสถิติใช้ tabular-nums เพื่อไม่ให้ตัวเลขเต้นตอนนับ</td></tr>
+          <tr><td>Spacing</td><td>จังหวะ 4/8px ตลอด · whitespace ใจกว้าง · ไม่มี element ชนกันหรือชิดขอบโดยไม่ตั้งใจ</td></tr>
+          <tr><td>Colour</td><td>contrast เนื้อหา ≥ 4.5:1 หัวเรื่องใหญ่ ≥ 3:1 · ไม่เกิน 3 สีต่อวิว</td></tr>
+          <tr><td>Motion</td><td>ใช้เมื่อมีความหมายเท่านั้น · 150-300ms ease-out · เคารพ prefers-reduced-motion</td></tr>
+          <tr><td>Hierarchy</td><td>ทุกหน้าตอบได้ใน 1 วินาทีว่า “หน้าอะไร ต้องทำอะไรต่อ” · CTA หลักหนึ่งเดียวเด่นสุด</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-head" style="margin-top:56px">
+      <h2>Mobile-first เป็นด่าน ไม่ใช่คำโฆษณา</h2>
+      <p class="lede">
+        ทุกหน้ารีวิวที่ 375px ก่อน desktop เสมอ เพราะผู้ใช้จริงเกือบทั้งหมดโหวตจากมือถือระหว่างเดินอยู่ในคณะ
+        — mobile ต้องถูกออกแบบ ไม่ใช่ desktop ที่ย่อลงมา
+      </p>
+    </div>
+    <div class="phones" id="phoneStrip"></div>
+
+    <div class="section-head" style="margin-top:56px">
+      <h2>การตัดสินใจที่เล่าได้</h2>
+    </div>
+    <div class="grid grid--2">
+      <div class="card">
+        <span class="card__num">01</span>
+        <h3>พรรคเดียวต้องมี 3 ทางเลือก</h3>
+        <p>เมื่อมีผู้สมัครพรรคเดียว การให้กดได้แค่ “เลือก” คือการบังคับ บัตรจึงเปลี่ยนเป็น รับรอง / ไม่รับรอง / งดออกเสียง พร้อมสี semantic คงที่ที่ <strong>ไม่เปลี่ยนตามธีม</strong> เพราะความหมายของสีสำคัญกว่าความสวยของพาเลตต์</p>
+      </div>
+      <div class="card">
+        <span class="card__num">02</span>
+        <h3>ผลที่ยังไม่ถึงเวลา ต้องออกแบบหน้า “ล็อก”</h3>
+        <p>ไม่ใช่ซ่อนเมนูแล้วปล่อยให้งง คนที่กดเข้ามาต้องรู้ว่าทำไมยังดูไม่ได้และดูได้เมื่อไหร่ ส่วนคะแนนถูกปิดตั้งแต่ชั้น API มีเทสต์คุมว่าไม่รั่ว</p>
+      </div>
+      <div class="card">
+        <span class="card__num">03</span>
+        <h3>ห้ามซ่อนเนื้อหาสำคัญไว้หลัง animation</h3>
+        <p>กติกาที่ตั้งขึ้นหลังเจอของจริง — บัตรลงคะแนนเคยตั้ง opacity เป็น 0 รอ reveal แล้ว reveal ไม่ทำงานบนบางเครื่อง บัตรหายทั้งหน้า ตั้งแต่นั้นบัตร รายชื่อพรรค และผลคะแนน ห้ามพึ่ง JS reveal และตรวจด้วย computed style จริง</p>
+      </div>
+      <div class="card">
+        <span class="card__num">04</span>
+        <h3>ปุ่มรองห้ามแย่งซีน</h3>
+        <p>บทเรียนจากหน้าผลคะแนนที่ปุ่มรองเด่นกว่า CTA หลักจนคนกดผิดทาง แก้ด้วยการลดน้ำหนักปุ่มรอง ไม่ใช่เพิ่มน้ำหนักปุ่มหลัก</p>
+      </div>
+      <div class="card">
+        <span class="card__num">05</span>
+        <h3>แต่ละธีมมีพิธีกรรมของตัวเอง</h3>
+        <p>Verdure จบด้วยการประทับ wax seal · Receipt Paper เป็นม้วนใบเสร็จที่หย่อนลงหีบ · Gumroad เป็นนีโอบรูทัลสีจัด เพราะวินาทีที่กดโหวตเสร็จควรรู้สึกว่าเสียงถูกนับแล้ว ไม่ใช่แค่ขึ้นคำว่า success</p>
+      </div>
+      <div class="card">
+        <span class="card__num">06</span>
+        <h3>ตัด editor ที่สร้างมากับมือทิ้ง</h3>
+        <p>ระบบเคยมี editor แบบ Canva ให้ admin ลากวางเอง ทำไปไกลแล้วตัดสินใจทิ้ง เพราะสิ่งที่ผู้ใช้ต้องการจริงคือหน้าตาที่หลากหลายและพร้อมใช้ ไม่ใช่เครื่องมือออกแบบที่ไม่มีคนดูแลต่อ</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── handover ────────────────────────────────────────────────────────── -->
+<section id="handover">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">07 — การส่งมอบ</p>
+      <h2>ออกแบบให้ระบบอยู่ต่อได้โดยไม่มีผม</h2>
+      <p class="lede">
+        ทีมสโมสรเปลี่ยนทุกปี งานประจำปีจึงถูกออกแบบให้เป็นส่วนหนึ่งของผลิตภัณฑ์
+        ไม่ใช่ความรู้ที่อยู่ในหัวคนเดียว
+      </p>
+    </div>
+
+    <div class="grid grid--2" style="margin-bottom:24px">
+      <div class="card">
+        <h3>ปุ่มตรวจความพร้อม 14 รายการ</h3>
+        <p>ตรวจ config กุญแจ วันเวลา รายชื่อ และธีม ให้ครบก่อนเปิดหีบ อ่านอย่างเดียว ไม่เขียนอะไรลง DB</p>
+      </div>
+      <div class="card">
+        <h3>Audit log + กันกดพลาด</h3>
+        <p>ทุกคำสั่งของ admin ถูกบันทึก และปุ่มล้างข้อมูลถูกล็อกไว้ระหว่างที่การโหวตยังเปิดอยู่ ต้องสั่งหยุดระบบก่อนเท่านั้น</p>
+      </div>
+      <div class="card">
+        <h3>สคริปต์เปลี่ยนปีการศึกษา</h3>
+        <p>preflight → archive ปีเก่า → import รายชื่อใหม่ → ตั้งวันและเลือกธีมในหน้า admin → ทำ key ceremony ชุดใหม่ของปีนั้น</p>
+      </div>
+      <div class="card">
+        <h3>ฐานข้อมูลทดสอบที่แตะของจริงไม่ได้</h3>
+        <p>ชุด e2e สร้าง DB ของตัวเองบนพอร์ตแยก และทุกคำสั่งลบ/ล้างมี guard บังคับตรวจชื่อ DB ก่อนเสมอ</p>
+      </div>
+    </div>
+
+    <div class="shots">
+      <button class="shot" data-full="assets/img/admin/2-template-chooser.webp" data-cap="Admin · เลือกธีมทั้งระบบ">
+        <span class="shot__frame"><img loading="lazy" src="assets/img/admin/2-template-chooser.webp" alt="หน้า admin สำหรับเลือกธีม แสดงรายการตระกูลธีมพร้อม swatch สีและสไลด์หน้าจริง"></span>
+        <span class="shot__cap">เลือกธีมทั้งระบบ <span>admin</span></span>
+      </button>
+      <button class="shot" data-full="assets/img/admin/5-readiness.webp" data-cap="Admin · ตรวจความพร้อม 14 รายการ">
+        <span class="shot__frame"><img loading="lazy" src="assets/img/admin/5-readiness.webp" alt="ผลการตรวจความพร้อมระบบ แสดงรายการที่ผ่าน เตือน และไม่ผ่าน"></span>
+        <span class="shot__cap">ตรวจความพร้อมก่อนเปิดหีบ <span>admin</span></span>
+      </button>
+      <button class="shot" data-full="assets/img/admin/7-global-config.webp" data-cap="Admin · ตั้งค่าปีและวันเลือกตั้ง">
+        <span class="shot__frame"><img loading="lazy" src="assets/img/admin/7-global-config.webp" alt="หน้าตั้งค่าทั่วไป กำหนดปีการศึกษา ชื่องาน และวันเวลาเปิดปิดหีบ"></span>
+        <span class="shot__cap">ตั้งปี วันเวลา และชื่องาน <span>admin</span></span>
+      </button>
+      <button class="shot" data-full="assets/img/admin/1-overview.webp" data-cap="Admin · ภาพรวมระบบ">
+        <span class="shot__frame"><img loading="lazy" src="assets/img/admin/1-overview.webp" alt="หน้าภาพรวมของ admin console"></span>
+        <span class="shot__cap">ภาพรวมระบบ <span>admin</span></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── quality ─────────────────────────────────────────────────────────── -->
+<section id="quality">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">08 — คุณภาพ</p>
+      <h2>ด่านที่ต้องผ่านก่อน deploy</h2>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>ชั้น</th><th>ครอบคลุมอะไร</th></tr></thead>
+        <tbody>
+          <tr><td>build</td><td>ต้อง compile ผ่านทั้ง 33 หน้า ไม่มี error</td></tr>
+          <tr><td>smoke · 15 เคส</td><td>API สาธารณะไม่รั่วคะแนน · admin API ตอบ 401 ทั้งเมื่อไม่มี auth และเมื่อปลอม cookie · login ติด rate limit 429 · โหวตต้องมี session · invariants ของ role และสิทธิ์</td></tr>
+          <tr><td>e2e · 35 เคส</td><td>โหวตครบวงจร · โหวตซ้ำและยิงพร้อมกัน · งดออกเสียง · หน้าปิดหีบ · admin console</td></tr>
+          <tr><td>readiness</td><td>ด่านสุดท้ายในหน้า admin ตรวจ 14 รายการก่อนเปิดหีบจริง</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout--plain" style="margin-top:24px">
+      <p>
+        ลำดับ gate คือ build → smoke → e2e → readiness
+        และมีเอกสารกำกับครบ: checklist สำหรับ deploy, runbook สำหรับผู้ดูแล, ใบขอฐานข้อมูลสำหรับฝ่าย IT
+        และ pitfall log 125 ข้อที่บันทึกทุกบทเรียนที่เคยเจ็บมา เพื่อไม่ให้ผิดซ้ำ
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── honest notes ────────────────────────────────────────────────────── -->
+<section id="notes">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">09 — บันทึกตรงไปตรงมา</p>
+      <h2>สิ่งที่ควรพูดให้ตรง</h2>
+    </div>
+    <ul class="clean">
+      <li><strong>สถานะ</strong> — ระบบพัฒนาเสร็จและผ่านด่าน build / smoke / e2e แล้ว ขั้นตอนสุดท้ายคือ deploy ด้วย Docker ร่วมกับฝ่าย IT ของคณะ</li>
+      <li><strong>ใช้ AI ช่วยพัฒนา</strong> — ผมใช้ AI เป็นคู่คิดตลอดโปรเจกต์ โดยการตัดสินใจเชิงสถาปัตยกรรมและความปลอดภัยทั้งหมดเป็นของผม และเขียนระเบียบการทำงานกับ pitfall log ไว้เป็นเอกสารเพื่อไม่ให้ผิดซ้ำ</li>
+      <li><strong>ภาพทั้งหมดในหน้านี้</strong> — ถ่ายจากหน้าพรีวิวของระบบที่ใช้ข้อมูลจำลองล้วน ไม่มีชื่อหรือรหัสนักศึกษาจริงปรากฏที่ใดเลย</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <h2 style="font-size:1.35rem;margin-bottom:12px">สนใจคุยเรื่องงาน</h2>
+      <p style="margin:0"><a class="link" href="mailto:teerapab6273@gmail.com">teerapab6273@gmail.com</a></p>
+    </div>
+    <small>
+      Teerapab Boonsri · Prince of Songkla University<br>
+      FMS Online Voting System · 2026
+    </small>
+  </div>
+</footer>
+
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="ดูภาพขนาดเต็ม">
+  <button class="lb__close" id="lbClose" aria-label="ปิด">✕</button>
+  <img id="lbImg" src="" alt="">
+  <p class="lb__cap" id="lbCap"></p>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
