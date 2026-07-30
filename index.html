@@ -1,556 +1,496 @@
 <!doctype html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FMS Online Voting System — Teerapab Boonsri</title>
-<meta name="description" content="ระบบเลือกตั้งออนไลน์ของสโมสรนักศึกษา คณะวิทยาการจัดการ ม.อ. — บัตรลงคะแนนนิรนามที่ตรวจการแก้ไขได้ ระบบธีม 23 แบบ และการออกแบบเพื่อส่งมอบให้ทีมรุ่นถัดไป">
-<meta name="theme-color" content="#0a0a0e">
+<title>Teerapab Boonsri — System / Business Analyst</title>
+<meta name="description" content="Portfolio of Teerapab Boonsri, a Business Information Systems student at Prince of Songkla University — an online voting system in real use, a credit tracker that reads transcripts, and a chatbot on Azure.">
+<meta name="theme-color" content="#F7F4ED">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="FMS Online Voting System — case study">
-<meta property="og:description" content="ระบบเลือกตั้งออนไลน์ที่ออกแบบให้ผลคะแนนพิสูจน์ได้ว่าไม่ถูกแก้ และไม่มีใครสืบได้ว่าใครเลือกพรรคไหน">
-<!-- og:image ต้องเป็น URL เต็มเสมอ ไม่งั้นภาพพรีวิวตอนแชร์ลิงก์จะไม่ขึ้น
-     repo ชื่อ Teerapab149.github.io → เว็บอยู่ที่ root ไม่มี subpath -->
+<meta property="og:title" content="Teerapab Boonsri — System / Business Analyst">
+<meta property="og:description" content="Three systems I designed and built end to end, from requirements to deploy.">
 <meta property="og:url" content="https://teerapab149.github.io/">
-<meta property="og:image" content="https://teerapab149.github.io/assets/img/desktop/01-original/1-home.webp">
+<meta property="og:image" content="https://teerapab149.github.io/assets/img/desktop/04-verdure/1-home.webp">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
+<!-- Two families only. Kanit carries the heavy-grotesque display scale without a
+     second face fighting it; IBM Plex Sans Thai handles body copy. Both are kept
+     from the Thai version of this page so the type scale stays identical. -->
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/verdure.css">
+<!-- Gates every faded start-state in the stylesheet. If this line never runs,
+     the class is absent and the page renders fully visible. -->
+<script>document.documentElement.classList.add('js-anim');</script>
 </head>
 <body>
 
-<!-- ── nav ─────────────────────────────────────────────────────────────── -->
-<header class="nav">
-  <div class="wrap nav__inner">
-    <a class="nav__brand" href="#top">Teerapab Boonsri <span>· developer</span></a>
-    <nav class="nav__links">
-      <a href="#problem">โจทย์</a>
-      <a href="#architecture">สถาปัตยกรรม</a>
-      <a href="#ballot">ความปลอดภัย</a>
-      <a href="#templates">ระบบธีม</a>
-      <a href="#uxui">UX/UI</a>
-      <a href="#handover">การส่งมอบ</a>
-      <a href="#quality">คุณภาพ</a>
-    </nav>
-  </div>
+<header class="bar">
+  <a href="#work">Work</a>
+  <span class="bar__mid">Teerapab Boonsri</span>
+  <a href="#contact">Contact</a>
 </header>
 
-<main id="top">
+<p class="count" id="count" aria-hidden="true">00 — scroll</p>
 
-<!-- ── hero ────────────────────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="wrap">
-    <p class="eyebrow">Case study · 2026</p>
-    <h1>ระบบเลือกตั้งออนไลน์<br>ที่<em>พิสูจน์ได้</em>ว่าคะแนนไม่ถูกแก้</h1>
-    <p class="hero__sub">
-      FMS Online Voting System — ระบบลงคะแนนของสโมสรนักศึกษา คณะวิทยาการจัดการ
-      มหาวิทยาลัยสงขลานครินทร์ นักศึกษาเข้าระบบด้วย PSU Passport โหวตได้คนละหนึ่งครั้ง
-      บัตรทุกใบถูกเข้ารหัสแยกจากตัวตนผู้โหวต และร้อยเป็น hash chain ที่ตรวจย้อนหลังได้ทั้งตาราง
-    </p>
-    <div class="hero__meta">
-      <span class="chip">Next.js 14</span>
-      <span class="chip">PostgreSQL · Prisma</span>
-      <span class="chip">NextAuth · PSU SSO</span>
-      <span class="chip">Tailwind</span>
-      <span class="chip">Framer Motion</span>
-      <span class="chip">Playwright</span>
-      <span class="chip">Docker</span>
-    </div>
+<main>
 
-    <figure class="hero__shot">
-      <img src="assets/img/desktop/01-original/1-home.webp" width="1600" height="1100"
-           alt="หน้าแรกของระบบเลือกตั้ง แสดงชื่องาน SAMO countdown และสถิติผู้ใช้สิทธิ์แบบ real-time">
+<!-- ══ 1 · intro — who this is, before anything else ═══════════════════════ -->
+<section class="stage" id="intro">
+  <div class="inner intro__grid">
+
+    <figure class="portrait up">
+      <div class="portrait__frame">
+        <!-- SLOT — replace the whole <div class="slot slot--fill"> with
+             <img src="assets/img/me/portrait.webp" width="1200" height="1500"
+                  fetchpriority="high" alt="Teerapab Boonsri">
+             See assets/img/me/README.md for what the photo needs to be. -->
+        <div class="slot slot--fill">
+          <em>Photo</em>
+          <b>A portrait of me — 4:5, 1200 × 1500 or larger</b>
+          <code>assets/img/me/portrait.webp</code>
+        </div>
+      </div>
+      <figcaption>Hat Yai, Songkhla · Thailand</figcaption>
     </figure>
-  </div>
-</section>
 
-<!-- ── stats ───────────────────────────────────────────────────────────── -->
-<section id="stats">
-  <div class="wrap">
-    <div class="stats">
-      <div class="stat"><b>587</b><span>commits ตลอด 7 เดือน<br>พัฒนาคนเดียว</span></div>
-      <div class="stat"><b>62,400</b><span>บรรทัดใน src/<br>283 ไฟล์</span></div>
-      <div class="stat"><b>23</b><span>ธีม ใน 6 ตระกูล<br>สลับได้จาก admin</span></div>
-      <div class="stat"><b>50</b><span>เทสต์อัตโนมัติ<br>smoke 15 + e2e 35</span></div>
-      <div class="stat"><b>125</b><span>บทเรียนที่บันทึกไว้<br>ใน DECISIONS.md</span></div>
-    </div>
-  </div>
-</section>
+    <div class="intro__type up" style="--d:90ms">
+      <p class="tag tag--honey">01 — About me</p>
 
-<!-- ── context + problem ───────────────────────────────────────────────── -->
-<section id="problem">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">01 — บริบทและโจทย์</p>
-      <h2>ทำไมระบบเลือกตั้งถึงไม่ใช่แค่ฟอร์มที่กดส่งได้</h2>
-      <p class="lede">
-        ผมรับผิดชอบทั้งโปรเจกต์คนเดียว ตั้งแต่คุยความต้องการกับคณะกรรมการเลือกตั้ง
-        ออกแบบฐานข้อมูล ออกแบบวิธีเก็บบัตรลงคะแนน ทำหน้าเว็บทั้งหมด ไปจนถึงเขียนเอกสารส่งมอบ
-        ให้ทีมสโมสรรุ่นถัดไปที่ไม่มีใครเป็นโปรแกรมเมอร์
+      <h1 class="big big--l intro__name">
+        Teerapab<br><span class="mark-wrap">Boonsri<svg class="scrawl" viewBox="0 0 300 32" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 22C64 8 152 4 240 11c30 3 48 7 54 11"/><path pathLength="1" d="M18 29C78 17 168 14 246 20" style="opacity:.55"/></svg></span>
+      </h1>
+
+      <p class="small intro__lede">
+        I am a <strong>Business Information Systems</strong> student at the Faculty of Management
+        Sciences, Prince of Songkla University. I sit on the line between the people who use a
+        system and the system itself — gathering requirements, drawing the flows and the data
+        model, and then building the thing and putting it live myself.
       </p>
+
+      <dl class="bio">
+        <div>
+          <dt>Studying</dt>
+          <dd><strong>BBA, Business Information Systems</strong> · Faculty of Management Sciences</dd>
+        </div>
+        <div>
+          <dt>University</dt>
+          <dd>Prince of Songkla University, Hat Yai campus · 2023 – present</dd>
+        </div>
+        <div>
+          <dt>Graduating</dt>
+          <dd>Expected 2027 · GPAX 3.03</dd>
+        </div>
+        <div>
+          <dt>Looking for</dt>
+          <dd><strong>System Analyst</strong> · <strong>Business Analyst</strong> · Management Trainee</dd>
+        </div>
+      </dl>
     </div>
 
-    <div class="grid grid--2">
-      <div class="card">
-        <span class="card__num">01</span>
-        <h3>ความน่าเชื่อถือของผล</h3>
-        <p>ถ้าคะแนนออกมาสูสี ต้องมีวิธีพิสูจน์ทางเทคนิคว่าไม่มีใครแก้ ไม่ใช่แค่ให้เชื่อกรรมการ</p>
+  </div>
+</section>
+
+<!-- ══ 2 · hero — three objects on one line ════════════════════════════════ -->
+<section class="stage" id="top">
+  <div class="inner hero__grid">
+
+    <div class="hero__type up">
+      <p class="tag tag--honey">Open to work · System / Business Analyst</p>
+      <!-- h2, not h1: the page's single h1 is the name in the About section above -->
+      <h2 class="big big--l">
+        I design<br>systems people <span class="mark-wrap">actually use<svg class="scrawl" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M46 76C14 64 16 30 60 20 112 8 218 8 264 20c28 8 32 38-2 52-48 18-166 20-216 6C30 74 22 58 36 46"/></svg></span>
+      </h2>
+    </div>
+
+    <figure class="capsule up" style="--d:120ms">
+      <img src="assets/img/desktop/04-verdure/1-home.webp" width="1600" height="1100" fetchpriority="high"
+           alt="Home screen of the FMS voting system, Verdure theme">
+    </figure>
+
+    <div class="hero__side up" style="--d:200ms">
+      <p class="tag">Three projects · one owner</p>
+      <p class="small">
+        Across all three projects below I owned the whole cycle: sitting with users to collect
+        requirements, designing the ER diagram and the business flows, then writing the code,
+        building the UI and deploying it.
+      </p>
+      <p class="small">
+        Writing code is the tool that makes my system design sharper.
+        <strong>It is not the destination I am aiming for.</strong>
+      </p>
+
+      <div class="stats-inline">
+        <div><b data-count>3,119</b><span>eligible voters in a system in real use</span></div>
+        <div><b data-count>~1,600</b><span>ballots actually cast</span></div>
+        <div><b data-count>3</b><span>systems built end to end</span></div>
       </div>
-      <div class="card">
-        <span class="card__num">02</span>
-        <h3>ความลับของบัตร</h3>
-        <p>ระบบออนไลน์ที่เก็บ “user คนนี้เลือกพรรคนี้” ไว้แถวเดียวกัน แปลว่าใครเข้าถึงฐานข้อมูลได้ก็รู้หมด — ผิดหลักการเลือกตั้งลับ</p>
-      </div>
-      <div class="card">
-        <span class="card__num">03</span>
-        <h3>กันโหวตซ้ำจริง</h3>
-        <p>ต้องกันได้แม้ผู้ใช้กดพร้อมกันหลายแท็บ ไม่ใช่กันได้เฉพาะตอนเน็ตช้าและโชคดี</p>
-      </div>
-      <div class="card">
-        <span class="card__num">04</span>
-        <h3>ส่งต่อได้ทุกปี</h3>
-        <p>ทีมสโมสรเปลี่ยนทุกปีและไม่มีใครเขียนโค้ด ระบบต้องเปลี่ยนปี เปลี่ยนรายชื่อ เปลี่ยนหน้าตาเว็บได้โดยไม่แตะโค้ด</p>
-      </div>
-      <div class="card">
-        <span class="card__num">05</span>
-        <h3>หน้าตาที่คนอยากเข้า</h3>
-        <p>เว็บราชการแบบเดิมทำให้นักศึกษาไม่อยากกดเข้ามา ต้องดูร่วมสมัยและใช้บนมือถือได้จริง</p>
-      </div>
-      <div class="card">
-        <span class="card__num">06</span>
-        <h3>ผลคะแนนต้องปิดจนถึงเวลา</h3>
-        <p>คะแนนระหว่างทางชี้นำคนที่ยังไม่โหวต จึงต้องปิดตั้งแต่ชั้น API ไม่ใช่แค่ซ่อนปุ่มใน UI</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ 3 · the capsule opens ═══════════════════════════════════════════════
+     Same image as the hero capsule, growing to full-bleed as you scroll — the
+     move the reference site is built around. --p is written by verdure.js;
+     with JS off it stays 0 and this is simply a capsule with a caption. -->
+<section class="grow" id="work" aria-label="FMS Online Voting System">
+  <div class="grow__pin">
+    <div class="grow__card">
+      <img src="assets/img/desktop/04-verdure/1-home.webp" width="1600" height="1100" loading="lazy"
+           alt="Voting system home screen with the countdown medallion and turnout figures">
+      <div class="grow__over">
+        <p class="tag">Live system · Project 01</p>
+        <p class="big big--m">FMS Online Voting System</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── architecture ────────────────────────────────────────────────────── -->
-<section id="architecture">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">02 — สถาปัตยกรรม</p>
-      <h2>แผนผังระบบ</h2>
-      <p class="lede">
-        Next.js App Router ตัวเดียวรับทั้งหน้าเว็บสาธารณะ หน้า admin และ API
-        ต่อ PostgreSQL ผ่าน Prisma และ deploy ด้วย Docker ใต้ subpath <code>/fms-ovs</code>
-      </p>
+<!-- ══ 4 · project 01 detail ═══════════════════════════════════════════════ -->
+<section class="stage stage--auto">
+  <div class="inner">
+    <div class="work__head up">
+      <p class="work__idx">01</p>
+      <p class="tag">In real use · Dec 2025 – present</p>
     </div>
 
-    <div class="arch">
-      <p class="arch__label">ผู้ใช้</p>
-      <div class="arch__row">
-        <div class="arch__box"><b>นักศึกษา</b><span>เกือบทั้งหมดเข้าจากมือถือ</span></div>
-        <div class="arch__box"><b>เจ้าหน้าที่ / admin</b><span>คุมวันเวลา รายชื่อ ธีม และการเปิดผล</span></div>
+    <div class="cols">
+      <div class="up">
+        <figure class="shot">
+          <img src="assets/img/desktop/04-verdure/4-vote-multi.webp" width="1600" height="1100" loading="lazy"
+               alt="Ballot screen showing the party options and the confirm button">
+        </figure>
+        <h2 class="big big--l shot__title">FMS Online<br>Voting System</h2>
       </div>
 
-      <p class="arch__flow">↓</p>
-      <p class="arch__label">แอปพลิเคชัน — Next.js 14 (Docker, subpath /fms-ovs)</p>
-      <div class="arch__row">
-        <div class="arch__box"><b>NextAuth</b><span>PSU Passport (OIDC) + sync ผู้ใช้เข้า DB</span></div>
-        <div class="arch__box"><b>หน้าสาธารณะ</b><span>home · candidates · party · vote · results</span></div>
-        <div class="arch__box"><b>Admin console</b><span>chooser · dashboard · readiness · audit</span></div>
-        <div class="arch__box"><b>API routes (26)</b><span>vote · results · admin/*</span></div>
-        <div class="arch__box arch__box--brand"><b>Template engine</b><span>6 ตระกูล × 23 ธีม จาก token ชั้นเดียว</span></div>
-      </div>
+      <div class="up" style="--d:90ms">
+        <p class="tag tag--honey">System Analyst · Core Developer · UI/UX</p>
+        <p class="small" style="margin:14px 0 22px">
+          The student council election system for the Faculty of Management Sciences, PSU,
+          which I built alone. The hard part was never making a web page accept a vote — it was
+          making the result <strong>provably untampered</strong> while making sure
+          <strong>nobody can trace who voted for whom</strong>. Those two goals fight each other
+          by nature, and almost every design decision in the system comes out of that conflict.
+        </p>
 
-      <p class="arch__flow">↓</p>
-      <p class="arch__label">ฐานข้อมูล — PostgreSQL + Prisma (8 models)</p>
-      <div class="arch__row">
-        <div class="arch__box"><b>User</b><span>isVoted, votedAt — <em>ไม่มีคอลัมน์ว่าเลือกใคร</em></span></div>
-        <div class="arch__box arch__box--brand"><b>Ballot</b><span>ciphertext + prevHash + rowHash</span></div>
-        <div class="arch__box arch__box--brand"><b>ChainHead</b><span>ปลายโซ่ ใช้เป็น row lock ตอนโหวต</span></div>
-        <div class="arch__box"><b>Candidate.score</b><span>ผลรวมคะแนนที่ API เสิร์ฟ</span></div>
-        <div class="arch__box"><b>AdminAuditLog</b><span>ทุกคำสั่งของ admin</span></div>
-      </div>
+        <div class="facts">
+          <div><b data-count>3,119</b><span>eligible voters, imported through the university API</span></div>
+          <div><b data-count>~1,600</b><span>ballots actually cast</span></div>
+          <div><b data-count>587</b><span>commits over 7 months</span></div>
+          <div><b data-count>23</b><span>themes, switchable from admin</span></div>
+        </div>
 
-      <p class="arch__flow">↓ เฉพาะกรณีมีข้อพิพาท</p>
-      <div class="arch__row">
-        <div class="arch__box arch__box--accent"><b>เครื่อง offline ของกรรมการ</b><span>private key อยู่บนกระดาษ ไม่เคยอยู่บนเซิร์ฟเวอร์ — ใช้ recount เท่านั้น</span></div>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="chips">
+          <span>Next.js 14</span><span>PostgreSQL</span><span>Prisma</span>
+          <span>NextAuth · PSU SSO</span><span>Playwright</span><span>Docker</span>
+        </div>
 
-<!-- ── ballot security ─────────────────────────────────────────────────── -->
-<section id="ballot">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">03 — จุดที่ยากที่สุด</p>
-      <h2>บัตรลงคะแนนนิรนามที่ตรวจการแก้ไขได้</h2>
-      <p class="lede">
-        ออกแบบเองทั้งชุด ใช้ <code>node:crypto</code> ล้วน ไม่เพิ่ม dependency ใหม่แม้แต่ตัวเดียว
-        เป้าหมายคือสองอย่างที่ปกติขัดกัน — ตรวจสอบย้อนหลังได้ แต่สืบกลับหาคนโหวตไม่ได้
-      </p>
-    </div>
+        <a class="btn" href="fms-election.html">Read the full case study
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
 
-    <div class="flow">
-      <div class="flow__step">
-        <div class="flow__dot">01</div>
-        <div>
-          <h3>แยกตัวตนออกจากตัวเลือก</h3>
-          <p>ตอนโหวต ระบบเขียนสองที่คนละตาราง — ตีตรา <code>isVoted</code> ที่ผู้ใช้ และหย่อนบัตรที่เข้ารหัสแล้วลงตาราง Ballot ไม่มีคีย์ใดเชื่อมสองสิ่งนี้เข้าหากัน คอลัมน์ที่เคยผูกไว้ถูกลบทิ้งอย่างตั้งใจ</p>
-        </div>
-      </div>
-      <div class="flow__step">
-        <div class="flow__dot">02</div>
-        <div>
-          <h3>เข้ารหัสบัตรด้วย RSA-OAEP + nonce</h3>
-          <p>ข้อความก่อนเข้ารหัสคือ <code>{ c: candidateId, n: nonce 128-bit }</code> — nonce ทำให้บัตรที่เลือกพรรคเดียวกันได้ ciphertext ไม่ซ้ำกัน ปิดช่องเดาแบบ dictionary บนช่วงค่า candidate id ที่มีอยู่ไม่กี่ค่า</p>
-        </div>
-      </div>
-      <div class="flow__step">
-        <div class="flow__dot">03</div>
-        <div>
-          <h3>ร้อยเป็น hash chain ด้วย HMAC</h3>
-          <p>บัตรทุกใบเก็บ <code>prevHash</code> และ <code>rowHash = HMAC(secret, prevHash‖payload‖seq)</code> ถ้ามีใครลบ แทรก หรือแก้บัตรกลางตาราง โซ่จะขาดที่จุดนั้นทันที ตรวจได้ทั้งตารางด้วยสคริปต์เดียว</p>
-        </div>
-      </div>
-      <div class="flow__step">
-        <div class="flow__dot">04</div>
-        <div>
-          <h3>เวลาก็เป็นข้อมูลรั่ว จึงเก็บแค่ระดับชั่วโมง</h3>
-          <p>ถ้าบัตรเก็บเวลาแบบละเอียด ก็เอาไป join กับเวลาที่ผู้ใช้กดโหวตเพื่อจับคู่กลับได้ ตาราง Ballot จึงเก็บแค่ช่วงชั่วโมงหยาบ ๆ ส่วนเวลาละเอียดอยู่กับผู้ใช้เองซึ่งไม่ใช่ความลับ</p>
-        </div>
-      </div>
-      <div class="flow__step">
-        <div class="flow__dot">05</div>
-        <div>
-          <h3>กุญแจถอดรหัสไม่เคยอยู่บนเซิร์ฟเวอร์</h3>
-          <p>ทำ key ceremony ปีละครั้งบนเครื่อง offline พิมพ์ private key ลงกระดาษแบ่งเก็บระหว่างเจ้าหน้าที่กับอาจารย์ที่ปรึกษา บนเซิร์ฟเวอร์มีแค่ public key — ต่อให้ยึดเซิร์ฟเวอร์ได้ก็ถอดรหัสบัตรไม่ได้</p>
-        </div>
-      </div>
-      <div class="flow__step">
-        <div class="flow__dot">06</div>
-        <div>
-          <h3>สิทธิ์ระดับฐานข้อมูล: แอปทำได้แค่ INSERT</h3>
-          <p>บน production รัน grants ให้ user ของแอปมีสิทธิ์แค่เพิ่มบัตร ไม่มี UPDATE ไม่มี DELETE — การเลือกตั้งที่จบแล้วจึงแก้ไม่ได้แม้ผ่านโค้ดของแอปเอง</p>
+        <div class="shot-row" style="margin-top:22px">
+          <img src="assets/img/desktop/04-verdure/7-results-revealed.webp" width="1600" height="1100" loading="lazy"
+               alt="Results screen after the count was revealed">
+          <img src="assets/img/desktop/04-verdure/2-candidates.webp" width="1600" height="1100" loading="lazy"
+               alt="Candidate list screen">
         </div>
       </div>
     </div>
-
-    <div class="callout" style="margin-top:28px">
-      <p>
-        <strong>Fail closed</strong> — ถ้าตัวแปรกุญแจบนเซิร์ฟเวอร์ไม่ครบ endpoint โหวตตอบ 503 ทันที
-        ไม่มี fallback ไปเก็บตัวเลือกแบบอ่านได้เด็ดขาด ระบบยอมปิดรับโหวต ดีกว่ายอมเก็บบัตรที่ไม่เป็นความลับ
-      </p>
-    </div>
   </div>
 </section>
 
-<!-- ── one person one vote ─────────────────────────────────────────────── -->
-<section id="race">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">04 — concurrency</p>
-      <h2>หนึ่งคนหนึ่งเสียง ตอนที่สองคำขอมาถึงพร้อมกัน</h2>
-      <p class="lede">
-        วิธีเดิมคือ “เช็คว่าโหวตยัง แล้วค่อยบันทึก” ซึ่งมีช่องว่างระหว่างสองขั้น (TOCTOU)
-        ถ้าผู้ใช้กดสองแท็บพร้อมกัน ทั้งคู่อาจผ่านการเช็คแล้วบันทึกทั้งคู่
-        คำตอบคือธุรกรรมเดียวที่ให้การรับประกันสามอย่างพร้อมกัน
-      </p>
+<!-- ══ 5 · project 02 ══════════════════════════════════════════════════════ -->
+<section class="stage stage--auto">
+  <div class="inner">
+    <div class="work__head up">
+      <p class="work__idx">02</p>
+      <p class="tag">Course 477-303 BISA&amp;D · Semester 2, 2025</p>
     </div>
 
-    <div class="code">
-      <div class="code__bar">src/app/api/vote/route.js</div>
-<pre><span class="c">// (a) TOCTOU one-shot · (b) chain serialization · (c) tally — ในธุรกรรมเดียว</span>
-<span class="k">const</span> outcome = <span class="k">await</span> db.<span class="f">$transaction</span>(<span class="k">async</span> (tx) => {
-  <span class="c">// (a) compare-and-set: มีคำขอเดียวเท่านั้นที่พลิก flag ได้ → count === 1</span>
-  <span class="k">const</span> claim = <span class="k">await</span> tx.user.<span class="f">updateMany</span>({
-    where: { id: user.id, isVoted: <span class="k">false</span> },
-    data:  { isVoted: <span class="k">true</span>, votedAt },
-  });
-  <span class="k">if</span> (claim.count === 0) <span class="k">return</span> <span class="s">"ALREADY_VOTED"</span>;
-
-  <span class="c">// (b) SELECT ... FOR UPDATE บนแถว ChainHead — คำขอที่ชนกันเรียงคิวกัน</span>
-  <span class="c">//     ทุกใบจึงได้ prevHash ที่ถูกต้องจริง โซ่ไม่ขาดแม้โหวตพร้อมกันเป๊ะ</span>
-  <span class="k">await</span> <span class="f">appendBallotTx</span>(tx, { payload, hourBucket, chainSecret });
-
-  <span class="c">// (c) นับคะแนนแบบ atomic</span>
-  <span class="k">await</span> tx.candidate.<span class="f">update</span>({
-    where: { id: parsedId },
-    data:  { score: { increment: 1 } },
-  });
-  <span class="k">return</span> <span class="s">"OK"</span>;
-});</pre>
-    </div>
-
-    <div class="grid grid--3" style="margin-top:18px">
-      <div class="card">
-        <h3>เข้ารหัสก่อนเข้าธุรกรรม</h3>
-        <p>ciphertext ไม่ได้ขึ้นกับสถานะของโซ่ จึงคำนวณไว้ก่อนได้ ทำให้ถือ row lock สั้นที่สุดเท่าที่เป็นไปได้</p>
+    <div class="cols">
+      <div class="up">
+        <!-- SLOT — swap the whole <figure class="slot"> for
+             <figure class="shot"><img src="…" alt="…"></figure> -->
+        <figure class="slot" style="--ar: 16 / 10">
+          <em>Image 1</em>
+          <b>Dashboard summarising credit progress by category</b>
+          <code>assets/img/credit/01-hero.webp</code>
+        </figure>
+        <h2 class="big big--l shot__title">FMS Credit<br>Tracker</h2>
       </div>
-      <div class="card">
-        <h3>พิสูจน์ด้วยเทสต์ ไม่ใช่ด้วยเหตุผล</h3>
-        <p>e2e ยิงสองคำขอพร้อมกันจากผู้ใช้คนเดียว ต้องสำเร็จหนึ่ง ปฏิเสธหนึ่ง และคะแนนรวมต้องเพิ่มขึ้นหนึ่ง</p>
-      </div>
-      <div class="card">
-        <h3>Rate limit ซ้อนอีกชั้น</h3>
-        <p>จำกัดจำนวนคำขอต่อผู้ใช้บน endpoint โหวตและ login เพื่อกันการยิงรัว แม้ตัวกันโหวตซ้ำจะรับมือได้อยู่แล้ว</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ── template system ─────────────────────────────────────────────────── -->
-<section id="templates">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">05 — ระบบธีม</p>
-      <h2>หน้าตาเว็บทั้งระบบ เปลี่ยนได้จาก admin คลิกเดียว</h2>
-      <p class="lede">
-        6 ตระกูล 23 ธีม แต่ละตระกูลมี layout ของตัวเองครบทุกหน้า ไม่ใช่แค่เปลี่ยนสี
-        ทั้งหมดมาจากไฟล์ palette ไฟล์เดียวต่อตระกูล — เพิ่มธีมใหม่คือแก้ 3 จุด ที่เหลือไหลตามทั้งระบบ
-      </p>
-    </div>
+      <div class="up" style="--d:90ms">
+        <p class="tag tag--honey">System Analyst · Full-stack Developer · UI/UX</p>
+        <p class="small" style="margin:14px 0 22px">
+          A credit tracker for students of the Faculty of Management Sciences. Students upload
+          their grade report and registration slip as PDFs and the system
+          <strong>reads the text out and checks it against the curriculum structure itself</strong>,
+          showing which categories are complete and which are still short — instead of ticking
+          boxes by hand in a table most people get wrong.
+        </p>
 
-    <div class="tabs" role="tablist" aria-label="เลือกตระกูลธีม">
-      <button class="tab" role="tab" aria-selected="true"  data-family="01-original">Original</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="02-gumroad">Gumroad</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="03-studio-dark">Studio Dark</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="04-verdure">Verdure</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="05-blossom">Blossom</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="06-receipt">Receipt Paper</button>
-    </div>
+        <div class="facts">
+          <div><b data-count>30</b><span>API routes</span></div>
+          <div><b data-count>13</b><span>database tables</span></div>
+          <div><b data-count>15</b><span>student + admin screens</span></div>
+          <div><b data-count>~12,000</b><span>lines of TypeScript</span></div>
+        </div>
 
-    <div class="shots" id="familyShots"><!-- filled by app.js, ทุกภาพมีอยู่จริงบนเซิร์ฟเวอร์ --></div>
+        <div class="chips">
+          <span>Next.js 16</span><span>React 19</span><span>TypeScript</span>
+          <span>Prisma 7</span><span>NextAuth 5</span><span>pdf-parse</span>
+        </div>
 
-    <div class="section-head" style="margin-top:56px">
-      <h2>23 ธีม หน้าเดียวกัน</h2>
-      <p class="lede">ทุกภาพด้านล่างคือหน้าแรกเดียวกัน ต่างกันแค่ธีมที่ active — คลิกเพื่อดูเต็ม</p>
-    </div>
-    <div class="themes" id="themeGrid"></div>
+        <a class="btn" href="credit-tracker.html">Read the full case study
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
 
-    <div class="grid grid--3" style="margin-top:40px">
-      <div class="card">
-        <h3>Token สองชั้น</h3>
-        <p>Layer 1 คือสีระดับธีม Layer 2 คือตัวแปรระดับ element โดยบังคับว่าตัวแปรที่เป็นสีต้องอ้าง token เสมอ ห้ามใส่ hex ตรง ๆ</p>
-      </div>
-      <div class="card">
-        <h3>พรีวิวต้องตรงกับของจริง</h3>
-        <p>ตัวที่ใช้พรีวิวกับตัวที่ render จริงต้อง map ค่าตรงกัน มี invariant คุมไว้ 7 ข้อ เพราะพรีวิวที่โกหกคือฟีเจอร์ที่อันตรายกว่าไม่มีพรีวิว</p>
-      </div>
-      <div class="card">
-        <h3>ลองก่อนเลือกได้จริง</h3>
-        <p>หน้าพรีวิวเดินได้ทั้ง flow (home → login → vote → success) โดยไม่แตะฐานข้อมูล คนที่ไม่ใช่ dev จึงตัดสินใจจากการลองใช้ ไม่ใช่จากภาพนิ่ง</p>
+        <div class="shot-row" style="margin-top:22px">
+          <figure class="slot" style="--ar: 16 / 10">
+            <em>Image 2</em><b>PDF upload screen</b>
+            <code>credit/02-upload.webp</code>
+          </figure>
+          <figure class="slot" style="--ar: 16 / 10">
+            <em>Image 3</em><b>Review table before saving</b>
+            <code>credit/03-verify.webp</code>
+          </figure>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── UX / UI ─────────────────────────────────────────────────────────── -->
-<section id="uxui">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">06 — UX / UI</p>
-      <h2>เกณฑ์ที่ใช้ตัดสินงานออกแบบ</h2>
-      <p class="lede">
-        ตั้งเกณฑ์ไว้ก่อนลงมือ และทุกข้อต้องตรวจได้จริงไม่ใช่ความรู้สึก
-        หลักคือสวยจาก craft พื้นฐาน ไม่ใช่จาก gimmick — ไม่มี 3D ไม่มี particle ไม่มี loading ที่นานเพื่อความเท่
-      </p>
+<!-- ══ 6 · project 03 ══════════════════════════════════════════════════════ -->
+<section class="stage stage--auto">
+  <div class="inner">
+    <div class="work__head up">
+      <p class="work__idx">03</p>
+      <p class="tag">Course 477-302 Cloud Computing Platform · Oct 2025</p>
     </div>
 
-    <div class="table-scroll">
-      <table>
-        <thead><tr><th>มิติ</th><th>เกณฑ์ที่ต้องผ่าน</th></tr></thead>
-        <tbody>
-          <tr><td>Typography</td><td>ไม่เกิน 3 ระดับต่อวิว · line-height 1.1 หัวเรื่อง / 1.6 เนื้อหา · ตัวเลขสถิติใช้ tabular-nums เพื่อไม่ให้ตัวเลขเต้นตอนนับ</td></tr>
-          <tr><td>Spacing</td><td>จังหวะ 4/8px ตลอด · whitespace ใจกว้าง · ไม่มี element ชนกันหรือชิดขอบโดยไม่ตั้งใจ</td></tr>
-          <tr><td>Colour</td><td>contrast เนื้อหา ≥ 4.5:1 หัวเรื่องใหญ่ ≥ 3:1 · ไม่เกิน 3 สีต่อวิว</td></tr>
-          <tr><td>Motion</td><td>ใช้เมื่อมีความหมายเท่านั้น · 150-300ms ease-out · เคารพ prefers-reduced-motion</td></tr>
-          <tr><td>Hierarchy</td><td>ทุกหน้าตอบได้ใน 1 วินาทีว่า “หน้าอะไร ต้องทำอะไรต่อ” · CTA หลักหนึ่งเดียวเด่นสุด</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="cols">
+      <div class="up">
+        <figure class="slot" style="--ar: 16 / 10">
+          <em>Image 1</em>
+          <b>The PSU Chatbot page with the bot embedded (light theme)</b>
+          <code>assets/img/chatbot/01-hero.webp</code>
+        </figure>
+        <h2 class="big big--l shot__title">PSU<br>Chatbot</h2>
+      </div>
 
-    <div class="section-head" style="margin-top:56px">
-      <h2>Mobile-first เป็นด่าน ไม่ใช่คำโฆษณา</h2>
-      <p class="lede">
-        ทุกหน้ารีวิวที่ 375px ก่อน desktop เสมอ เพราะผู้ใช้จริงเกือบทั้งหมดโหวตจากมือถือระหว่างเดินอยู่ในคณะ
-        — mobile ต้องถูกออกแบบ ไม่ใช่ desktop ที่ย่อลงมา
-      </p>
-    </div>
-    <div class="phones" id="phoneStrip"></div>
+      <div class="up" style="--d:90ms">
+        <p class="tag tag--honey">System Analyst · Cloud Developer · Front-end</p>
+        <p class="small" style="margin:14px 0 22px">
+          A chatbot that answers student questions, built on Azure Bot Service, wired to Language
+          Studio, then embedded in a web page through the Direct Line API with a Node.js layer in
+          between that trades the secret key for a token
+          <strong>so the key never reaches the frontend</strong> · the whole thing runs around the
+          clock on an Azure VM.
+        </p>
 
-    <div class="section-head" style="margin-top:56px">
-      <h2>การตัดสินใจที่เล่าได้</h2>
-    </div>
-    <div class="grid grid--2">
-      <div class="card">
-        <span class="card__num">01</span>
-        <h3>พรรคเดียวต้องมี 3 ทางเลือก</h3>
-        <p>เมื่อมีผู้สมัครพรรคเดียว การให้กดได้แค่ “เลือก” คือการบังคับ บัตรจึงเปลี่ยนเป็น รับรอง / ไม่รับรอง / งดออกเสียง พร้อมสี semantic คงที่ที่ <strong>ไม่เปลี่ยนตามธีม</strong> เพราะความหมายของสีสำคัญกว่าความสวยของพาเลตต์</p>
-      </div>
-      <div class="card">
-        <span class="card__num">02</span>
-        <h3>ผลที่ยังไม่ถึงเวลา ต้องออกแบบหน้า “ล็อก”</h3>
-        <p>ไม่ใช่ซ่อนเมนูแล้วปล่อยให้งง คนที่กดเข้ามาต้องรู้ว่าทำไมยังดูไม่ได้และดูได้เมื่อไหร่ ส่วนคะแนนถูกปิดตั้งแต่ชั้น API มีเทสต์คุมว่าไม่รั่ว</p>
-      </div>
-      <div class="card">
-        <span class="card__num">03</span>
-        <h3>ห้ามซ่อนเนื้อหาสำคัญไว้หลัง animation</h3>
-        <p>กติกาที่ตั้งขึ้นหลังเจอของจริง — บัตรลงคะแนนเคยตั้ง opacity เป็น 0 รอ reveal แล้ว reveal ไม่ทำงานบนบางเครื่อง บัตรหายทั้งหน้า ตั้งแต่นั้นบัตร รายชื่อพรรค และผลคะแนน ห้ามพึ่ง JS reveal และตรวจด้วย computed style จริง</p>
-      </div>
-      <div class="card">
-        <span class="card__num">04</span>
-        <h3>ปุ่มรองห้ามแย่งซีน</h3>
-        <p>บทเรียนจากหน้าผลคะแนนที่ปุ่มรองเด่นกว่า CTA หลักจนคนกดผิดทาง แก้ด้วยการลดน้ำหนักปุ่มรอง ไม่ใช่เพิ่มน้ำหนักปุ่มหลัก</p>
-      </div>
-      <div class="card">
-        <span class="card__num">05</span>
-        <h3>แต่ละธีมมีพิธีกรรมของตัวเอง</h3>
-        <p>Verdure จบด้วยการประทับ wax seal · Receipt Paper เป็นม้วนใบเสร็จที่หย่อนลงหีบ · Gumroad เป็นนีโอบรูทัลสีจัด เพราะวินาทีที่กดโหวตเสร็จควรรู้สึกว่าเสียงถูกนับแล้ว ไม่ใช่แค่ขึ้นคำว่า success</p>
-      </div>
-      <div class="card">
-        <span class="card__num">06</span>
-        <h3>ตัด editor ที่สร้างมากับมือทิ้ง</h3>
-        <p>ระบบเคยมี editor แบบ Canva ให้ admin ลากวางเอง ทำไปไกลแล้วตัดสินใจทิ้ง เพราะสิ่งที่ผู้ใช้ต้องการจริงคือหน้าตาที่หลากหลายและพร้อมใช้ ไม่ใช่เครื่องมือออกแบบที่ไม่มีคนดูแลต่อ</p>
+        <div class="facts">
+          <div><b>Azure</b><span>Bot Service + Language Studio</span></div>
+          <div><b>24/7</b><span>running on an Azure VM (Ubuntu)</span></div>
+          <div><b>HTTPS</b><span>Nginx + Certbot + pm2</span></div>
+          <div><b>3</b><span>people on the team, the system was mine</span></div>
+        </div>
+
+        <div class="chips">
+          <span>Azure Bot Service</span><span>Language Studio</span><span>Direct Line API</span>
+          <span>Node.js</span><span>Nginx</span><span>pm2</span>
+        </div>
+
+        <a class="btn" href="psu-chatbot.html">Read the full case study
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <div class="shot-row" style="margin-top:22px">
+          <figure class="slot" style="--ar: 16 / 10">
+            <em>Image 2</em><b>Dark theme of the page</b>
+            <code>chatbot/02-dark.webp</code>
+          </figure>
+          <figure class="slot" style="--ar: 16 / 10">
+            <em>Image 3</em><b>Testing in Web Chat</b>
+            <code>chatbot/05-webchat-test.webp</code>
+          </figure>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── handover ────────────────────────────────────────────────────────── -->
-<section id="handover">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">07 — การส่งมอบ</p>
-      <h2>ออกแบบให้ระบบอยู่ต่อได้โดยไม่มีผม</h2>
-      <p class="lede">
-        ทีมสโมสรเปลี่ยนทุกปี งานประจำปีจึงถูกออกแบบให้เป็นส่วนหนึ่งของผลิตภัณฑ์
-        ไม่ใช่ความรู้ที่อยู่ในหัวคนเดียว
-      </p>
-    </div>
+<!-- ══ 7 · roles ═══════════════════════════════════════════════════════════ -->
+<section class="stage" id="roles">
+  <div class="inner">
+    <p class="tag up">02 — What I am looking for</p>
+    <h2 class="big big--l up" style="--d:60ms;margin-top:14px">
+      I want to sit between<br>the people and <span class="mark-wrap">the system<svg class="scrawl" viewBox="0 0 300 32" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 22C64 8 152 4 240 11c30 3 48 7 54 11"/><path pathLength="1" d="M18 29C78 17 168 14 246 20" style="opacity:.55"/></svg></span>
+    </h2>
 
-    <div class="grid grid--2" style="margin-bottom:24px">
-      <div class="card">
-        <h3>ปุ่มตรวจความพร้อม 14 รายการ</h3>
-        <p>ตรวจ config กุญแจ วันเวลา รายชื่อ และธีม ให้ครบก่อนเปิดหีบ อ่านอย่างเดียว ไม่เขียนอะไรลง DB</p>
+    <div class="roles">
+      <div class="role role--lead up">
+        <p class="role__n">First choice</p>
+        <h3 class="role__t">System Analyst<br>Business Analyst</h3>
+        <p class="small">
+          The closest match to what I have actually done — in all three projects I started by
+          collecting requirements, writing use cases, designing the ER diagram and setting the
+          business rules before touching the first line of code. My advantage is that I can talk
+          to developers on their own terms, because I have written it myself.
+        </p>
       </div>
-      <div class="card">
-        <h3>Audit log + กันกดพลาด</h3>
-        <p>ทุกคำสั่งของ admin ถูกบันทึก และปุ่มล้างข้อมูลถูกล็อกไว้ระหว่างที่การโหวตยังเปิดอยู่ ต้องสั่งหยุดระบบก่อนเท่านั้น</p>
+      <div class="role up">
+        <p class="role__n">Second choice</p>
+        <h3 class="role__t">Management Trainee</h3>
+        <p class="small">
+          I study business administration, not engineering, so my view always starts from the
+          organisation's problem. In group projects I am the one holding the overall picture and
+          coordinating, which is why work that needs several parties moving at once suits me.
+        </p>
       </div>
-      <div class="card">
-        <h3>สคริปต์เปลี่ยนปีการศึกษา</h3>
-        <p>preflight → archive ปีเก่า → import รายชื่อใหม่ → ตั้งวันและเลือกธีมในหน้า admin → ทำ key ceremony ชุดใหม่ของปีนั้น</p>
+      <div class="role up">
+        <p class="role__n">Also open to</p>
+        <h3 class="role__t">Front-end · Full-stack<br>Web Developer</h3>
+        <p class="small">
+          The UI of the voting system is the part I am proudest of — a 23-theme system switchable
+          site-wide from the admin page, and every screen designed mobile-first. If the role is
+          development, I can do it today; my long-term goal is simply systems analysis.
+        </p>
       </div>
-      <div class="card">
-        <h3>ฐานข้อมูลทดสอบที่แตะของจริงไม่ได้</h3>
-        <p>ชุด e2e สร้าง DB ของตัวเองบนพอร์ตแยก และทุกคำสั่งลบ/ล้างมี guard บังคับตรวจชื่อ DB ก่อนเสมอ</p>
-      </div>
-    </div>
-
-    <div class="shots">
-      <button class="shot" data-full="assets/img/admin/2-template-chooser.webp" data-cap="Admin · เลือกธีมทั้งระบบ">
-        <span class="shot__frame"><img loading="lazy" src="assets/img/admin/2-template-chooser.webp" alt="หน้า admin สำหรับเลือกธีม แสดงรายการตระกูลธีมพร้อม swatch สีและสไลด์หน้าจริง"></span>
-        <span class="shot__cap">เลือกธีมทั้งระบบ <span>admin</span></span>
-      </button>
-      <button class="shot" data-full="assets/img/admin/5-readiness.webp" data-cap="Admin · ตรวจความพร้อม 14 รายการ">
-        <span class="shot__frame"><img loading="lazy" src="assets/img/admin/5-readiness.webp" alt="ผลการตรวจความพร้อมระบบ แสดงรายการที่ผ่าน เตือน และไม่ผ่าน"></span>
-        <span class="shot__cap">ตรวจความพร้อมก่อนเปิดหีบ <span>admin</span></span>
-      </button>
-      <button class="shot" data-full="assets/img/admin/7-global-config.webp" data-cap="Admin · ตั้งค่าปีและวันเลือกตั้ง">
-        <span class="shot__frame"><img loading="lazy" src="assets/img/admin/7-global-config.webp" alt="หน้าตั้งค่าทั่วไป กำหนดปีการศึกษา ชื่องาน และวันเวลาเปิดปิดหีบ"></span>
-        <span class="shot__cap">ตั้งปี วันเวลา และชื่องาน <span>admin</span></span>
-      </button>
-      <button class="shot" data-full="assets/img/admin/1-overview.webp" data-cap="Admin · ภาพรวมระบบ">
-        <span class="shot__frame"><img loading="lazy" src="assets/img/admin/1-overview.webp" alt="หน้าภาพรวมของ admin console"></span>
-        <span class="shot__cap">ภาพรวมระบบ <span>admin</span></span>
-      </button>
     </div>
   </div>
 </section>
 
-<!-- ── quality ─────────────────────────────────────────────────────────── -->
-<section id="quality">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">08 — คุณภาพ</p>
-      <h2>ด่านที่ต้องผ่านก่อน deploy</h2>
+<!-- ══ 8 · skills + cv ═════════════════════════════════════════════════════ -->
+<section class="stage stage--auto" id="cv">
+  <div class="inner">
+    <p class="tag up">03 — Skills</p>
+    <h2 class="big big--m up" style="--d:60ms;margin:14px 0 clamp(26px,4vw,44px)">What I actually used in the three projects above</h2>
+
+    <div class="grid2">
+      <div class="block up">
+        <h3>Business &amp; Systems Analysis</h3>
+        <p class="tag">How every project starts</p>
+        <ul><li>Requirement Analysis</li><li>Business Process Flow</li><li>Use Case Diagram</li>
+          <li>Context Diagram</li><li>ER Diagram</li><li>System Logic Design</li></ul>
+      </div>
+      <div class="block up" style="--d:60ms">
+        <h3>Experience Design</h3>
+        <p class="tag">UI/UX &amp; Prototyping</p>
+        <ul><li>Wireframing</li><li>Figma</li><li>Mobile-first Design</li><li>Design System</li><li>Accessibility</li></ul>
+      </div>
+      <div class="block up" style="--d:120ms">
+        <h3>Web Development</h3>
+        <p class="tag">What I build with</p>
+        <ul><li>Next.js</li><li>React</li><li>TypeScript</li><li>JavaScript</li><li>Tailwind CSS</li>
+          <li>HTML · CSS</li><li>Prisma</li><li>PostgreSQL</li></ul>
+      </div>
+      <div class="block up" style="--d:180ms">
+        <h3>Cloud &amp; Delivery</h3>
+        <p class="tag">Getting it live</p>
+        <ul><li>Microsoft Azure</li><li>Azure Bot Service</li><li>Azure VM</li><li>API Integration</li>
+          <li>Nginx</li><li>Docker</li><li>Git · GitHub</li></ul>
+      </div>
     </div>
 
-    <div class="table-scroll">
-      <table>
-        <thead><tr><th>ชั้น</th><th>ครอบคลุมอะไร</th></tr></thead>
-        <tbody>
-          <tr><td>build</td><td>ต้อง compile ผ่านทั้ง 33 หน้า ไม่มี error</td></tr>
-          <tr><td>smoke · 15 เคส</td><td>API สาธารณะไม่รั่วคะแนน · admin API ตอบ 401 ทั้งเมื่อไม่มี auth และเมื่อปลอม cookie · login ติด rate limit 429 · โหวตต้องมี session · invariants ของ role และสิทธิ์</td></tr>
-          <tr><td>e2e · 35 เคส</td><td>โหวตครบวงจร · โหวตซ้ำและยิงพร้อมกัน · งดออกเสียง · หน้าปิดหีบ · admin console</td></tr>
-          <tr><td>readiness</td><td>ด่านสุดท้ายในหน้า admin ตรวจ 14 รายการก่อนเปิดหีบจริง</td></tr>
-        </tbody>
-      </table>
+    <p class="tag up" style="margin-top:clamp(46px,7vw,84px)">04 — Background</p>
+    <div class="cv" style="margin-top:18px">
+      <div class="cv__row up">
+        <p class="cv__when">2023 – present</p>
+        <div class="cv__what">
+          <em>Education</em>
+          <h3>Prince of Songkla University · BBA</h3>
+          <p class="small">Business Information Systems, Faculty of Management Sciences · GPAX 3.03 · expected graduation 2027</p>
+        </div>
+      </div>
+      <div class="cv__row up">
+        <p class="cv__when">Oct 2025</p>
+        <div class="cv__what">
+          <em>PSU Chatbot · 477-302</em>
+          <h3>An Azure chatbot deployed for real use</h3>
+          <p class="small">
+            Designed the conversation flow and the cloud architecture under a tight budget, finishing
+            with a deploy to an Azure VM with HTTPS · the course lecturer invited me to build the
+            faculty's own chatbot off the back of this work.
+          </p>
+        </div>
+      </div>
+      <div class="cv__row up">
+        <p class="cv__when">Dec 2025 – present</p>
+        <div class="cv__what">
+          <em>FMS Online Voting System</em>
+          <h3>The student council election system</h3>
+          <p class="small">
+            Collected requirements with the election committee and designed the threat model, the
+            database and the way ballots are stored · imported 3,119 eligible voters through the
+            university API with no bad records.
+          </p>
+        </div>
+      </div>
+      <div class="cv__row up">
+        <p class="cv__when">Semester 2, 2025</p>
+        <div class="cv__what">
+          <em>FMS Credit Tracker · 477-303</em>
+          <h3>A credit tracker that reads transcripts itself</h3>
+          <p class="small">
+            Designed the use cases, context diagram and ER diagram first, then built it as a
+            Next.js + TypeScript web app with both a student side and a curriculum-admin side.
+          </p>
+        </div>
+      </div>
     </div>
 
-    <div class="callout callout--plain" style="margin-top:24px">
-      <p>
-        ลำดับ gate คือ build → smoke → e2e → readiness
-        และมีเอกสารกำกับครบ: checklist สำหรับ deploy, runbook สำหรับผู้ดูแล, ใบขอฐานข้อมูลสำหรับฝ่าย IT
-        และ pitfall log 125 ข้อที่บันทึกทุกบทเรียนที่เคยเจ็บมา เพื่อไม่ให้ผิดซ้ำ
+    <div class="note up">
+      <p class="small">
+        <strong>Something I always say plainly</strong> — I use AI as a thinking partner on every
+        project, but the architecture, the security and the system design decisions are mine, and I
+        keep a written record of the lessons I hit so I do not repeat them.
       </p>
     </div>
   </div>
 </section>
 
-<!-- ── honest notes ────────────────────────────────────────────────────── -->
-<section id="notes">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">09 — บันทึกตรงไปตรงมา</p>
-      <h2>สิ่งที่ควรพูดให้ตรง</h2>
+<!-- ══ 9 · contact ═════════════════════════════════════════════════════════ -->
+<section class="stage end" id="contact">
+  <div class="inner">
+    <p class="tag up">05 — Contact</p>
+    <h2 class="big big--l up" style="--d:60ms;margin:16px 0 26px">
+      I speak developer<br>and <span class="mark-wrap">business<svg class="scrawl" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M50 78C16 66 18 30 62 19 114 6 216 6 262 19c28 8 32 38-2 52-48 18-164 20-214 7"/></svg></span>
+    </h2>
+
+    <p class="small up" style="--d:110ms;max-width:52ch">
+      I am looking for a job or an internship as a <strong>System Analyst</strong>,
+      <strong>Business Analyst</strong> or <strong>Management Trainee</strong>. Happy to go deep on
+      any of the projects above, code included.
+    </p>
+
+    <div class="btns up" style="--d:160ms;margin-top:30px">
+      <a class="btn" href="mailto:teerapab.bs@gmail.com">teerapab.bs@gmail.com</a>
+      <a class="btn btn--ghost" href="tel:+66620986667">(+66) 62-098-6667</a>
     </div>
-    <ul class="clean">
-      <li><strong>สถานะ</strong> — ระบบพัฒนาเสร็จและผ่านด่าน build / smoke / e2e แล้ว ขั้นตอนสุดท้ายคือ deploy ด้วย Docker ร่วมกับฝ่าย IT ของคณะ</li>
-      <li><strong>ใช้ AI ช่วยพัฒนา</strong> — ผมใช้ AI เป็นคู่คิดตลอดโปรเจกต์ โดยการตัดสินใจเชิงสถาปัตยกรรมและความปลอดภัยทั้งหมดเป็นของผม และเขียนระเบียบการทำงานกับ pitfall log ไว้เป็นเอกสารเพื่อไม่ให้ผิดซ้ำ</li>
-      <li><strong>ภาพทั้งหมดในหน้านี้</strong> — ถ่ายจากหน้าพรีวิวของระบบที่ใช้ข้อมูลจำลองล้วน ไม่มีชื่อหรือรหัสนักศึกษาจริงปรากฏที่ใดเลย</li>
-    </ul>
+
+    <div class="foot">
+      <ul>
+        <li><a href="mailto:teerapab.bs@gmail.com">Email</a></li>
+        <li><a href="https://github.com/Teerapab149" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/teerapab-boonsri-bb2404394/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+      <small>
+        Teerapab Boonsri · Hat Yai, Songkhla<br>
+        Business Information Systems · Prince of Songkla University
+      </small>
+    </div>
   </div>
 </section>
 
 </main>
 
-<footer class="footer">
-  <div class="wrap footer__row">
-    <div>
-      <h2 style="font-size:1.35rem;margin-bottom:14px">สนใจคุยเรื่องงาน</h2>
-      <ul class="contacts">
-        <li>
-          <a class="link" href="mailto:Teerapab.bs@gmail.com">
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6 9-6"/></svg>
-            Teerapab.bs@gmail.com
-          </a>
-        </li>
-        <li>
-          <a class="link" href="https://github.com/Teerapab149" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.5 9.5 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
-            github.com/Teerapab149
-          </a>
-        </li>
-        <li>
-          <a class="link" href="https://www.linkedin.com/in/teerapab-boonsri-bb2404394/" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.64h.05A4.17 4.17 0 0 1 17.6 8.7c4 0 4.4 2.53 4.4 5.82V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21h-4V9Z"/></svg>
-            LinkedIn
-          </a>
-        </li>
-      </ul>
-    </div>
-    <small>
-      Teerapab Boonsri · Prince of Songkla University<br>
-      FMS Online Voting System · 2026
-    </small>
-  </div>
-</footer>
-
-<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="ดูภาพขนาดเต็ม">
-  <button class="lb__close" id="lbClose" aria-label="ปิด">✕</button>
-  <img id="lbImg" src="" alt="">
-  <p class="lb__cap" id="lbCap"></p>
-</div>
-
-<script src="assets/app.js"></script>
+<script src="assets/verdure.js"></script>
 </body>
 </html>

@@ -1,37 +1,64 @@
 /* ==========================================================================
-   Portfolio — FMS Online Voting System
-   Design bar borrowed from the project itself (docs/MASTER-DESIGN-PLAN §2):
+   Shared design system — Teerapab Boonsri portfolio
+   Loaded by the three case-study pages. The landing page has its own
+   self-contained stylesheet (assets/verdure.css) and does not load this file.
+
+   Design bar borrowed from the election project itself
+   (docs/MASTER-DESIGN-PLAN §2):
    ≤3 type levels per view · 4/8px rhythm · ≤3 colours per view ·
    motion only when it means something · one dominant CTA.
    No content is ever hidden behind a JS reveal (project rule, learned the
    hard way when a ballot rendered at opacity:0 and never came back).
+
+   ── Verdure retone, 2026-07-30 ──────────────────────────────────────────
+   The owner picked the Verdure landing page, so this sheet was retoned from
+   the original purple to the SAME palette as assets/verdure.css: cream paper,
+   moss ink, honey accent. The class names and the layout did not change — only
+   the tokens and the display type. If you touch a colour here, change it in
+   verdure.css too or the two halves of the site drift apart.
+
+   Every colour was contrast-checked against its own background; the ratio is
+   noted on the line. Nothing carrying text drops below 4.5:1.
    ========================================================================== */
 
 :root {
-  --bg:        #0a0a0e;
-  --surface:   #131319;
-  --surface-2: #1a1a22;
-  --line:      #26262f;
-  --line-soft: #1e1e26;
+  --bg:        #F7F4ED;   /* Verdure cream — identical to verdure.css --paper */
+  --surface:   #FFFFFF;
+  --surface-2: #EBE4D6;
+  --line:      #DED5C3;
+  --line-soft: #E9E1D2;
 
-  --text:      #eeeef4;
-  --muted:     #9d9daa;
-  --dim:       #6f6f7d;
+  --text:      #1B362B;   /* moss   · 12.9:1 on --bg */
+  --muted:     #3A5E4D;   /* moss-3 ·  6.8:1 on --bg */
+  --dim:       #4F6959;   /* moss-4 ·  5.5:1 on --bg · 4.8:1 on --surface-2 — smallest legible */
 
-  --brand:     #c85ec0;   /* FMS purple, lifted for contrast on dark */
-  --brand-2:   #8a2680;   /* the real brand token */
-  --accent:    #8ef0b0;   /* used only for "verified / pass" semantics */
-  --warn:      #ffce6a;
+  --brand:     #7D6228;   /* honey-ink · 5.2:1 on --bg — the only honey that may carry text */
+  --brand-2:   #C5A059;   /* honey · 3.1:1 — decorative only: rules, washes, hover fills */
+  --brand-ink: #1B362B;   /* solid fills (buttons, active tab) are moss, as on the landing page */
+  --accent:    #14664A;   /* "verified / pass" semantics only; 6.2:1 on --bg */
+  --warn:      #7D6228;
+
+  /* code blocks stay dark on purpose — a light page reads better with one
+     inverted island than with grey-on-grey syntax highlighting. The island is
+     moss-dark rather than near-black so it belongs to the same family. */
+  --code-bg:   #14251D;
+  --code-bar:  #1B322A;
+  --code-line: #2B463A;
+  --code-text: #E9E4D6;
+
+  --shadow-sm: 0 1px 2px rgba(27, 54, 43, .05), 0 4px 12px -6px rgba(27, 54, 43, .10);
+  --shadow-md: 0 2px 4px rgba(27, 54, 43, .04), 0 18px 40px -24px rgba(27, 54, 43, .24);
+  --shadow-lg: 0 4px 8px rgba(27, 54, 43, .04), 0 40px 80px -40px rgba(27, 54, 43, .30);
 
   --radius:    14px;
-  --radius-lg: 22px;
+  --radius-lg: 26px;
   --maxw:      1120px;
 
   --font-display: 'Kanit', 'Segoe UI', system-ui, sans-serif;
   --font-body: 'IBM Plex Sans Thai', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -56,7 +83,13 @@ body {
 .grid > *, .shots > *, .themes > *, .arch__row > *, .stats > * { min-width: 0; }
 .code, .table-scroll, .phones { max-width: 100%; min-width: 0; }
 
-img { max-width: 100%; display: block; }
+/* height:auto is NOT optional here. Every <img> carries width/height attributes
+   (they reserve layout space so the page does not jump while images load), and
+   those attributes map to real CSS width/height. Constraining only max-width
+   leaves the attribute height in force, so an image renders at its container
+   width by its ATTRIBUTE height — stretched tall. Rules that deliberately set
+   an explicit height (.shot__frame img, .phone__frame img) out-specify this. */
+img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; }
 
 /* ── layout primitives ─────────────────────────────────────────────────── */
@@ -67,19 +100,23 @@ a { color: inherit; }
 section { padding-block: clamp(56px, 9vw, 104px); }
 section + section { border-top: 1px solid var(--line-soft); }
 
+/* Kanit 600 at .2em, not mono — same label treatment as .tag on the landing page */
 .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--font-mono);
-  font-size: .75rem; letter-spacing: .18em; text-transform: uppercase;
+  font-family: var(--font-display); font-weight: 600;
+  font-size: .6875rem; letter-spacing: .2em; text-transform: uppercase;
   color: var(--dim); margin: 0 0 14px;
 }
 .eyebrow::before {
-  content: ''; width: 22px; height: 1px; background: var(--brand); opacity: .8;
+  content: ''; width: 22px; height: 1px; background: var(--brand-2);
 }
 
-h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; margin: 0; font-weight: 600; }
-h2 { font-size: clamp(1.55rem, 3.4vw, 2.2rem); letter-spacing: -.01em; }
-h3 { font-size: 1.125rem; font-weight: 600; letter-spacing: 0; }
+/* Verdure display type: heavy weight, negative tracking, tight leading. This is
+   the single loudest signal that the case studies and the landing page are one
+   site — keep the weights at 700/800 (the font link on each page loads them). */
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.12; margin: 0; font-weight: 700; }
+h2 { font-size: clamp(1.65rem, 3.8vw, 2.5rem); font-weight: 800; letter-spacing: -.045em; line-height: 1.05; }
+h3 { font-size: 1.125rem; font-weight: 700; letter-spacing: -.02em; }
 
 .lede { color: var(--muted); max-width: 62ch; margin: 14px 0 0; }
 p { margin: 0 0 16px; }
@@ -107,8 +144,10 @@ p:last-child { margin-bottom: 0; }
   font-size: .875rem; color: var(--muted); text-decoration: none; white-space: nowrap;
   padding: 4px 0; border-bottom: 1px solid transparent; transition: color .2s ease, border-color .2s ease;
 }
-.nav__links a:hover, .nav__links a.is-active { color: var(--text); border-color: var(--brand); }
+.nav__links a:hover, .nav__links a.is-active { color: var(--text); border-color: var(--brand-2); }
 @media (max-width: 780px) { .nav__links { display: none; } }
+/* at 360px the back link + full brand would push the bar sideways */
+@media (max-width: 560px) { .nav__brand span { display: none; } }
 
 /* ── hero ──────────────────────────────────────────────────────────────── */
 
@@ -116,16 +155,19 @@ p:last-child { margin-bottom: 0; }
   padding-block: clamp(64px, 11vw, 130px) clamp(40px, 6vw, 72px);
   position: relative; isolation: isolate;
 }
+/* On a light page the wash has to be far weaker than its dark counterpart —
+   the same alpha that read as "a glow" on #0a0a0e reads as "a stain" on #f7f6f9 */
 .hero::before {
   content: ''; position: absolute; inset: -160px -10% auto -10%; height: 680px; z-index: -1;
   background:
-    radial-gradient(46% 52% at 18% 34%, color-mix(in srgb, var(--brand-2) 52%, transparent), transparent 72%),
-    radial-gradient(40% 46% at 78% 12%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 70%);
+    radial-gradient(46% 52% at 18% 34%, color-mix(in srgb, var(--brand-2) 14%, transparent), transparent 72%),
+    radial-gradient(40% 46% at 78% 12%, color-mix(in srgb, var(--brand) 8%, transparent), transparent 70%);
   filter: blur(20px);
   pointer-events: none;
 }
 .hero h1 {
-  font-size: clamp(2.4rem, 6.4vw, 4.4rem); font-weight: 600; letter-spacing: -.02em; margin: 0 0 20px;
+  font-size: clamp(2.4rem, 6.6vw, 4.6rem); font-weight: 800;
+  letter-spacing: -.055em; line-height: .96; margin: 0 0 22px;
 }
 .hero h1 em { font-style: normal; color: var(--brand); }
 .hero__sub { font-size: clamp(1.0625rem, 1.9vw, 1.25rem); color: var(--muted); max-width: 60ch; }
@@ -141,14 +183,14 @@ p:last-child { margin-bottom: 0; }
 .hero__shot {
   margin-top: clamp(36px, 6vw, 64px); border-radius: var(--radius-lg); overflow: hidden;
   border: 1px solid var(--line); background: var(--surface);
-  box-shadow: 0 40px 90px -50px rgba(0,0,0,.9);
+  box-shadow: var(--shadow-lg);
 }
 .hero__shot img { width: 100%; }
 
 /* ── stat strip ────────────────────────────────────────────────────────── */
 
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line-soft);
-  border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
 .stat { background: var(--surface); padding: 22px 20px; }
 .stat b {
   display: block; font-family: var(--font-display); font-weight: 600;
@@ -165,7 +207,7 @@ p:last-child { margin-bottom: 0; }
 
 .card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 24px;
+  padding: 24px; box-shadow: var(--shadow-sm);
 }
 .card h3 { margin-bottom: 8px; }
 .card p { color: var(--muted); font-size: .9375rem; margin: 0; }
@@ -222,36 +264,38 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
 
 /* ── code ──────────────────────────────────────────────────────────────── */
 
+/* the one inverted island on the page — syntax colours need a dark ground to
+   stay distinguishable, and grey-on-grey highlighting is unreadable */
 .code {
-  background: #0d0d13; border: 1px solid var(--line); border-radius: var(--radius);
-  overflow: hidden;
+  background: var(--code-bg); border: 1px solid var(--code-line); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-md);
 }
 .code__bar {
   display: flex; align-items: center; gap: 10px; padding: 10px 16px;
-  border-bottom: 1px solid var(--line); background: var(--surface);
-  font-family: var(--font-mono); font-size: .75rem; color: var(--dim);
+  border-bottom: 1px solid var(--code-line); background: var(--code-bar);
+  font-family: var(--font-mono); font-size: .75rem; color: #9BB0A6;
 }
 .code pre {
   margin: 0; padding: 20px; overflow-x: auto;
-  font-family: var(--font-mono); font-size: .8125rem; line-height: 1.75; color: #d5d5e0;
+  font-family: var(--font-mono); font-size: .8125rem; line-height: 1.75; color: var(--code-text);
 }
-.code .c { color: #6f6f7d; }        /* comment */
-.code .k { color: #c85ec0; }        /* keyword */
-.code .s { color: #8ef0b0; }        /* string  */
-.code .f { color: #7fb8ff; }        /* fn      */
+.code .c { color: #7E958A; }        /* comment — moss-grey */
+.code .k { color: #E0A75E; }        /* keyword — honey    */
+.code .s { color: #92CBA9; }        /* string  — mint     */
+.code .f { color: #B9D0E8; }        /* fn      — the one cool hue, kept inside the island */
 
 /* ── template gallery ──────────────────────────────────────────────────── */
 
 .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .tab {
-  font: inherit; font-size: .875rem; cursor: pointer;
+  font: inherit; font-family: var(--font-display); font-size: .875rem; cursor: pointer;
   background: var(--surface); color: var(--muted);
   border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px;
   transition: color .18s ease, border-color .18s ease, background .18s ease;
 }
-.tab:hover { color: var(--text); }
+.tab:hover { color: var(--text); border-color: var(--brand-2); }
 .tab[aria-selected="true"] {
-  color: var(--bg); background: var(--brand); border-color: var(--brand); font-weight: 500;
+  color: var(--bg); background: var(--text); border-color: var(--text); font-weight: 600;
 }
 
 .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
@@ -259,9 +303,10 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
   display: block; width: 100%;
   border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
   background: var(--surface); cursor: zoom-in; padding: 0; font: inherit; text-align: left; color: inherit;
-  transition: border-color .2s ease, transform .2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
-.shot:hover { border-color: var(--brand); transform: translateY(-2px); }
+.shot:hover { border-color: var(--brand-2); transform: translateY(-2px); box-shadow: var(--shadow-md); }
 @media (prefers-reduced-motion: reduce) { .shot:hover { transform: none; } }
 /* display:block matters — these are <span>s inside a <button>, and aspect-ratio
    + overflow do nothing on an inline box (thumbnails render as a zoomed crop). */
@@ -282,9 +327,11 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
   gap: 18px; overflow-x: auto; padding-bottom: 14px; scroll-snap-type: x mandatory;
 }
 .phone { scroll-snap-align: start; }
+/* dark bezel is kept on purpose — it reads as a phone, and a cream-on-cream
+   frame would make the screenshot edge disappear. Moss, not near-black. */
 .phone__frame {
-  border: 8px solid #1c1c24; border-radius: 26px; overflow: hidden; background: #1c1c24;
-  height: 420px; box-shadow: 0 24px 50px -30px rgba(0,0,0,.9);
+  border: 8px solid var(--text); border-radius: 26px; overflow: hidden; background: var(--text);
+  height: 420px; box-shadow: var(--shadow-md);
 }
 .phone__frame img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .phone p { font-size: .8125rem; color: var(--dim); margin: 10px 0 0; text-align: center; }
@@ -301,13 +348,14 @@ tr:last-child td { border-bottom: 0; }
 
 /* ── callout ───────────────────────────────────────────────────────────── */
 
+/* the honey left bar is the same device as .note on the landing page */
 .callout {
-  border: 1px solid color-mix(in srgb, var(--brand) 38%, var(--line));
-  background: color-mix(in srgb, var(--brand-2) 12%, var(--surface));
-  border-radius: var(--radius); padding: 22px 24px;
+  border: 1px solid var(--line); border-left: 3px solid var(--brand-2);
+  background: color-mix(in srgb, var(--brand-2) 7%, var(--surface));
+  border-radius: 0 var(--radius) var(--radius) 0; padding: 22px 24px;
 }
 .callout p { color: var(--text); margin: 0; }
-.callout--plain { border-color: var(--line); background: var(--surface); }
+.callout--plain { background: var(--surface); box-shadow: var(--shadow-sm); }
 .callout--plain p { color: var(--muted); font-size: .9375rem; }
 
 /* ── footer ────────────────────────────────────────────────────────────── */
@@ -329,7 +377,7 @@ tr:last-child td { border-bottom: 0; }
 
 .lb {
   position: fixed; inset: 0; z-index: 100; display: none;
-  background: rgba(6,6,10,.94); padding: 24px;
+  background: rgba(20, 37, 29, .95); padding: 24px;
   overflow: auto;
 }
 .lb[open], .lb.is-open { display: grid; place-items: start center; }
@@ -344,3 +392,138 @@ tr:last-child td { border-bottom: 0; }
   font-family: var(--font-mono); font-size: .75rem; color: var(--muted);
   background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 16px;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Added 2026-07-30 when the single case study became a three-project
+   portfolio. Everything below is shared by index.html and all three
+   case-study pages.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── buttons ───────────────────────────────────────────────────────────── */
+
+/* moss fill, honey on hover — identical behaviour to .btn in verdure.css */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-display); font-size: .875rem; font-weight: 600; letter-spacing: -.01em;
+  padding: 12px 22px; border-radius: 999px; text-decoration: none; cursor: pointer;
+  border: 1px solid var(--text); background: var(--text); color: var(--bg);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+}
+.btn:hover {
+  background: var(--brand-2); border-color: var(--brand-2); color: var(--text);
+  box-shadow: var(--shadow-md); transform: translateY(-2px);
+}
+.btn svg { flex: none; }
+
+.btn--ghost { background: transparent; color: var(--text); border-color: var(--line); }
+.btn--ghost:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+@media (prefers-reduced-motion: reduce) { .btn:hover { transform: none; } }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+/* ── back link (case study → portfolio) ────────────────────────────────── */
+
+.nav__back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .875rem; color: var(--muted); text-decoration: none;
+  transition: color .18s ease;
+}
+.nav__back:hover { color: var(--brand); }
+.nav__back svg { flex: none; }
+
+/* ── image slot — a placeholder that names the file it is waiting for ──────
+   These exist so screenshots can be dropped in later without touching layout:
+   replace the whole <figure class="slot"> with a <figure class="figure">.
+   Deliberately loud, so an unfilled slot can never be mistaken for a design. */
+
+.slot {
+  margin: 0; border: 1.5px dashed var(--brand-2);
+  border-radius: var(--radius); background: var(--surface);
+  padding: 0; overflow: hidden;
+}
+.slot__box {
+  aspect-ratio: var(--ar, 16 / 10);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; padding: 24px; text-align: center; min-height: 150px;
+}
+.slot__num {
+  font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--brand);
+}
+.slot__box b { font-family: var(--font-display); font-size: .9375rem; font-weight: 500; color: var(--text); max-width: 40ch; }
+.slot__box code {
+  font-family: var(--font-mono); font-size: .75rem; color: var(--dim);
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: 6px; padding: 4px 10px; word-break: break-all; max-width: 100%;
+}
+
+/* ── real figure (what a slot becomes once the screenshot lands) ───────── */
+
+.figure { margin: 0; }
+.figure img {
+  width: 100%; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); box-shadow: var(--shadow-md);
+}
+.figure figcaption, .slot figcaption {
+  font-size: .8125rem; color: var(--dim); margin-top: 10px; line-height: 1.65;
+}
+.slot figcaption { padding: 0 16px 16px; margin-top: 0; }
+
+.figure-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.figure-grid > * { min-width: 0; }
+
+/* ── label / value list ────────────────────────────────────────────────── */
+
+.kv { display: grid; gap: 0; margin: 0; }
+.kv > div {
+  display: grid; grid-template-columns: minmax(120px, 190px) 1fr; gap: 18px;
+  padding: 14px 0; border-top: 1px solid var(--line-soft);
+}
+.kv > div:first-child { border-top: 0; }
+.kv dt {
+  font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--dim); padding-top: 3px;
+}
+.kv dd { margin: 0; color: var(--muted); font-size: .9375rem; }
+.kv dd strong { color: var(--text); font-weight: 600; }
+@media (max-width: 560px) { .kv > div { grid-template-columns: 1fr; gap: 6px; } }
+
+/* ── scroll reveal ─────────────────────────────────────────────────────────
+   PROJECT RULE: content is never hidden behind JS. The opacity:0 start state
+   only exists under html.js-anim, and that class is set by an inline script in
+   <head>. If JS is blocked, fails, or the browser is old, the class is never
+   added and every element renders at its normal, fully visible state. */
+
+.js-anim .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .55s cubic-bezier(.22, .61, .36, 1),
+              transform .55s cubic-bezier(.22, .61, .36, 1);
+  transition-delay: var(--d, 0ms);
+}
+.js-anim .reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-anim .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ── case-study footer nav (where to go after the last section) ────────── */
+
+.pagenav { border-top: 1px solid var(--line-soft); padding-block: clamp(40px, 6vw, 64px); }
+.pagenav__grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.pagenav__grid > * { min-width: 0; }
+.pagenav__card {
+  display: block; text-decoration: none; padding: 22px 24px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.pagenav__card:hover { border-color: var(--brand-2); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+@media (prefers-reduced-motion: reduce) { .pagenav__card:hover { transform: none; } }
+.pagenav__card span {
+  display: block; font-family: var(--font-mono); font-size: .6875rem;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px;
+}
+.pagenav__card b { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 600; display: block; }
+.pagenav__card em { font-style: normal; display: block; font-size: .875rem; color: var(--muted); margin-top: 4px; }

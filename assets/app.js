@@ -18,15 +18,15 @@
   };
 
   var PAGES = [
-    { file: '1-home',             label: 'หน้าแรก' },
-    { file: '2-candidates',       label: 'รายชื่อพรรค' },
-    { file: '3-party',            label: 'หน้าพรรค' },
-    { file: '4-vote-multi',       label: 'บัตรเลือกตั้ง · หลายพรรค' },
-    { file: '5-vote-single',      label: 'บัตรเลือกตั้ง · พรรคเดียว' },
-    { file: '6-results-embargo',  label: 'ผลคะแนน · ยังไม่เปิด' },
-    { file: '7-results-revealed', label: 'ผลคะแนน · เปิดแล้ว' },
-    { file: '8-success',          label: 'ลงคะแนนสำเร็จ' },
-    { file: '9-closed',           label: 'ปิดหีบแล้ว' }
+    { file: '1-home',             label: 'Home' },
+    { file: '2-candidates',       label: 'Party list' },
+    { file: '3-party',            label: 'Party page' },
+    { file: '4-vote-multi',       label: 'Ballot · several parties' },
+    { file: '5-vote-single',      label: 'Ballot · single party' },
+    { file: '6-results-embargo',  label: 'Results · still sealed' },
+    { file: '7-results-revealed', label: 'Results · revealed' },
+    { file: '8-success',          label: 'Vote cast' },
+    { file: '9-closed',           label: 'Polls closed' }
   ];
 
   var THEMES = [
@@ -40,14 +40,14 @@
   ];
 
   var MOBILE = [
-    { family: '02-gumroad',     file: '1-home',    label: 'Gumroad · หน้าแรก' },
-    { family: '02-gumroad',     file: '2-vote',    label: 'Gumroad · บัตรเลือกตั้ง' },
-    { family: '04-verdure',     file: '2-vote',    label: 'Verdure · บัตรเลือกตั้ง' },
-    { family: '06-receipt',     file: '2-vote',    label: 'Receipt · บัตรเลือกตั้ง' },
-    { family: '03-studio-dark', file: '3-results', label: 'Studio Dark · ผลคะแนน' },
-    { family: '05-blossom',     file: '3-results', label: 'Blossom · ผลคะแนน' },
-    { family: '06-receipt',     file: '4-success', label: 'Receipt · ลงคะแนนสำเร็จ' },
-    { family: '01-original',    file: '1-home',    label: 'Original · หน้าแรก' }
+    { family: '02-gumroad',     file: '1-home',    label: 'Gumroad · home' },
+    { family: '02-gumroad',     file: '2-vote',    label: 'Gumroad · ballot' },
+    { family: '04-verdure',     file: '2-vote',    label: 'Verdure · ballot' },
+    { family: '06-receipt',     file: '2-vote',    label: 'Receipt · ballot' },
+    { family: '03-studio-dark', file: '3-results', label: 'Studio Dark · results' },
+    { family: '05-blossom',     file: '3-results', label: 'Blossom · results' },
+    { family: '06-receipt',     file: '4-success', label: 'Receipt · vote cast' },
+    { family: '01-original',    file: '1-home',    label: 'Original · home' }
   ];
 
   var $  = function (s, r) { return (r || document).querySelector(s); };

@@ -1,7 +1,12 @@
 # Portfolio — Teerapab Boonsri
 
-เว็บ case study หน้าเดียวของโปรเจกต์ **FMS Online Voting System** — ระบบเลือกตั้งออนไลน์
-ของสโมสรนักศึกษา คณะวิทยาการจัดการ ม.สงขลานครินทร์
+เว็บพอร์ตโฟลิโอส่วนตัว **ภาษาอังกฤษ** · ธีมสว่าง Verdure (ครีม/มอส/ทอง) ทั้งเว็บ
+หน้าแรกเริ่มด้วย About me (ชื่อ ที่เรียน งานที่มองหา — System Analyst / Business Analyst เป็นหลัก)
+แล้วแยกเป็น case study สามหน้า
+
+1. **FMS Online Voting System** — ระบบเลือกตั้งสโมสรนักศึกษาที่ใช้งานจริง
+2. **FMS Credit Tracker** — ระบบติดตามหน่วยกิตที่อ่านทรานสคริปต์ PDF เอง
+3. **PSU Chatbot** — แชตบอตบน Azure ที่ deploy ขึ้นใช้งานจริง
 
 static ล้วน ไม่มี build step ไม่มี dependency — เปิดไฟล์ก็ทำงานได้ deploy ที่ไหนก็ได้ที่เสิร์ฟไฟล์ static
 
@@ -27,15 +32,36 @@ Cloudflare Pages / Netlify / Vercel ก็ใช้ได้เหมือน�
 ## โครงสร้าง
 
 ```
-index.html            เนื้อหาทั้งหมด
-assets/style.css      design system (ตัวแปรอยู่บนสุด)
-assets/app.js         gallery + lightbox + scroll-spy
-assets/img/           108 ภาพ (webp) — desktop / mobile / themes / admin
-docs/HANDOFF.md       ⭐ อ่านก่อนแก้อะไร
-docs/CONTENT-SOURCE.md ที่มาของทุกตัวเลขในหน้าเว็บ + เวอร์ชันสั้นสำหรับ resume/LinkedIn
-CLAUDE.md             กติกาสำหรับ AI ที่มาทำต่อ
+index.html             หน้าแรก — Verdure ครีม/มอส/ทอง · เริ่มด้วย About me
+fms-election.html      case study · ระบบเลือกตั้ง
+credit-tracker.html    case study · ระบบติดตามหน่วยกิต
+psu-chatbot.html       case study · แชตบอตบน Azure
+
+assets/verdure.css     design system ของหน้าแรก ทั้งชุด (ไม่โหลด style.css)
+assets/verdure.js      reveal + count-up + capsule ที่ขยายตอน scroll ของหน้าแรก
+assets/style.css       design system ของ case study 3 หน้า (พาเลตต์ Verdure ชุดเดียวกัน)
+assets/motion.js       scroll reveal + count-up + scroll-spy (credit-tracker, psu-chatbot)
+assets/app.js          gallery + lightbox + scroll-spy ของหน้า fms-election
+
+assets/img/            desktop / mobile / themes / admin — 108 ภาพจริงของระบบเลือกตั้ง
+assets/img/me/         ⬜ ยังว่าง — รูปตัวเอง 1 รูปสำหรับ section About me
+assets/img/credit/     ⬜ ยังว่าง — ดู README ในโฟลเดอร์ว่าต้องใส่ไฟล์ชื่ออะไรบ้าง
+assets/img/chatbot/    ⬜ ยังว่าง — ดู README ในโฟลเดอร์ว่าต้องใส่ไฟล์ชื่ออะไรบ้าง
+
+docs/HANDOFF.md        ⭐ อ่านก่อนแก้อะไร
+docs/CONTENT-SOURCE.md ที่มาของทุกตัวเลขของระบบเลือกตั้ง + เวอร์ชันสั้นสำหรับ resume/LinkedIn
+CLAUDE.md              กติกาสำหรับ AI ที่มาทำต่อ
 ```
 
-ภาพทั้งหมดถ่ายอัตโนมัติจากระบบจริงด้วย Playwright โดยชุด desktop/mobile/themes ใช้หน้าพรีวิว
+## ภาพที่ยังขาด
+
+section About me ของหน้าแรกแบบ B ยังรอ **รูปตัวเอง** อยู่ที่ `assets/img/me/portrait.webp`
+(แนวตั้ง 4:5) — เป็นภาพแรกที่คนเห็นตอนเข้าเว็บ ควรใส่ก่อนภาพอื่น
+
+หน้า Credit Tracker กับ PSU Chatbot ยังใช้ **กล่องเส้นประที่บอกชื่อไฟล์ที่รออยู่** แทนภาพจริง
+วางไฟล์ตามชื่อใน `assets/img/credit/README.md` และ `assets/img/chatbot/README.md`
+แล้วเปลี่ยน `<figure class="slot">…</figure>` เป็น `<figure class="figure"><img …></figure>`
+
+ภาพของระบบเลือกตั้งถ่ายอัตโนมัติด้วย Playwright โดยชุด desktop/mobile/themes ใช้หน้าพรีวิว
 ที่เป็นข้อมูลจำลองล้วน ไม่มีข้อมูลนักศึกษาจริง — สคริปต์แคปอยู่ในโปรเจกต์ต้นทาง
 (`docs/portfolio-shots/_scripts/`)

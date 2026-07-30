@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMS Credit Tracker — Teerapab Boonsri</title>
+<meta name="description" content="A credit tracker for students of the Faculty of Management Sciences, PSU — upload a transcript as a PDF and the system reads it out and checks it against the curriculum structure automatically.">
+<meta name="theme-color" content="#F7F4ED">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="FMS Credit Tracker — case study">
+<meta property="og:description" content="Upload your grade report as a PDF and the system works out which credit categories are complete and which are still short.">
+<meta property="og:url" content="https://teerapab149.github.io/credit-tracker.html">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Kanit 700/800 is what carries the Verdure display type in style.css -->
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.classList.add('js-anim');</script>
+</head>
+<body>
+
+<!-- ── nav ─────────────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__back" href="index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Portfolio
+    </a>
+    <a class="nav__brand" href="#top">FMS Credit Tracker <span>· case study</span></a>
+    <nav class="nav__links">
+      <a href="#problem">Problem</a>
+      <a href="#design">System design</a>
+      <a href="#database">Database</a>
+      <a href="#student">Student side</a>
+      <a href="#admin">Admin side</a>
+      <a href="#stack">Stack</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ── hero ────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Case study · Course 477-303 BISA&amp;D · Semester 2, 2025</p>
+    <h1>A system that <em>reads your transcript</em><br>and tells you what you still owe</h1>
+    <p class="hero__sub">
+      FMS Credit Tracker — students upload their grade report and their registration slip as PDF
+      files, the system pulls the text out into individual courses, then matches them against the
+      faculty's curriculum structure by itself: which categories are complete, which are still
+      short and by how many credits, instead of ticking boxes by hand in the curriculum table.
+    </p>
+    <div class="hero__meta">
+      <span class="chip">Next.js 16</span>
+      <span class="chip">React 19 · TypeScript</span>
+      <span class="chip">PostgreSQL · Prisma 7</span>
+      <span class="chip">NextAuth 5</span>
+      <span class="chip">Tailwind 4 · shadcn/ui</span>
+      <span class="chip">pdf-parse</span>
+      <span class="chip">Zustand</span>
+      <span class="chip">Recharts</span>
+    </div>
+
+    <!-- SLOT — replace the whole <figure class="slot"> with:
+         <figure class="hero__shot"><img src="assets/img/credit/01-hero.webp" …></figure> -->
+    <figure class="slot" style="--ar: 16 / 10; margin-top: clamp(36px, 6vw, 64px)">
+      <div class="slot__box">
+        <span class="slot__num">Main image</span>
+        <b>Dashboard summarising credit progress by category</b>
+        <code>assets/img/credit/01-hero.webp</code>
+      </div>
+      <figcaption>Opening image of the case study — the dashboard with a ring or bar of progress per category</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── stats ───────────────────────────────────────────────────────────── -->
+<section id="stats">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b>30</b><span>API routes<br>Next.js App Router</span></div>
+      <div class="stat"><b>13</b><span>database tables<br>all designed by me</span></div>
+      <div class="stat"><b>15</b><span>screens<br>student side + admin side</span></div>
+      <div class="stat"><b>~12,000</b><span>lines of TypeScript<br>across 87 files</span></div>
+      <div class="stat"><b>2</b><span>user roles<br>Student and Admin</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── problem ─────────────────────────────────────────────────────────── -->
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">01 — The problem</p>
+      <h2>The registrar tells you what grades you got, not whether you can graduate</h2>
+      <p class="lede">
+        This was a project for the Business Information Systems Analysis &amp; Design course, done as
+        a group — but the analysis, the design and the development were all mine. It started from a
+        problem my friends and I ran into every single term.
+      </p>
+    </div>
+
+    <div class="grid grid--2">
+      <div class="card reveal">
+        <span class="card__num">01</span>
+        <h3>The data and the rules live in different places</h3>
+        <p>The registrar shows the courses you took and the grades you got, but the curriculum structure sits in a separate document. Students have to open both and compare them by hand.</p>
+      </div>
+      <div class="card reveal" style="--d:60ms">
+        <span class="card__num">02</span>
+        <h3>General education is genuinely complicated</h3>
+        <p>GENED has sub-categories, each with its own minimum credit requirement. Counting one category wrong makes the whole result wrong.</p>
+      </div>
+      <div class="card reveal" style="--d:120ms">
+        <span class="card__num">03</span>
+        <h3>Course codes change between curriculum years</h3>
+        <p>The same course can carry a different code in the old curriculum and the new one. A system that matches codes literally sees two unrelated courses.</p>
+      </div>
+      <div class="card reveal" style="--d:180ms">
+        <span class="card__num">04</span>
+        <h3>Finding out near graduation is too late</h3>
+        <p>If you only discover a missing category in the last term of your fourth year, there may be no term left to take it in. Seeing the whole picture early is worth more than checking at the end.</p>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top:26px">
+      <p>
+        <strong>What the requirements gathering concluded</strong> — students do not need “somewhere
+        to keep grades”, because the registrar already is that. What is missing is the
+        <strong>interpretation</strong>: what do the grades I already have actually mean? So this
+        system does not try to replace the registrar. It takes data from it and answers one question
+        clearly — what is left?
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── system design ───────────────────────────────────────────────────── -->
+<section id="design">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">02 — System design</p>
+      <h2>Draw it to the end, then write the code</h2>
+      <p class="lede">
+        I started with the use cases and the context diagram so we could agree on who is allowed to
+        do what, and where the boundary of the system sits, before going near the database detail.
+      </p>
+    </div>
+
+    <div class="grid grid--2">
+      <div class="card reveal">
+        <h3>Student</h3>
+        <p>Upload PDF files · review what the system extracted · read the progress dashboard · simulate a study plan ahead of time</p>
+      </div>
+      <div class="card reveal" style="--d:60ms">
+        <h3>Admin</h3>
+        <p>Manage curricula and credit categories · maintain the central course catalogue · map equivalent courses · bulk-import with CSV</p>
+      </div>
+    </div>
+
+    <div class="figure-grid reveal" style="margin-top:24px">
+      <figure class="slot" style="--ar: 4 / 3">
+        <div class="slot__box">
+          <span class="slot__num">Image 2</span>
+          <b>Use Case Diagram</b>
+          <code>assets/img/credit/05-usecase.webp</code>
+        </div>
+        <figcaption>From the slide “SYSTEM DESIGN — USE CASE DIAGRAM”</figcaption>
+      </figure>
+      <figure class="slot" style="--ar: 4 / 3">
+        <div class="slot__box">
+          <span class="slot__num">Image 3</span>
+          <b>Context Diagram</b>
+          <code>assets/img/credit/06-context.webp</code>
+        </div>
+        <figcaption>From the slide “SYSTEM DESIGN — CONTEXT DIAGRAM”</figcaption>
+      </figure>
+    </div>
+
+    <div class="callout callout--plain reveal" style="margin-top:24px">
+      <p>
+        A boundary decided at the very start — the system
+        <strong>does not talk to the registrar's API directly</strong>, because that is university
+        data students have no API-level right to. The realistic path is to let the owner of the data
+        hand their own file to the system. That trades a lot of extra work on the text-extraction
+        side, but it means the system can actually exist without waiting for anyone's permission.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── database ────────────────────────────────────────────────────────── -->
+<section id="database">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">03 — Database design</p>
+      <h2>Three decisions that mean a new curriculum needs no code change</h2>
+      <p class="lede">
+        The curriculum structure changes every few years. Bake the rules into the code and the system
+        dies with that edition of the curriculum. All three decisions below exist to keep the rules
+        as <strong>data</strong>, not <strong>code</strong>.
+      </p>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow__step">
+        <span class="flow__dot">01</span>
+        <div>
+          <h3>Categories are a tree, not a flat list</h3>
+          <p>
+            The <code>CurriculumCategory</code> table references itself through <code>parentId</code>,
+            so a top-level category can nest sub-categories to any depth, and every level holds its
+            own minimum credit requirement. Adding a new sub-category later means adding a row, not
+            editing a condition in the code.
+          </p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">02</span>
+        <div>
+          <h3>A central course catalogue, cloned into each curriculum</h3>
+          <p>
+            <code>MasterSubject</code> is a catalogue where every course code is unique system-wide.
+            When a new curriculum is created, the system clones courses out of the catalogue into
+            that curriculum's own <code>Subject</code> rows. The result: fix a course name in one
+            place, while older curricula keep whatever was true for them that year.
+          </p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">03</span>
+        <div>
+          <h3>A separate table for equivalent courses</h3>
+          <p>
+            <code>SubjectEquivalency</code> pairs a new code with its base code, so the system knows
+            that a course which changed code still counts as the same course · when the faculty
+            renumbers again, an admin can add the new pair themselves from the admin screens.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <figure class="slot reveal" style="--ar: 16 / 9; margin-top:24px">
+      <div class="slot__box">
+        <span class="slot__num">Image 4</span>
+        <b>ER Diagram of the system</b>
+        <code>assets/img/credit/07-er.webp</code>
+      </div>
+      <figcaption>From the slide “DATABASE DESIGN — ER DIAGRAM”</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── student flow ────────────────────────────────────────────────────── -->
+<section id="student">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">04 — The student side</p>
+      <h2>Upload → review → see the result</h2>
+      <p class="lede">
+        Pulling text out of a PDF is never 100% accurate every time, so the system does not pretend
+        it is. It <strong>says how confident it is</strong> and always has a person confirm first.
+      </p>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow__step">
+        <span class="flow__dot">01</span>
+        <div>
+          <h3>Upload</h3>
+          <p>The student uploads the grade report and the registration slip as PDFs — both of which they can download from the registrar themselves.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">02</span>
+        <div>
+          <h3>The system extracts the text</h3>
+          <p>
+            The server reads the file with <code>pdf-parse</code>, then picks out course codes, course
+            names, credits and grades with regexes written against the real document format. It then
+            merges the two documents and assigns each row a
+            <strong>confidence score</strong>.
+          </p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">03</span>
+        <div>
+          <h3>Review before confirming</h3>
+          <p>
+            Rows the system is unsure about are highlighted for correction first · the whole table is
+            editable, because one wrong row throws off the credit count for an entire category.
+          </p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">04</span>
+        <div>
+          <h3>Dashboard and plan simulation</h3>
+          <p>
+            Once confirmed, the system matches every course to a category in the curriculum and
+            summarises how complete or how short each one is, with a mode for simulating what happens
+            to the picture if you take a given course next term.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="figure-grid reveal" style="margin-top:26px">
+      <figure class="slot" style="--ar: 16 / 10">
+        <div class="slot__box">
+          <span class="slot__num">Image 5</span>
+          <b>The PDF upload screen</b>
+          <code>assets/img/credit/02-upload.webp</code>
+        </div>
+      </figure>
+      <figure class="slot" style="--ar: 16 / 10">
+        <div class="slot__box">
+          <span class="slot__num">Image 6</span>
+          <b>Review table for the extracted data</b>
+          <code>assets/img/credit/03-verify.webp</code>
+        </div>
+      </figure>
+      <figure class="slot" style="--ar: 16 / 10">
+        <div class="slot__box">
+          <span class="slot__num">Image 7</span>
+          <b>Results by category</b>
+          <code>assets/img/credit/04-results.webp</code>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ── admin flow ──────────────────────────────────────────────────────── -->
+<section id="admin">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">05 — The admin side</p>
+      <h2>Whoever owns the curriculum has to be able to change it without calling a programmer</h2>
+    </div>
+
+    <ul class="clean reveal">
+      <li><strong>Manage curricula</strong> — create, edit, and clone last year's curriculum as a starting point instead of retyping the whole thing every year</li>
+      <li><strong>Central course catalogue</strong> — add courses one at a time, or bulk-import from a CSV file when setting the system up for the first time</li>
+      <li><strong>Map equivalent courses</strong> — declare that a new code and an old code are the same course, so credit counting stays correct across curriculum editions</li>
+      <li><strong>Automatic matching</strong> — the system proposes the pairs that probably match based on the course codes, then leaves the admin to confirm; it never decides for them</li>
+      <li><strong>Set credit thresholds per category</strong> — the minimum credits for every category and sub-category are editable from the screen</li>
+    </ul>
+
+    <div class="figure-grid reveal" style="margin-top:26px">
+      <figure class="slot" style="--ar: 16 / 10">
+        <div class="slot__box">
+          <span class="slot__num">Image 8</span>
+          <b>Course catalogue management</b>
+          <code>assets/img/credit/08-admin-subjects.webp</code>
+        </div>
+      </figure>
+      <figure class="slot" style="--ar: 16 / 10">
+        <div class="slot__box">
+          <span class="slot__num">Image 9</span>
+          <b>Equivalent course mapping</b>
+          <code>assets/img/credit/09-equivalency.webp</code>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ── stack ───────────────────────────────────────────────────────────── -->
+<section id="stack">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">06 — The stack</p>
+      <h2>What I chose, and why</h2>
+    </div>
+
+    <dl class="kv reveal">
+      <div>
+        <dt>Framework</dt>
+        <dd><strong>Next.js 16 (App Router) · React 19 · TypeScript</strong><br>
+          My first project written fully in TypeScript, after building the voting system in
+          JavaScript. Having types helped a great deal while reworking the multi-level category
+          structure.</dd>
+      </div>
+      <div>
+        <dt>Database</dt>
+        <dd><strong>PostgreSQL · Prisma 7</strong><br>
+          Self-referencing relations and hierarchical queries are straightforward here, and schema
+          changes come with migrations.</dd>
+      </div>
+      <div>
+        <dt>Auth</dt>
+        <dd><strong>NextAuth 5 · bcryptjs</strong><br>
+          Student and Admin are separated at the middleware layer, not merely by hiding menu items in
+          the UI.</dd>
+      </div>
+      <div>
+        <dt>Reading PDFs</dt>
+        <dd><strong>pdf-parse + regex</strong><br>
+          Patterns written against the university's real document format, with a confidence score for
+          every row extracted.</dd>
+      </div>
+      <div>
+        <dt>UI</dt>
+        <dd><strong>Tailwind CSS 4 · shadcn/ui (Radix)</strong><br>
+          I chose Radix because correct accessible behaviour comes with it from the start, while the
+          appearance stays entirely mine to control.</dd>
+      </div>
+      <div>
+        <dt>Everything else</dt>
+        <dd><strong>Zustand · Recharts · Framer Motion</strong><br>
+          Zustand holds state across the upload → review → results steps, a long flow where the user
+          can go back at any point.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<!-- ── honest notes ────────────────────────────────────────────────────── -->
+<section id="notes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">07 — Straight talk</p>
+      <h2>Things worth saying plainly</h2>
+    </div>
+    <ul class="clean reveal">
+      <li><strong>Status</strong> — a course project, developed until both flows work end to end, but not yet rolled out to the whole faculty</li>
+      <li><strong>It was a group of 10</strong> — the analysis, the system design, the database design and all of the development were my work; the rest of the team handled documentation and the presentation</li>
+      <li><strong>Text extraction is still tied to the document format</strong> — if the university changes the look of the PDF, the regexes have to follow. That limit was known when I chose this path, and it is exactly why the review screen exists</li>
+      <li><strong>Next step</strong> — with permission to hit the registrar's API directly, the upload and review steps could disappear entirely</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── where to go next ────────────────────────────────────────────────── -->
+<section class="pagenav">
+  <div class="wrap">
+    <div class="pagenav__grid">
+      <a class="pagenav__card" href="fms-election.html">
+        <span>Next project</span>
+        <b>FMS Online Voting System</b>
+        <em>An election system in real use, with 3,119 eligible voters</em>
+      </a>
+      <a class="pagenav__card" href="psu-chatbot.html">
+        <span>Next project</span>
+        <b>PSU Chatbot</b>
+        <em>A student-question chatbot on Azure Bot Service</em>
+      </a>
+      <a class="pagenav__card" href="index.html">
+        <span>Back</span>
+        <b>Portfolio home</b>
+        <em>All three projects and my background in one place</em>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <h2 style="font-size:1.35rem;margin-bottom:14px">Let's talk about work</h2>
+      <ul class="contacts">
+        <li>
+          <a class="link" href="mailto:teerapab.bs@gmail.com">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6 9-6"/></svg>
+            teerapab.bs@gmail.com
+          </a>
+        </li>
+        <li>
+          <a class="link" href="https://github.com/Teerapab149" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.5 9.5 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+            github.com/Teerapab149
+          </a>
+        </li>
+        <li>
+          <a class="link" href="https://www.linkedin.com/in/teerapab-boonsri-bb2404394/" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.64h.05A4.17 4.17 0 0 1 17.6 8.7c4 0 4.4 2.53 4.4 5.82V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21h-4V9Z"/></svg>
+            LinkedIn
+          </a>
+        </li>
+      </ul>
+    </div>
+    <small>
+      Teerapab Boonsri · Prince of Songkla University<br>
+      FMS Credit Tracker · 477-303 BISA&amp;D · Semester 2, 2025
+    </small>
+  </div>
+</footer>
+
+<script src="assets/motion.js"></script>
+</body>
+</html>

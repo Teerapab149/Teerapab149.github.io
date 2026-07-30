@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PSU Chatbot — Teerapab Boonsri</title>
+<meta name="description" content="A chatbot answering student questions, built on Azure Bot Service, wired to Language Studio and embedded in a web page through the Direct Line API, running on an Azure VM around the clock.">
+<meta name="theme-color" content="#F7F4ED">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="PSU Chatbot — case study">
+<meta property="og:description" content="A chatbot on Azure, deployed for real use with HTTPS on an Azure VM.">
+<meta property="og:url" content="https://teerapab149.github.io/psu-chatbot.html">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Kanit 700/800 is what carries the Verdure display type in style.css -->
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.classList.add('js-anim');</script>
+</head>
+<body>
+
+<!-- ── nav ─────────────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__back" href="index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Portfolio
+    </a>
+    <a class="nav__brand" href="#top">PSU Chatbot <span>· case study</span></a>
+    <nav class="nav__links">
+      <a href="#problem">Problem</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#build">Build steps</a>
+      <a href="#security">Key handling</a>
+      <a href="#deploy">Deploy</a>
+      <a href="#learned">Lessons</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ── hero ────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Case study · Course 477-302 Cloud Computing Platform · Oct 2025</p>
+    <h1>A cloud chatbot that<br><em>actually went live</em>, not a demo</h1>
+    <p class="hero__sub">
+      PSU Chatbot — a bot that answers the questions students ask most, built on Azure Bot Service,
+      wired to Language Studio, then embedded in a page written in plain HTML/CSS/JavaScript through
+      the Direct Line API, with Node.js in the middle exchanging the secret key for a short-lived
+      token. The whole thing runs on an Azure VM around the clock, with HTTPS.
+    </p>
+    <div class="hero__meta">
+      <span class="chip">Azure Bot Service</span>
+      <span class="chip">Language Studio</span>
+      <span class="chip">Direct Line API</span>
+      <span class="chip">Node.js</span>
+      <span class="chip">HTML · CSS · JS</span>
+      <span class="chip">Azure VM (Ubuntu)</span>
+      <span class="chip">Nginx · Certbot</span>
+      <span class="chip">pm2</span>
+    </div>
+
+    <!-- SLOT — replace the whole <figure class="slot"> with:
+         <figure class="hero__shot"><img src="assets/img/chatbot/01-hero.webp" …></figure> -->
+    <figure class="slot" style="--ar: 16 / 10; margin-top: clamp(36px, 6vw, 64px)">
+      <div class="slot__box">
+        <span class="slot__num">Main image</span>
+        <b>The PSU Chatbot page with the chat box embedded (light theme)</b>
+        <code>assets/img/chatbot/01-hero.webp</code>
+      </div>
+      <figcaption>Opening image of the case study — the web page from the slide “Step 4: designing the web page (Frontend)”</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── stats ───────────────────────────────────────────────────────────── -->
+<section id="stats">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b>24/7</b><span>continuously available<br>on an Azure VM (Ubuntu)</span></div>
+      <div class="stat"><b>HTTPS</b><span>certificate from Certbot<br>behind an Nginx reverse proxy</span></div>
+      <div class="stat"><b>5</b><span>main steps<br>from knowledge base to deploy</span></div>
+      <div class="stat"><b>2</b><span>page themes<br>light and dark</span></div>
+      <div class="stat"><b>3</b><span>people on the team<br>the system itself was mine</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── problem ─────────────────────────────────────────────────────────── -->
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">01 — The problem</p>
+      <h2>The same questions, answered by hand every single day</h2>
+      <p class="lede">
+        The course asked us to build a cloud application that genuinely works. I chose a chatbot for
+        student questions because it has a clear finish line you can measure — did it answer
+        correctly? — rather than merely showing that I can call a cloud service.
+      </p>
+    </div>
+
+    <div class="grid grid--3">
+      <div class="card reveal">
+        <span class="card__num">01</span>
+        <h3>Repeated questions, scattered answers</h3>
+        <p>The answers are spread across announcements, the faculty website and chat groups, so students ask a person instead of looking it up.</p>
+      </div>
+      <div class="card reveal" style="--d:60ms">
+        <span class="card__num">02</span>
+        <h3>A hard budget ceiling</h3>
+        <p>It is a student account, so I had to pick the cheapest service tier that still stays up all the time.</p>
+      </div>
+      <div class="card reveal" style="--d:120ms">
+        <span class="card__num">03</span>
+        <h3>It has to be genuinely reachable</h3>
+        <p>Living only inside Azure's test panel means nobody uses it. It needed its own URL, openable from a phone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── architecture ────────────────────────────────────────────────────── -->
+<section id="architecture">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">02 — Architecture</p>
+      <h2>How a single message travels</h2>
+      <p class="lede">
+        The system has four layers, and the most important one is the Node.js layer in the middle,
+        which exists for exactly one reason — to keep the bot's secret key out of the user's browser.
+      </p>
+    </div>
+
+    <div class="arch reveal">
+      <p class="arch__label">The user's side</p>
+      <div class="arch__row">
+        <div class="arch__box"><b>Browser</b><span>An HTML/CSS/JS page with the chat box embedded · works on desktop and mobile</span></div>
+      </div>
+
+      <p class="arch__flow">↓ asks for a token</p>
+
+      <p class="arch__label">Our server</p>
+      <div class="arch__row">
+        <div class="arch__box arch__box--brand">
+          <b>Node.js · server.js</b>
+          <span>Keeps the Direct Line secret in a server-side <code>.env</code>, then exchanges it for a short-lived token to hand to the frontend</span>
+        </div>
+      </div>
+
+      <p class="arch__flow">↓ connects with the token</p>
+
+      <p class="arch__label">Azure services</p>
+      <div class="arch__row">
+        <div class="arch__box"><b>Direct Line API</b><span>The standard channel for connecting a bot to a website you wrote yourself</span></div>
+        <div class="arch__box"><b>Azure Bot Service</b><span>The bot itself: takes the message and passes it on to the language model</span></div>
+        <div class="arch__box arch__box--accent"><b>Language Studio</b><span>The trained question-and-answer store (QnA) · every answer comes from here</span></div>
+      </div>
+    </div>
+
+    <figure class="slot reveal" style="--ar: 16 / 9; margin-top:26px">
+      <div class="slot__box">
+        <span class="slot__num">Image 2</span>
+        <b>System workflow diagram</b>
+        <code>assets/img/chatbot/03-workflow.webp</code>
+      </div>
+      <figcaption>From the slide “SYSTEM WORKFLOW”</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── build steps ─────────────────────────────────────────────────────── -->
+<section id="build">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">03 — What I built, step by step</p>
+      <h2>Five steps, from an answer store to a page anyone can open</h2>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow__step">
+        <span class="flow__dot">01</span>
+        <div>
+          <h3>Build the question-and-answer store in Language Studio</h3>
+          <p>Set up the project, load in the questions students ask most along with their answers, test accuracy in the test panel, then deploy to the Azure cloud.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">02</span>
+        <div>
+          <h3>Create the Azure Bot Service from that model</h3>
+          <p>Create Bot straight from Language Studio, which gives you a bot already wired to the answer store, then test in Azure's Web Chat that it answers correctly.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">03</span>
+        <div>
+          <h3>Open the Direct Line channel</h3>
+          <p>Get the Direct Line secret key from the bot's channel settings, keep it in a server-side <code>.env</code> file, and write the Node.js layer that trades the key for a token.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">04</span>
+        <div>
+          <h3>Design the page myself</h3>
+          <p>
+            No off-the-shelf widget — the UI is written from scratch in plain HTML/CSS/JavaScript,
+            with a light/dark theme switch, a side panel of popular questions, and a hero strip at
+            the top, so it looks like the faculty's own page rather than Microsoft's default.
+          </p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">05</span>
+        <div>
+          <h3>Put it on an Azure VM with HTTPS</h3>
+          <p>
+            Create the VM (Ubuntu) and set its DNS name · upload the files and run Node.js ·
+            put Nginx in front on ports 80/443 as a reverse proxy · get an SSL certificate with
+            Certbot · let pm2 keep the process from staying dead.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="figure-grid reveal" style="margin-top:26px">
+      <figure class="slot" style="--ar: 16 / 10">
+        <div class="slot__box">
+          <span class="slot__num">Image 3</span>
+          <b>Language Studio while building the answer store</b>
+          <code>assets/img/chatbot/04-language-studio.webp</code>
+        </div>
+      </figure>
+      <figure class="slot" style="--ar: 16 / 10">
+        <div class="slot__box">
+          <span class="slot__num">Image 4</span>
+          <b>Testing the bot in Azure's Web Chat</b>
+          <code>assets/img/chatbot/05-webchat-test.webp</code>
+        </div>
+      </figure>
+      <figure class="slot" style="--ar: 16 / 10">
+        <div class="slot__box">
+          <span class="slot__num">Image 5</span>
+          <b>Dark theme of the page</b>
+          <code>assets/img/chatbot/02-dark.webp</code>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ── security decision ───────────────────────────────────────────────── -->
+<section id="security">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">04 — The most important decision</p>
+      <h2>Why put a server in the middle when the page could call Azure directly?</h2>
+      <p class="lede">
+        Direct Line can be connected two ways — with the secret key itself, or by exchanging it for a
+        token first. The first is far less code, but it means the key that unlocks full control of the
+        bot ends up in browser-side code, where anyone who hits view source can read it.
+      </p>
+    </div>
+
+    <div class="grid grid--2 reveal">
+      <div class="card">
+        <span class="card__num">The path I did not take</span>
+        <h3>Embed the secret key in the page</h3>
+        <p>Works immediately and needs no server at all — but anyone who opens the page walks away with a key that lets them talk to the bot as us, without limit.</p>
+      </div>
+      <div class="card">
+        <span class="card__num">The path I took</span>
+        <h3>A server that trades the key for a token</h3>
+        <p>The secret lives only in a <code>.env</code> file on the server · the browser only ever gets a short-lived token, scoped to that conversation.</p>
+      </div>
+    </div>
+
+    <div class="code reveal" style="margin-top:22px">
+      <div class="code__bar">The idea behind server.js — the browser never sees the secret</div>
+<pre><span class="c">// the secret is read from .env, which is never shipped with the page or committed to git</span>
+<span class="k">const</span> secret = process.env.<span class="f">DIRECT_LINE_SECRET</span>;
+
+<span class="c">// the page calls this endpoint and gets back only a short-lived token</span>
+app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class="k">async</span> (req, res) =&gt; {
+  <span class="k">const</span> r = <span class="k">await</span> <span class="f">fetch</span>(
+    <span class="s">'https://directline.botframework.com/v3/directline/tokens/generate'</span>,
+    { method: <span class="s">'POST'</span>, headers: { Authorization: <span class="s">`Bearer ${secret}`</span> } }
+  );
+  res.<span class="f">json</span>(<span class="k">await</span> r.<span class="f">json</span>());   <span class="c">// { token, expires_in }</span>
+});</pre>
+    </div>
+
+    <div class="callout callout--plain reveal" style="margin-top:22px">
+      <p>
+        This was the first time I hit a case where “the easier way” and “the right way” were not the
+        same way, and it is why this project has a server at all when the page is ordinary HTML.
+      </p>
+    </div>
+
+    <figure class="slot reveal" style="--ar: 16 / 9; margin-top:22px">
+      <div class="slot__box">
+        <span class="slot__num">Image 6</span>
+        <b>The Direct Line secret key page in Azure Bot Service</b>
+        <code>assets/img/chatbot/06-direct-line-key.webp</code>
+      </div>
+      <figcaption>From the slide “DIRECT LINE SECRET KEY” — make sure the key in the image is masked before uploading</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── deploy ──────────────────────────────────────────────────────────── -->
+<section id="deploy">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">05 — Deployment</p>
+      <h2>From my own machine to a URL that opens on a phone</h2>
+    </div>
+
+    <dl class="kv reveal">
+      <div>
+        <dt>The machine</dt>
+        <dd>An Azure Virtual Machine running <strong>Ubuntu</strong>, with an Azure DNS name so it is reachable by name rather than by IP address</dd>
+      </div>
+      <div>
+        <dt>Reverse proxy</dt>
+        <dd><strong>Nginx</strong> takes requests on ports 80 and 443 and forwards them to the Node.js process inside, so users never have to type a port number after the URL</dd>
+      </div>
+      <div>
+        <dt>HTTPS</dt>
+        <dd>A certificate from <strong>Certbot</strong> — genuinely required, not decoration, because modern browsers block cross-domain API calls made from a page still served over HTTP</dd>
+      </div>
+      <div>
+        <dt>Staying up</dt>
+        <dd><strong>pm2</strong> supervises the Node.js process so it restarts itself on a crash and comes back on its own after the VM reboots</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<!-- ── problems + learned ──────────────────────────────────────────────── -->
+<section id="learned">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">06 — Problems and lessons</p>
+      <h2>The things no tutorial mentions until you build it</h2>
+    </div>
+
+    <div class="grid grid--3">
+      <div class="card reveal">
+        <h3>The service sleeps when nobody uses it</h3>
+        <p>Cheap service tiers go idle without traffic, so the first message after a quiet stretch is unusually slow. That is the trade-off you bought with the price, not a bug.</p>
+      </div>
+      <div class="card reveal" style="--d:60ms">
+        <h3>WebChat can only be styled so far</h3>
+        <p>The Bot Framework's ready-made component only goes so far with CSS, so in the end I wrote the whole UI myself and talked to the bot through the API directly, which gave me complete freedom.</p>
+      </div>
+      <div class="card reveal" style="--d:120ms">
+        <h3>Mobile is not a shrunken desktop</h3>
+        <p>A chat box that sits comfortably on a monitor takes over nearly the entire phone screen. Position and size had to be designed for small screens specifically.</p>
+      </div>
+    </div>
+
+    <div class="section-head reveal" style="margin-top:44px;margin-bottom:20px">
+      <h2 style="font-size:1.35rem">What I took away from it</h2>
+    </div>
+    <ul class="clean reveal">
+      <li><strong>Designing a cloud architecture</strong> — seeing what belongs on the frontend, what belongs on the backend, and what the provider's own service should handle</li>
+      <li><strong>Knowing the deployment options</strong> — understanding the trade-offs between App Service, Bot Service and managing a VM yourself</li>
+      <li><strong>Why UX matters</strong> — a bot that answers correctly but is awkward to use gets no users, so the UI work is not an optional extra</li>
+      <li><strong>Handling secrets</strong> — where a key may live, and where it absolutely may not</li>
+    </ul>
+
+    <div class="callout reveal" style="margin-top:26px">
+      <p>
+        <strong>What came of it</strong> — after the course finished, the lecturer invited me to build
+        the faculty's own chatbot off the back of this work, which is a signal I value more than the
+        grade.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── honest notes ────────────────────────────────────────────────────── -->
+<section id="notes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">07 — Straight talk</p>
+      <h2>Things worth saying plainly</h2>
+    </div>
+    <ul class="clean reveal">
+      <li><strong>Built in the first term of my third year</strong> — the web work here is basic HTML/CSS/JS, nowhere near as involved as the two projects that followed. Its value is in the flow design and in wiring cloud services together until the thing genuinely works</li>
+      <li><strong>It was a group of 3</strong> — the system design, the Azure service configuration and the web development were my work</li>
+      <li><strong>The answer store is still QnA-style</strong> — it only answers what it was trained on; it is not a model that can look things up on its own · the next step I have planned is connecting it to university data and using a RAG approach so it can answer from real documents</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── where to go next ────────────────────────────────────────────────── -->
+<section class="pagenav">
+  <div class="wrap">
+    <div class="pagenav__grid">
+      <a class="pagenav__card" href="fms-election.html">
+        <span>Next project</span>
+        <b>FMS Online Voting System</b>
+        <em>An election system in real use, with 3,119 eligible voters</em>
+      </a>
+      <a class="pagenav__card" href="credit-tracker.html">
+        <span>Next project</span>
+        <b>FMS Credit Tracker</b>
+        <em>Reads a PDF transcript and checks it against the curriculum automatically</em>
+      </a>
+      <a class="pagenav__card" href="index.html">
+        <span>Back</span>
+        <b>Portfolio home</b>
+        <em>All three projects and my background in one place</em>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <h2 style="font-size:1.35rem;margin-bottom:14px">Let's talk about work</h2>
+      <ul class="contacts">
+        <li>
+          <a class="link" href="mailto:teerapab.bs@gmail.com">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6 9-6"/></svg>
+            teerapab.bs@gmail.com
+          </a>
+        </li>
+        <li>
+          <a class="link" href="https://github.com/Teerapab149" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.5 9.5 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+            github.com/Teerapab149
+          </a>
+        </li>
+        <li>
+          <a class="link" href="https://www.linkedin.com/in/teerapab-boonsri-bb2404394/" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.64h.05A4.17 4.17 0 0 1 17.6 8.7c4 0 4.4 2.53 4.4 5.82V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21h-4V9Z"/></svg>
+            LinkedIn
+          </a>
+        </li>
+      </ul>
+    </div>
+    <small>
+      Teerapab Boonsri · Prince of Songkla University<br>
+      PSU Chatbot · 477-302 Cloud Computing Platform · 2025
+    </small>
+  </div>
+</footer>
+
+<script src="assets/motion.js"></script>
+</body>
+</html>

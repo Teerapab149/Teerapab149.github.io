@@ -1,0 +1,558 @@
+/* ==========================================================================
+   verdure.css — alternative landing page (index-verdure.html only).
+   Self-contained: does NOT load style.css, so it cannot affect the three
+   case-study pages.
+
+   ── What this is ────────────────────────────────────────────────────────
+   COLOUR comes from the Verdure template the owner already likes, copied from
+   E:/fms-election/fms_election69/src/utils/verdurePalettes.js. He asked to keep
+   the earth-tone greens and to push the accent to honey rather than the
+   template's burgundy, so the accent channel below is the honey/gold family
+   (gold #CDA85F · terra #A9863F) instead of terra #722F55.
+
+   LAYOUT comes from the reference he gave (artemartemartem.com), rebuilt from
+   what that page actually does:
+     · full-viewport stages, not a scrolling document
+     · a three-object hero — huge type left, capsule media centre, tiny prose right
+     · the capsule media grows to full-bleed as you scroll
+     · enormous type overlapping the media at its bottom edge
+     · hand-drawn accent scrawls annotating the type — the single vivid accent
+     · extreme scale contrast: ~100px display against ~13px body
+   The first attempt at this page kept Verdure's own furniture (edge rail, disc,
+   floating dock) and the result read as a generic template. That furniture is
+   gone on purpose — do not add it back without asking him.
+
+   Project rules still apply, all of them:
+   · no dependency, no build step (Google Fonts is the one allowed exception)
+   · nothing hidden behind JS — every start-state sits under html.js-anim
+   · body must never scroll sideways
+   ========================================================================== */
+
+:root {
+  /* ── paper + ink: Verdure greens over a warm sand cream ─────────────── */
+  --paper:    #F7F4ED;
+  --paper-2:  #FFFFFF;
+  --paper-3:  #EBE4D6;
+  --moss:     #1B362B;   /* 12.9:1 on --paper */
+  --moss-2:   #294A3C;
+  --moss-3:   #3A5E4D;   /*  6.8:1 on --paper — secondary prose */
+  /* was #5C7A6A, which measured 4.3:1 on --paper (and 3.7:1 on --paper-3) —
+     under the 4.5 floor this project sets for anything carrying text.
+     #4F6959 is the lightest value that clears 4.5 on all three paper tones. */
+  --moss-4:   #4F6959;   /*  5.5:1 on --paper · 4.8:1 on --paper-3 — smallest legible */
+
+  /* ── honey accent ───────────────────────────────────────────────────── */
+  --honey:      #C5A059;  /* 3.1:1 — decorative only: scrawls, rules, fills */
+  --honey-deep: #A9863F;
+  --honey-ink:  #7D6228;  /* 5.2:1 — the only honey allowed to carry text  */
+
+  --rule:  #DED5C3;
+
+  --maxw:  1440px;
+  --bar:   58px;    /* height of the fixed top bar */
+
+  --font-display: 'Kanit', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    'IBM Plex Sans Thai', 'Segoe UI', system-ui, sans-serif;
+
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; overflow-x: clip; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--moss);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* height:auto is NOT optional here. Every <img> carries width/height attributes
+   (they reserve layout space and stop the page jumping while images load), and
+   those attributes map to real CSS width/height. Constraining only max-width
+   leaves the attribute height in force, so an image renders at its container
+   width by its ATTRIBUTE height — 154 × 1100 instead of 154 × 106. */
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+::selection { background: var(--honey); color: var(--moss); }
+
+/* min-width:auto on grid/flex children is what lets one long string shove the
+   whole document sideways */
+.hero__grid > *, .facts > *, .cols > *, .shot-row > * { min-width: 0; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FIXED CHROME — a thin top bar and a scroll readout. That is all.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.bar {
+  position: fixed; inset: 0 0 auto 0; height: var(--bar); z-index: 60;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding-inline: clamp(14px, 3vw, 34px);
+  background: color-mix(in srgb, var(--paper) 84%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid color-mix(in srgb, var(--rule) 70%, transparent);
+}
+.bar a, .bar span {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(.75rem, 1.5vw, .9375rem); letter-spacing: -.02em;
+  text-decoration: none; white-space: nowrap;
+}
+.bar__mid { display: none; }
+@media (min-width: 720px) { .bar__mid { display: block; } }
+.bar a { transition: color .2s ease; }
+.bar a:hover { color: var(--honey-ink); }
+
+/* scroll readout, bottom-centre — decorative, absent without JS */
+.count {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
+  z-index: 60; display: none;
+  font-family: var(--font-display); font-weight: 500;
+  font-size: .6875rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--moss-4);
+  background: color-mix(in srgb, var(--paper) 80%, transparent);
+  backdrop-filter: blur(8px);
+  padding: 7px 16px; border-radius: 999px; border: 1px solid var(--rule);
+}
+.js-anim .count { display: block; }
+/* On a phone this pill sits on top of the running text, and a touch device
+   already gives the reader its own scroll feedback — so it is desktop-only. */
+@media (max-width: 860px) { .js-anim .count { display: none; } }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   STAGE — the unit of this page. A full screen, vertically centred.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.stage {
+  min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: calc(var(--bar) + clamp(28px, 5vw, 64px)) clamp(18px, 4vw, 54px) clamp(56px, 7vw, 90px);
+  position: relative;
+}
+.stage--auto { min-height: 0; }
+.inner { width: 100%; max-width: var(--maxw); margin-inline: auto; }
+
+/* on a phone a locked 100svh stage just crops the content */
+@media (max-width: 860px) { .stage { min-height: 0; padding-block: clamp(56px, 12vw, 90px); } }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TYPE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.big {
+  font-family: var(--font-display); font-weight: 800;
+  line-height: .92; letter-spacing: -.055em;
+  margin: 0; color: var(--moss);
+}
+/* Thai needs looser tracking and more leading than Latin, or the tone marks
+   above and below start colliding between lines */
+.big:lang(th) { letter-spacing: -.03em; line-height: 1.06; }
+
+.big--xl { font-size: clamp(3rem, 10.5vw, 9.5rem); }
+.big--l  { font-size: clamp(2.4rem, 7.4vw, 6.4rem); }
+.big--m  { font-size: clamp(1.9rem, 4.6vw, 4rem); }
+
+.big em { font-style: normal; color: var(--honey-ink); }
+.big .out {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--moss-4);
+}
+
+/* tiny label — the counterweight that makes the display type read as huge */
+.tag {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: .6875rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--moss-4); margin: 0;
+}
+.tag--honey { color: var(--honey-ink); }
+
+.small { font-size: 13.5px; line-height: 1.62; color: var(--moss-3); margin: 0; }
+.small strong { color: var(--moss); font-weight: 600; }
+.small + .small { margin-top: 12px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCRAWL — the hand-drawn annotation. Decorative, aria-hidden, and drawn on
+   with stroke-dashoffset. pathLength="1" normalises every path so one rule
+   animates them all regardless of their real length.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.scrawl {
+  position: absolute; pointer-events: none; overflow: visible;
+  stroke: var(--honey); fill: none;
+  stroke-width: 7; stroke-linecap: round; stroke-linejoin: round;
+}
+/* The scrawls stretch to whatever word they wrap (preserveAspectRatio="none"),
+   which would also stretch the stroke into a wedge. This pins the line weight
+   to screen pixels so it stays an even hand-drawn stroke at any word width. */
+.scrawl path { vector-effect: non-scaling-stroke; }
+.js-anim .scrawl path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.js-anim .is-in .scrawl path,
+.js-anim .scrawl.is-in path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.1s cubic-bezier(.5, .1, .3, 1) var(--sd, .15s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js-anim .scrawl path { stroke-dashoffset: 0; transition: none; }
+}
+
+/* The scrawl is drawn OVER the word, the way the reference annotates its
+   headline by hand — thin strokes, so the word stays readable underneath. */
+.mark-wrap { position: relative; display: inline-block; }
+.mark-wrap > .scrawl { inset: -18% -7% -18% -7%; width: 114%; height: 136%; z-index: 2; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INTRO — the first screen of the site: who this person is.
+   Portrait left, name and facts right. The portrait frame is an arch, NOT the
+   pill radius of .capsule, on purpose: the capsule two screens down is meant to
+   read as "the same object opening" (see .grow), so the portrait must not look
+   like a third copy of it.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.intro__grid {
+  display: grid; gap: clamp(26px, 4vw, 62px); align-items: center;
+  grid-template-columns: minmax(0, .72fr) minmax(0, 1fr);
+}
+.intro__grid > * { min-width: 0; }
+@media (max-width: 900px) { .intro__grid { grid-template-columns: 1fr; gap: 30px; } }
+
+.portrait { margin: 0; }
+.portrait__frame {
+  position: relative; overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border-radius: 240px 240px 26px 26px;
+  background: var(--paper-3);
+  box-shadow: 0 40px 80px -46px rgba(27, 54, 43, .5);
+}
+.portrait__frame img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.portrait figcaption {
+  margin-top: 14px; font-size: 11.5px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--moss-4);
+}
+/* width:100% is required, not tidy-up. Auto inline margins switch a grid item
+   off stretch, so without a definite width the figure shrinks to fit-content —
+   which here is the figcaption, leaving a 192px-wide portrait. */
+@media (max-width: 900px) { .portrait { width: 100%; max-width: 330px; margin-inline: auto; } }
+
+.intro__name { margin-top: 16px; }
+.intro__lede { margin-top: 18px; max-width: 54ch; }
+
+/* the four facts under the name — hairline rows, same rhythm as .cv */
+.bio { display: grid; margin: clamp(20px, 3vw, 30px) 0 0; }
+.bio > div {
+  display: grid; grid-template-columns: minmax(0, 124px) minmax(0, 1fr);
+  gap: 4px clamp(14px, 2.5vw, 28px);
+  padding: 11px 0; border-top: 1px solid var(--rule);
+}
+.bio > div:last-child { border-bottom: 1px solid var(--rule); }
+@media (max-width: 560px) { .bio > div { grid-template-columns: 1fr; } }
+.bio dt {
+  font-family: var(--font-display); font-weight: 600; font-size: 11px;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--moss-4);
+}
+.bio dd { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--moss-3); }
+.bio dd strong { color: var(--moss); font-weight: 600; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HERO — three objects on one line: type · capsule media · prose
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hero__grid {
+  display: grid; gap: clamp(28px, 4vw, 56px); align-items: center;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .62fr) minmax(0, .58fr);
+}
+@media (max-width: 1080px) { .hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, .7fr); } }
+@media (max-width: 780px)  { .hero__grid { grid-template-columns: 1fr; gap: 30px; } }
+
+.hero__type { position: relative; }
+.hero__type .tag { margin-bottom: 18px; }
+
+/* the capsule — a tall, heavily rounded media card */
+/* Radius and proportion are deliberately identical to .grow__card at --p:0 —
+   the two sit in consecutive sections, so matching them makes the scroll read
+   as "the same capsule opening" rather than as a second copy of the image. */
+.capsule {
+  margin: 0; overflow: hidden;
+  border-radius: 110px;
+  aspect-ratio: 3 / 4;
+  background: var(--paper-3);
+  box-shadow: 0 40px 80px -44px rgba(27, 54, 43, .5);
+}
+.capsule img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+@media (max-width: 780px) { .capsule { max-width: 320px; margin-inline: auto; } }
+
+.hero__side { align-self: center; }
+.hero__side .tag { margin-bottom: 12px; }
+@media (max-width: 1080px) { .hero__side { grid-column: 1 / -1; max-width: 46ch; } }
+
+.stats-inline {
+  display: flex; flex-wrap: wrap; gap: 20px 30px; margin-top: 22px;
+  padding-top: 18px; border-top: 1px solid var(--rule);
+}
+.stats-inline div { min-width: 0; }
+.stats-inline b {
+  display: block; font-family: var(--font-display); font-weight: 700;
+  font-size: 1.5rem; line-height: 1; letter-spacing: -.045em;
+  font-variant-numeric: tabular-nums;
+}
+.stats-inline span { display: block; font-size: 11.5px; color: var(--moss-4); margin-top: 5px; line-height: 1.45; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GROW — the capsule expanding to full-bleed as you scroll.
+   --p (0 → 1) is written by verdure.js. With JS off it stays 0 and the card
+   simply renders as a capsule; nothing is hidden either way.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.grow { height: 260vh; position: relative; }
+.grow__pin {
+  position: sticky; top: 0; height: 100svh;
+  display: grid; place-items: center; overflow: hidden;
+}
+/* Starts matched to .capsule (380 × 505, radius 110) and opens to full bleed. */
+.grow__card {
+  --p: 0;
+  position: relative; overflow: hidden;
+  width:  calc(380px + (100vw  - 380px) * var(--p));
+  height: calc(505px + (100svh - 505px) * var(--p));
+  border-radius: calc(110px * (1 - var(--p)));
+  background: var(--paper-3);
+  box-shadow: 0 40px 90px -50px rgba(27, 54, 43, calc(.5 - .5 * var(--p)));
+}
+.grow__card > img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+/* the caption rides the bottom edge of the card and only appears once the card
+   is most of the way open — the reference does exactly this */
+/* The screenshots underneath are pale, so cream text needs a genuinely opaque
+   foot to sit on — a soft 0→.86 ramp left the title unreadable. It also has to
+   reach full strength well before the card finishes opening, hence the earlier
+   ramp on --p. */
+.grow__over {
+  position: absolute; inset: auto 0 0 0;
+  padding: clamp(40px, 9vw, 130px) clamp(16px, 3vw, 40px) clamp(16px, 3vw, 40px);
+  background: linear-gradient(to top,
+              rgba(27,54,43,.95) 0%, rgba(27,54,43,.88) 38%,
+              rgba(27,54,43,.55) 70%, rgba(27,54,43,0) 100%);
+  opacity: clamp(0, calc((var(--p) - .28) * 2.6), 1);
+  pointer-events: none;
+}
+.grow__over .big { color: var(--paper); }
+.grow__over .tag { color: var(--honey); margin-bottom: 8px; }
+
+@media (max-width: 860px) {
+  /* a 260vh pin on a phone is just a long empty scroll — show the card plainly */
+  .grow { height: auto; }
+  .grow__pin { position: static; height: auto; padding-block: 40px; }
+  .grow__card { width: min(100%, 420px); height: auto; aspect-ratio: 3/4; border-radius: 60px; }
+  .grow__over { opacity: 1; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   WORK — a stage per project: big screenshot, title overlapping its edge,
+   tiny facts column alongside.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.work__head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 20px;
+  padding-bottom: 14px; margin-bottom: clamp(18px, 3vw, 30px);
+  border-bottom: 1px solid var(--rule);
+}
+/* honey-deep, not honey: the plain honey measured 2.24:1 on cream, and this
+   numeral is real text (the section index), so it has to clear the 3:1 bar for
+   large type. honey-deep is 3.1:1 and keeps the warmth. */
+.work__idx {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(2.6rem, 7vw, 5.4rem); line-height: .8;
+  letter-spacing: -.06em; color: var(--honey-deep); margin: 0;
+}
+
+.cols {
+  display: grid; gap: clamp(22px, 3.5vw, 48px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  align-items: start;
+}
+@media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+
+/* the screenshot, with the project name overlapping its lower edge */
+.shot { position: relative; margin: 0; }
+.shot img {
+  width: 100%; border-radius: clamp(14px, 2vw, 26px);
+  background: var(--paper-2); border: 1px solid var(--rule);
+  box-shadow: 0 34px 70px -40px rgba(27, 54, 43, .45);
+}
+.shot__title {
+  position: relative; margin: -.34em 0 0 -.02em; z-index: 2;
+  mix-blend-mode: normal;
+}
+@media (max-width: 640px) { .shot__title { margin-top: -.12em; } }
+
+.shot-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.shot-row img, .shot-row .slot { border-radius: 14px; }
+
+.facts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px;
+  margin: 0 0 20px;
+}
+.facts > div { padding: 12px 0; border-top: 1px solid var(--rule); }
+.facts b {
+  display: block; font-family: var(--font-display); font-weight: 700;
+  font-size: 1.45rem; line-height: 1; letter-spacing: -.045em;
+  font-variant-numeric: tabular-nums;
+}
+.facts span { display: block; font-size: 11.5px; color: var(--moss-4); margin-top: 5px; line-height: 1.45; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 22px; }
+.chips span {
+  font-size: 11px; letter-spacing: .01em; color: var(--moss-3);
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-radius: 999px; padding: 4px 11px;
+}
+
+/* ── button ────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-display); font-weight: 600; font-size: .875rem;
+  letter-spacing: -.01em; text-decoration: none; cursor: pointer;
+  padding: 12px 22px; border-radius: 999px;
+  background: var(--moss); color: var(--paper); border: 1px solid var(--moss);
+  transition: background .2s ease, transform .2s cubic-bezier(.22,.61,.36,1), color .2s ease;
+}
+.btn:hover { background: var(--honey); border-color: var(--honey); color: var(--moss); transform: translateY(-2px); }
+.btn--ghost { background: transparent; color: var(--moss); border-color: var(--rule); }
+.btn--ghost:hover { background: var(--moss); color: var(--paper); border-color: var(--moss); }
+@media (prefers-reduced-motion: reduce) { .btn:hover { transform: none; } }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ── waiting image slot ────────────────────────────────────────────────────
+   Names the file it is waiting for, and is deliberately loud so an unfilled
+   slot can never be mistaken for a finished design. */
+
+.slot {
+  margin: 0; display: grid; place-items: center; text-align: center;
+  aspect-ratio: var(--ar, 16 / 10); padding: 20px; gap: 7px;
+  border: 1.5px dashed var(--honey);
+  border-radius: clamp(14px, 2vw, 26px);
+  background: var(--paper-2);
+}
+.slot em {
+  font-style: normal; font-family: var(--font-display); font-weight: 600;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--honey-ink);
+}
+.slot b { font-family: var(--font-display); font-weight: 500; font-size: 13.5px; letter-spacing: -.01em; max-width: 32ch; }
+.slot code {
+  font-family: ui-monospace, Consolas, monospace; font-size: 10.5px; color: var(--moss-4);
+  background: var(--paper-3); border-radius: 5px; padding: 3px 8px; word-break: break-all; max-width: 100%;
+}
+/* fills a frame that already has its own shape (the portrait arch) instead of
+   imposing its own aspect-ratio and radius */
+.slot--fill {
+  position: absolute; inset: 0; aspect-ratio: auto; border-radius: inherit;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ROLES · SKILLS · CV
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.roles { display: grid; gap: 0; margin-top: clamp(26px, 4vw, 44px); }
+.role {
+  display: grid; gap: 8px clamp(20px, 4vw, 54px);
+  grid-template-columns: 108px minmax(0, 1fr) minmax(0, 1fr);
+  padding: clamp(18px, 2.6vw, 30px) 0; border-top: 1px solid var(--rule);
+  align-items: baseline;
+}
+.role:last-child { border-bottom: 1px solid var(--rule); }
+@media (max-width: 860px) { .role { grid-template-columns: 1fr; } }
+.role__n { font-family: var(--font-display); font-weight: 600; font-size: 11px;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--moss-4); }
+.role--lead .role__n { color: var(--honey-ink); }
+.role__t {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.35rem, 3.2vw, 2.35rem); letter-spacing: -.05em; line-height: 1.08; margin: 0;
+}
+.role--lead .role__t { color: var(--honey-ink); }
+
+.grid2 { display: grid; gap: clamp(20px, 3vw, 40px); grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.grid2 > * { min-width: 0; }
+
+.block h3 {
+  font-family: var(--font-display); font-weight: 700; font-size: 1.0625rem;
+  letter-spacing: -.02em; margin: 0 0 4px;
+}
+.block .tag { margin-bottom: 12px; }
+.block ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 5px; }
+.block li {
+  font-size: 12px; color: var(--moss-3);
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-radius: 999px; padding: 5px 11px;
+}
+
+.cv { display: grid; }
+.cv__row {
+  display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
+  gap: 6px clamp(18px, 3vw, 40px); padding: 20px 0; border-top: 1px solid var(--rule);
+}
+.cv__row:last-child { border-bottom: 1px solid var(--rule); }
+@media (max-width: 700px) { .cv__row { grid-template-columns: 1fr; } }
+.cv__when { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--moss-4); padding-top: 4px; }
+.cv__what h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.0625rem; letter-spacing: -.02em; margin: 0 0 4px; }
+.cv__what em { font-style: normal; color: var(--honey-ink); font-size: 11.5px; letter-spacing: .06em;
+  text-transform: uppercase; display: block; margin-bottom: 6px; }
+
+.note {
+  margin-top: 26px; padding: 20px 22px;
+  border: 1px solid var(--rule); border-left: 3px solid var(--honey);
+  background: var(--paper-2); border-radius: 0 12px 12px 0;
+}
+
+/* ── closing ───────────────────────────────────────────────────────────── */
+
+.end { background: var(--moss); color: var(--paper); }
+.end .big { color: var(--paper); }
+.end .big em { color: var(--honey); }
+/* 58% cream over moss composites to 4.5:1 exactly, 55% to 4.2:1 — both too thin
+   a margin for 11px type, so the two smallest labels in this section sit at 64%
+   (5.3:1). Measure these by compositing the alpha over --moss, not by reading
+   the colour alone. */
+.end .tag { color: color-mix(in srgb, var(--paper) 64%, transparent); }
+.end .small { color: color-mix(in srgb, var(--paper) 76%, transparent); }
+.end .small strong { color: var(--paper); }
+.end .btn { background: var(--honey); border-color: var(--honey); color: var(--moss); }
+.end .btn:hover { background: var(--paper); border-color: var(--paper); }
+.end .btn--ghost { background: transparent; color: var(--paper);
+  border-color: color-mix(in srgb, var(--paper) 32%, transparent); }
+.end .btn--ghost:hover { background: var(--paper); color: var(--moss); border-color: var(--paper); }
+.end .scrawl { stroke: var(--honey); }
+.end a { color: inherit; }
+.end .foot { border-top-color: color-mix(in srgb, var(--paper) 20%, transparent); }
+.end .foot small { color: color-mix(in srgb, var(--paper) 64%, transparent); }
+.end .foot a { border-bottom-color: color-mix(in srgb, var(--paper) 26%, transparent); }
+
+.foot {
+  margin-top: clamp(40px, 7vw, 80px); padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  display: flex; flex-wrap: wrap; gap: 20px 30px; justify-content: space-between; align-items: flex-end;
+}
+.foot ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 24px; }
+.foot a { text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 2px; font-size: 13.5px; }
+.foot a:hover { border-color: currentColor; }
+.foot small { font-size: 11.5px; line-height: 1.7; color: var(--moss-4); }
+
+/* ── reveal ────────────────────────────────────────────────────────────────
+   PROJECT RULE: content is never hidden behind JS. The start state below only
+   exists under html.js-anim, added by an inline script in <head>. No JS → no
+   class → the page renders fully visible. */
+
+.js-anim .up {
+  opacity: 0; transform: translateY(26px);
+  transition: opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
+  transition-delay: var(--d, 0ms);
+}
+.js-anim .up.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-anim .up { opacity: 1; transform: none; transition: none; }
+}

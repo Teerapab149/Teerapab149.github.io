@@ -1,40 +1,54 @@
-# HANDOFF — เว็บ portfolio (FMS Online Voting System)
+# HANDOFF — เว็บ portfolio (Teerapab Boonsri)
 
-> เขียน 2026-07-27 · สำหรับ Claude คนถัดไป และสำหรับเจ้าของโปรเจกต์
-> อ่านไฟล์นี้ก่อนแตะอะไรทั้งสิ้น แล้วค่อยดู `CLAUDE.md` (กติกา) และ `docs/CONTENT-SOURCE.md` (ข้อเท็จจริงทั้งหมด)
+> เขียน 2026-07-27 · แก้ใหญ่ 2026-07-30 (จาก case study เดี่ยว → พอร์ตโฟลิโอ 3 โปรเจกต์ ธีมสว่าง)
+> · แก้ครั้งล่าสุด 2026-07-30 รอบเย็น — **เว็บเปลี่ยนเป็นภาษาอังกฤษทั้งหมด** · เพิ่ม
+> section **About me** พร้อมช่องรูปตัวเองเป็นส่วนแรกของหน้าแรก (ดู §13) · **เจ้าของเลือก Verdure
+> แล้ว** จึงสลับ `index-verdure.html` → `index.html` ลบแบบ A ทิ้ง และ**แปลง case study ทั้งสามหน้า
+> เป็นพาเลตต์ Verdure** ด้วย (ดู §12)
+> สำหรับ Claude คนถัดไป และสำหรับเจ้าของโปรเจกต์
+> อ่านไฟล์นี้ก่อนแตะอะไรทั้งสิ้น แล้วค่อยดู `CLAUDE.md` (กติกา) และ `docs/CONTENT-SOURCE.md` (ข้อเท็จจริงของระบบเลือกตั้ง)
 
 ---
 
 ## 0. หนึ่งย่อหน้าว่าโปรเจกต์นี้คืออะไร
 
-เว็บหน้าเดียว (static) ที่เป็น **case study ของโปรเจกต์ FMS Online Voting System** สำหรับให้ HR
-และคนที่สนใจจ้างงานเข้ามาดู เจ้าของคือ **Teerapab Boonsri** นักศึกษา/ผู้พัฒนา คณะวิทยาการจัดการ
-ม.สงขลานครินทร์ เป้าหมายของหน้านี้คือแสดงให้เห็นสองอย่างพร้อมกัน — **ออกแบบระบบเป็น** และ
-**ทำ UX/UI เป็น** เพราะเจ้าของมองว่างาน UI ของระบบเลือกตั้งนั้นเป็นจุดแข็งที่ไม่ควรถูกมองข้าม
+เว็บพอร์ตโฟลิโอ (static) ของ **Teerapab Boonsri** นักศึกษา Business Information Systems
+คณะวิทยาการจัดการ ม.สงขลานครินทร์ สำหรับให้ HR และคนที่สนใจจ้างงานเข้ามาดู
+เป้าหมายคือแสดงสามอย่างพร้อมกัน — **ออกแบบระบบเป็น** · **ทำ UX/UI เป็น** ·
+และ**สื่อสารได้ว่าอยากทำงานสายไหน** (Analyst / Management มาก่อนสาย dev)
 
 ไม่มี build step ไม่มี framework ไม่มี dependency — HTML + CSS + JS ล้วน เพื่อให้ deploy ฟรีได้ทุกที่
 และให้คนที่มารับช่วงต่ออ่านออกทันที
 
 ---
 
-## 1. สถานะปัจจุบัน (2026-07-27)
+## 1. สถานะปัจจุบัน (2026-07-30)
 
 | ส่วน | สถานะ |
 |---|---|
-| หน้าเว็บ `index.html` ครบ 9 หัวข้อ + hero + footer | ✅ เสร็จ |
-| CSS design system (`assets/style.css`) | ✅ เสร็จ |
-| JS: gallery แท็บ 6 ตระกูล, กริด 23 ธีม, mobile strip, lightbox, scroll-spy | ✅ เสร็จ |
-| ภาพ 108 ไฟล์ (webp, 11MB) ใน `assets/img/` | ✅ ครบ |
-| ตรวจ responsive 1440 / 1024 / 768 / 390 / 360 px — ไม่มี horizontal overflow | ✅ ผ่าน |
-| console error / รูปเสีย | ✅ ไม่มี |
-| GitHub Actions deploy workflow | ✅ เขียนไว้แล้ว |
-| push ขึ้น GitHub | ✅ เจ้าของ push แล้ว → `github.com/Teerapab149/Teerapab149.github.io` |
+| `index.html` — หน้าแรก **Verdure**: About me + รูปตัวเอง → hero → capsule ที่ขยายตอน scroll → 3 โปรเจกต์ → งานที่มองหา → ทักษะ → ประวัติ → ติดต่อ | ✅ เสร็จ · อังกฤษ |
+| หน้าแรกแบบ A (ม่วง/เทา) | 🗑️ ลบแล้ว — เจ้าของเลือก Verdure (ดู §12) |
+| `fms-election.html` — case study ระบบเลือกตั้ง | ✅ เสร็จ · อังกฤษ · Verdure |
+| `credit-tracker.html` — case study ใหม่ 7 หัวข้อ | ✅ เสร็จ · อังกฤษ · Verdure |
+| `psu-chatbot.html` — case study ใหม่ 7 หัวข้อ | ✅ เสร็จ · อังกฤษ · Verdure |
+| contrast ทุกคู่สีของทั้ง 4 หน้า (วัดจริงจาก computed style + ผสม alpha) | ✅ ผ่านทั้งหมด — แก้ 3 จุดที่ไม่ผ่าน (ดู §12) |
+| **ภาพตัวเอง (portrait) ใน section About me** | ❌ **ยังเป็นกล่องเส้นประ — รอเจ้าของอัปโหลด (ดู §11)** |
+| design system ธีมสว่าง — `verdure.css` (หน้าแรก) + `style.css` (case study) ใช้พาเลตต์ Verdure ชุดเดียวกัน | ✅ เสร็จ |
+| scroll reveal + count-up + scroll-spy (`assets/motion.js`) | ✅ เสร็จ |
+| ตรวจ responsive 1440 / 1024 / 768 / 390 / 360 px — รอบอังกฤษตรวจ 4 หน้าที่แก้ (แบบ B + case study ×3) = 20 ชุด | ✅ ผ่านทั้ง 20 ไม่มี overflow แนวนอน |
+| console error / รูปเสีย ทั้ง 5 หน้า | ✅ ไม่มี |
+| ทดสอบกรณี JS ไม่ทำงาน ทั้งสองหน้าแรก — ไม่มีอะไรค้างจาง | ✅ ผ่าน |
+| gallery ของหน้า fms-election (6 แท็บ · 23 ธีม · 8 มือถือ) หลังเปลี่ยนธีม | ✅ ยังทำงาน |
+| **ภาพของ Credit Tracker (9 รูป)** | ❌ **ยังเป็นกล่องเส้นประ — รอเจ้าของอัปโหลด (ดู §11)** |
+| **ภาพของ PSU Chatbot (6 รูป)** | ❌ **ยังเป็นกล่องเส้นประ — รอเจ้าของอัปโหลด (ดู §11)** |
 | **เปิด GitHub Pages** | ❌ **ยังไม่เปิด — `teerapab149.github.io/` ตอบ 404 (ดู §4)** |
-| ลิงก์ GitHub / LinkedIn / อีเมล ใน footer | ✅ ครบแล้ว |
-| โปรเจกต์อื่นนอกจาก FMS-OVS | ❌ ยังไม่มี ตอนนี้เป็น case study เดี่ยว |
+| push การแก้รอบนี้ขึ้น GitHub | ❌ ยังไม่ push — **ต้องให้เจ้าของสั่งเอง** |
 
 remote คือ `https://github.com/Teerapab149/Teerapab149.github.io.git` (branch `main`)
-เหลือขั้นตอนเดียวคือเปิด Pages ในหน้า Settings ของ repo
+
+> ⚠️ **URL เดิมเปลี่ยนความหมายแล้ว** — `teerapab149.github.io/` เคยเป็นหน้า case study ของระบบเลือกตั้ง
+> ตอนนี้เป็นหน้าพอร์ตโฟลิโอ ส่วน case study ย้ายไป `teerapab149.github.io/fms-election.html`
+> ถ้าเคยส่งลิงก์เดิมให้ใครไว้ ลิงก์ยังใช้ได้ แต่จะเห็นหน้าใหม่
 
 ---
 
@@ -42,25 +56,38 @@ remote คือ `https://github.com/Teerapab149/Teerapab149.github.io.git` (bra
 
 ```
 portfolio-teerapab/
-├── index.html               ← เนื้อหาทั้งหมดอยู่ที่นี่ไฟล์เดียว
+├── index.html               ← หน้าแรก (พอร์ตโฟลิโอ) — Verdure · เดิมชื่อ index-verdure.html
+├── fms-election.html        ← case study ระบบเลือกตั้ง — เดิมคือ index.html
+├── credit-tracker.html      ← case study ระบบติดตามหน่วยกิต
+├── psu-chatbot.html         ← case study แชตบอต
 ├── serve.js                 ← static server สำหรับพรีวิว (node serve.js → :4173)
+├── .claude/launch.json      ← ให้ preview tool รัน serve.js ได้เอง
 ├── assets/
-│   ├── style.css            ← design system ทั้งหมด (ตัวแปรอยู่บนสุด)
-│   ├── app.js               ← gallery + lightbox + scroll-spy (vanilla, ไม่มี dep)
+│   ├── verdure.css          ← design system ของหน้าแรก ทั้งชุด (ไม่โหลด style.css)
+│   ├── verdure.js           ← reveal + count-up + capsule ที่ขยาย + scroll readout ของหน้าแรก
+│   ├── style.css            ← design system ของ case study 3 หน้า (พาเลตต์ Verdure เหมือนกัน)
+│   ├── motion.js            ← scroll reveal + count-up + scroll-spy (credit-tracker, psu-chatbot)
+│   ├── app.js               ← gallery + lightbox + scroll-spy ของหน้า fms-election
 │   └── img/
 │       ├── desktop/01-original … 06-receipt/   6 ตระกูล × 9 หน้า
 │       ├── mobile/01-original … 06-receipt/    6 ตระกูล × 4 หน้า
 │       ├── themes/01 … 23                      ทุกธีม หน้าแรก
-│       └── admin/1 … 7                         หน้า admin
+│       ├── admin/1 … 7                         หน้า admin
+│       ├── me/README.md                        ⬜ ว่าง — รูปตัวเอง 1 รูป (portrait.webp)
+│       ├── credit/README.md                    ⬜ ว่าง — ตารางบอกว่าต้องใส่ไฟล์ชื่ออะไร
+│       └── chatbot/README.md                   ⬜ ว่าง — ตารางบอกว่าต้องใส่ไฟล์ชื่ออะไร
 ├── docs/
 │   ├── HANDOFF.md           ← ไฟล์นี้
-│   └── CONTENT-SOURCE.md    ← ข้อเท็จจริงทุกตัวเลขที่ใช้ในหน้าเว็บ + เวอร์ชันสั้นสำหรับ resume/LinkedIn
+│   └── CONTENT-SOURCE.md    ← ข้อเท็จจริงทุกตัวเลขของ *ระบบเลือกตั้ง* + เวอร์ชันสั้นสำหรับ resume/LinkedIn
 ├── CLAUDE.md                ← กติกาสำหรับ AI ที่มาทำต่อ
 ├── README.md
 └── .github/workflows/deploy.yml
 ```
 
-**หลักสำคัญ:** รายการภาพใน gallery ถูกประกาศเป็น array บนหัวไฟล์ `assets/app.js`
+**ทุกหน้าอยู่ที่ root โดยตั้งใจ** — จะได้ใช้ `assets/...` เหมือนกันหมด ไม่ต้องมี `../`
+ถ้าย้ายหน้าลงโฟลเดอร์ย่อยเมื่อไร ต้องไล่แก้ path รูปทุกอันในหน้านั้น
+
+**หลักสำคัญ:** รายการภาพใน gallery ของหน้า fms-election ถูกประกาศเป็น array บนหัวไฟล์ `assets/app.js`
 (`FAMILIES`, `PAGES`, `THEMES`, `MOBILE`) — จะเพิ่ม/ลด/สลับภาพ แก้ที่ array พวกนั้นที่เดียว
 
 ---
@@ -126,25 +153,22 @@ repo ถูก push ขึ้นไปแล้วที่ **https://github.com
 
 ## 6. TODO ที่ยังค้าง (เรียงตามความสำคัญ)
 
-1. **[เจ้าของ] เปิด GitHub Pages** ตาม §4 — สิ่งเดียวที่ขวางไม่ให้ HR เข้าดูได้
-   (push เสร็จแล้ว · repo ถูกเปลี่ยนชื่อเป็น `Teerapab149.github.io` เพื่อให้เว็บอยู่ที่ root ไม่มี subpath)
-2. ~~**[เจ้าของ] ให้ URL GitHub / LinkedIn**~~ ✅ เสร็จ 2026-07-27 — footer มีครบสามช่องทางแล้ว:
-   `Teerapab.bs@gmail.com` · `github.com/Teerapab149` ·
-   `linkedin.com/in/teerapab-boonsri-bb2404394`
-   (อีเมลติดต่อของเจ้าของคือ **Teerapab.bs@gmail.com** ไม่ใช่อันที่ผูกกับ git)
-3. **ปีการศึกษาในภาพเป็น 2570 / SAMO 50** เพราะเป็นข้อมูลจำลองของหน้าพรีวิว ไม่ใช่ SAMO 49 ที่เล่าในเนื้อหา
+1. **[เจ้าของ] อัปโหลดภาพ 16 รูป** ตาม §11 — เริ่มจาก **รูปตัวเอง** ก่อน เพราะมันคือสิ่งแรกที่คนเห็นตอนเข้าเว็บ
+2. **[เจ้าของ] เปิด GitHub Pages** ตาม §4 — สิ่งเดียวที่ขวางไม่ให้ HR เข้าดูได้
+3. **[เจ้าของ] push การแก้รอบ 2026-07-30** — AI ไม่ push แทน (กติกาข้อ 7 ของ `CLAUDE.md`)
+4. **`og:image` ของสองหน้าใหม่** — `credit-tracker.html` กับ `psu-chatbot.html` ยังไม่มี `og:image`
+   เพราะยังไม่มีภาพจริง · พอใส่ภาพแล้วให้เพิ่มบรรทัด `og:image` ชี้ไป URL เต็มของภาพหลักแต่ละหน้า
+5. ~~**สถานะ deploy ของระบบเลือกตั้ง**~~ ✅ แก้แล้ว 2026-07-30 — เจ้าของยืนยันว่าใช้งานจริงแล้ว
+   ผู้มีสิทธิ์ 3,119 คน · ผู้ใช้สิทธิ์จริงราว 1,600 คน
+6. **ปีการศึกษาในภาพเป็น 2570 / SAMO 50** เพราะเป็นข้อมูลจำลองของหน้าพรีวิว ไม่ใช่ SAMO 49 ที่เล่าในเนื้อหา
    ถ้าอยากให้ตรงกัน: แก้ `src/utils/editorDummyData.js` ในโปรเจกต์ต้นทาง แล้วแคปใหม่ (ดู §7)
-4. **สถานะ deploy ของระบบเลือกตั้ง** — หัวข้อ "บันทึกตรงไปตรงมา" เขียนว่ายังไม่ deploy จริง
-   ถ้าขึ้น production แล้วต้องกลับมาแก้ประโยคนั้นและเปลี่ยนเป็น "ใช้งานจริงแล้ว"
-5. **ยังไม่มีภาพไดอะแกรม** — สถาปัตยกรรมกับ ballot lifecycle ตอนนี้วาดด้วย CSS ในหน้าเว็บเลย
-   (ดีอยู่แล้ว ไม่ต้องมีภาพก็ได้) แต่ถ้าจะทำ OG image สวย ๆ ต้องวาดแยก
-6. ~~**`og:image` / `og:url`**~~ ✅ ตั้งเป็น `https://teerapab149.github.io/` แล้ว ตรงกับชื่อ repo ปัจจุบัน
-   — **ถ้าเปลี่ยนชื่อ repo หรือย้ายไป custom domain ต้องแก้สองบรรทัดนี้ใน `<head>` ของ `index.html`**
-   ไม่งั้นแชร์ลิงก์แล้วภาพพรีวิวจะไม่ขึ้น
-7. **เวอร์ชันภาษาอังกฤษ** — ตอนนี้เป็นไทยล้วน ถ้าจะสมัครงานต่างชาติต้องทำ `en/index.html`
-   หรือทำสวิตช์ภาษา (เนื้อหาภาษาอังกฤษบางส่วนมีใน `docs/CONTENT-SOURCE.md` ข้อ 12 แล้ว)
-8. **เพิ่มโปรเจกต์อื่น** — โครงหน้าออกแบบมาให้เป็น case study เดี่ยว ถ้าจะเพิ่มโปรเจกต์ที่ 2
-   ควรทำหน้า index รวมแยก แล้วให้หน้านี้กลายเป็น `projects/fms-ovs.html`
+7. ~~**เวอร์ชันภาษาอังกฤษ**~~ ✅ แก้แล้ว 2026-07-30 — เจ้าของสั่งให้เป็นอังกฤษทั้งเว็บ
+   เลยไม่ทำสวิตช์ภาษาและไม่มีเวอร์ชันไทยของหน้าที่เลือกใช้ · ถ้าอยากได้ทั้งสองภาษาในอนาคต
+   ต้องทำ `th/` แยก และเนื้อหาไทยของ 4 หน้าอยู่ใน git history ของ commit ก่อนหน้านี้
+   · **ยกเว้น `index.html` แบบ A ที่ยังเป็นไทย** เพราะเป็นแบบที่ไม่ได้เลือก (ดู §12)
+8. **ยังไม่มี CONTENT-SOURCE ของสองโปรเจกต์ใหม่** — ตัวเลขของ Credit Tracker นับสดจาก
+   `E:/psucredit-project-main` เมื่อ 2026-07-30 (30 API routes · 13 models · 87 ไฟล์ · 11,996 บรรทัด · 15 หน้า)
+   ส่วน Chatbot ไม่มี repo ในเครื่อง ตัวเลขมาจากสไลด์ล้วน — ถ้าจะอัปเดตต้องนับใหม่เอง
 
 ---
 
@@ -199,5 +223,117 @@ cp -r docs/portfolio-shots/web/* E:/portfolio-teerapab/assets/img/
 1. อ่านไฟล์นี้จบ → อ่าน `CLAUDE.md` → เปิด `docs/CONTENT-SOURCE.md` ไว้เป็นแหล่งอ้างอิง
 2. `node serve.js` แล้วเปิด `http://localhost:4173` ดูของจริงก่อนแก้อะไร
 3. เช็ค §6 ว่า TODO ข้อไหนยังค้าง แล้วถามเจ้าของว่าจะทำข้อไหนต่อ
-4. แก้แล้วต้องทดสอบ responsive 5 ความกว้างตามข้อ §8.2 ทุกครั้ง และแปะผลจริงให้เจ้าของดู
-   ห้ามบอกแค่ว่า "ตรวจแล้วผ่าน"
+4. แก้แล้วต้องทดสอบ responsive 5 ความกว้าง × ทุกหน้าที่แตะ ตามข้อ §8.2 ทุกครั้ง
+   และแปะผลจริงให้เจ้าของดู ห้ามบอกแค่ว่า "ตรวจแล้วผ่าน"
+
+   ⚠️ **`document.scrollWidth` ใช้ตรวจ overflow ไม่ได้ในโปรเจกต์นี้** — `style.css` ตั้ง
+   `overflow-x: clip` ไว้บน `html` และ `body` (จำเป็น ไม่งั้น `position: sticky` ของ nav พัง)
+   ซึ่ง clip จะไม่สร้าง scrollable region เลย ทำให้ `scrollWidth` เท่ากับ `clientWidth` เสมอ
+   แม้จะมี element ล้นอยู่จริง · วิธีที่ถูกคือไล่ดู `getBoundingClientRect()` ของทุก element
+   แล้วข้ามตัวที่อยู่ใต้กล่องที่ `overflow-x` เป็น `auto/scroll/hidden/clip`
+   (marquee, code block, ตาราง, แถบมือถือ ตั้งใจให้กว้างเกินแล้วคลิปในตัวเอง)
+
+---
+
+## 11. ภาพที่ยังรออยู่ (16 รูป)
+
+สองหน้าใหม่ใช้ **กล่องเส้นประที่พิมพ์ชื่อไฟล์ที่รออยู่** แทนภาพจริง ตั้งใจให้เห็นชัดว่ายังไม่เสร็จ
+จะได้ไม่มีใครเผลอคิดว่านี่คือดีไซน์ที่ตั้งใจ
+
+รายละเอียดว่าไฟล์ไหนคือภาพอะไรอยู่ใน:
+- `assets/img/me/README.md` — **1 รูป (รูปตัวเอง แนวตั้ง 4:5)** ใช้ใน section About me ของหน้าแรกแบบ B
+- `assets/img/credit/README.md` — 9 รูป (dashboard, upload, verify, results, use case, context, ER, admin ×2)
+- `assets/img/chatbot/README.md` — 6 รูป (หน้าเว็บสว่าง/มืด, workflow, Language Studio, Web Chat, Direct Line key)
+
+ต้นทางของภาพทั้งหมดคือสไลด์นำเสนอสองไฟล์ที่เจ้าของมีอยู่แล้ว
+
+**วิธีเปลี่ยนกล่องเป็นภาพจริง** — แทนที่ทั้งก้อน
+
+```html
+<figure class="slot" style="--ar: 16 / 10">
+  <div class="slot__box">…</div>
+  <figcaption>…</figcaption>
+</figure>
+```
+
+ด้วย
+
+```html
+<figure class="figure">
+  <img src="assets/img/credit/01-hero.webp" width="1600" height="1000" loading="lazy" alt="…">
+  <figcaption>…</figcaption>
+</figure>
+```
+
+เฉพาะภาพหลักบนสุดของแต่ละ case study ให้ใช้ `class="hero__shot"` แทน `class="figure"`
+เพื่อให้ได้เงาและขอบแบบเดียวกับหน้า fms-election
+
+> 🔒 **ก่อนอัปโหลดต้องดูทุกภาพ** — ห้ามมีชื่อจริง รหัสนักศึกษาจริง หรือเกรดจริงของใครติดมา
+> และภาพ `chatbot/06-direct-line-key.webp` ต้องปิดบัง secret key ให้มิดก่อนเสมอ
+> ถ้า key ตัวจริงเคยหลุด ให้กด regenerate ใหม่ใน Azure Bot Service ด้วย
+
+**slot ของหน้าแรกกับของ case study เป็นคนละคลาสกัน** — หน้าแรกใช้ `.slot` ของ `verdure.css`
+(ลูกเป็น `em` / `b` / `code` ตรง ๆ) ส่วน case study ใช้ `.slot` + `.slot__box` ของ `style.css`
+ถ้าใส่ภาพของ Credit Tracker / Chatbot ต้องแก้ทั้งหน้าแรกและหน้า case study ของโปรเจกต์นั้น
+
+---
+
+## 12. เจ้าของเลือก Verdure — เว็บทั้งก้อนเป็นพาเลตต์เดียวแล้ว
+
+เดิมมีหน้าแรกสองแบบให้เลือก (แบบ A ม่วง/เทา · แบบ B Verdure) · **2026-07-30 เจ้าของเลือกแบบ B**
+แล้วสั่งให้สลับไฟล์และลบแบบ A ทิ้ง จึงทำสามอย่างนี้:
+
+1. `index-verdure.html` → `index.html` · ลบ `index.html` เดิม (แบบ A) และ `assets/home.css`
+   ลิงก์ทุกอันในหน้า case study ชี้ `index.html` อยู่แล้ว จึงไม่ต้องแก้ลิงก์เลย
+2. **แปลง `style.css` (case study 3 หน้า) เป็นพาเลตต์ Verdure** — ไม่แตะคลาสหรือ layout
+   แก้แค่ token สี + type ของหัวเรื่อง (Kanit 700/800 tracking ติดลบ เหมือน `.big` ของหน้าแรก)
+   จึงต้องเพิ่ม `wght@700;800` ใน `<link>` ฟอนต์ของทั้งสามหน้า
+3. hero shot + `og:image` ของ `fms-election.html` เปลี่ยนจากธีม `01-original` (ม่วง)
+   เป็น `04-verdure` ให้เข้ากับหน้า · ธีม Original ยังเป็นแท็บแรกของ gallery §05 อยู่
+
+**แบบ A หายไปแล้วจริง ๆ** — ไฟล์นั้นไม่เคยถูก commit (อยู่แต่ใน working tree)
+ที่สำรองไว้อยู่ใน scratchpad ของ session 2026-07-30 (`variant-A-backup/index-plain-thai.html`
+กับ `home.css`) ซึ่งไม่ถาวร · **ห้ามบอกเจ้าของว่า "กู้จาก git ได้"** เพราะกู้ไม่ได้
+
+### สามจุดที่ contrast ไม่ผ่านและถูกแก้ในรอบนี้
+
+วัดจริงจาก computed style ของทุก element ที่มี text node (ไม่ใช่เชื่อคอมเมนต์ในไฟล์)
+และ**ผสม alpha ทับพื้นก่อนวัด** — สามจุดนี้ตกเกณฑ์:
+
+| จุด | เดิม | วัดได้ | แก้เป็น |
+|---|---|---|---|
+| `--moss-4` / `--dim` (ตัวเล็กสุดทั้งเว็บ) | `#5C7A6A` | 4.3:1 บนครีม · 3.7:1 บน `--paper-3` | `#4F6959` → 5.5:1 · 4.8:1 |
+| `.work__idx` (เลข 01/02/03 ตัวใหญ่) | `--honey` | 2.24:1 | `--honey-deep` → 3.1:1 |
+| `.end .tag` / `.end .foot small` (ครีมโปร่งบนมอส) | 58% / 55% | 4.5:1 / 4.2:1 | 64% → 5.3:1 |
+
+`--honey #C5A059` เป็นสี**ประดับเท่านั้น** (3.1:1 บนครีม) — ห้ามเอาไปใส่ตัวหนังสือบนพื้นครีม
+ถ้าอยากได้ทองที่อ่านได้ ใช้ `--honey-ink #7D6228` (5.2:1) หรือบนพื้นมอสใช้ honey ได้ (4.95:1)
+
+---
+
+## 13. section About me (ใหม่ 2026-07-30)
+
+เจ้าของบอกว่าเว็บ "เน้นพรีเซนโปรเจกต์เลยตั้งแต่เข้าเว็บ ยังไม่ได้พรีเซนตัวผม"
+จึงเพิ่ม stage แรกของหน้าแรกเป็น **About me** ก่อน hero เดิม
+(ไม่แก้ทับ hero เดิมที่เขาชอบอยู่แล้ว — hero เลื่อนลงไปเป็น stage ที่ 2 เฉย ๆ)
+
+โครง: กรอบรูปทรงโค้ง (arch) ซ้าย · ขวาเป็นชื่อตัวใหญ่ + ประโยคแนะนำตัว + `<dl class="bio">` 4 บรรทัด
+(Studying / University / Graduating / Looking for) คั่นด้วยเส้น hairline เหมือน `.cv`
+
+CSS ใหม่ที่เพิ่มใน `verdure.css`: `.intro__grid` `.portrait` `.portrait__frame` `.bio` `.slot--fill`
+
+**กับดักที่เจอจริงตอนทำ (อย่าทำซ้ำ)** — `.portrait` ตอนแรกใส่แค่ `max-width` + `margin-inline: auto`
+ที่ ≤900px แล้วรูปหดเหลือ 192px เพราะ **auto margin ปิด stretch ของ grid item**
+ทำให้กล่องหดตาม fit-content ซึ่งก็คือความกว้างของ figcaption · ต้องใส่ `width: 100%` คู่ไปด้วยเสมอ
+
+**กรอบรูปเป็นทรง arch ไม่ใช่ทรงแคปซูล** — ตั้งใจให้ไม่เหมือน `.capsule` / `.grow__card`
+เพราะสองอันนั้นต้องอ่านว่าเป็น "วัตถุเดียวกันที่กำลังเปิดออก" ตอน scroll
+ถ้าเอารูปตัวเองไปใช้ทรงเดียวกัน คนจะอ่านเป็นวัตถุที่สามและ effect นั้นพัง
+
+**ช่องว่างก่อนคำที่มีเส้นวงกลม (`.mark-wrap`) ต้องอยู่นอก `<span>`** — ตอนแปลเป็นอังกฤษเคยเขียน
+`people<span class="mark-wrap"> actually use…` แล้วช่องว่างหน้าคำถูกกลืนหาย เพราะ leading space
+ที่ต้นของ inline-block ถูก collapse → อ่านเป็น "peopleactually" · ภาษาไทยไม่เจอปัญหานี้เพราะไม่มีเว้นวรรค
+
+**ตรวจ responsive ด้วย iframe ได้เร็วกว่า resize จริง** — สร้าง iframe กว้างตามที่ต้องการทดสอบ
+โหลดหน้าเข้าไป แล้วไล่ `getBoundingClientRect()` ทุก element ข้ามตัวที่อยู่ใต้กล่อง `overflow-x`
+(ดูเหตุผลที่ห้ามใช้ `scrollWidth` ใน §10) · 4 หน้า × 5 ความกว้าง จบใน JS call เดียว
