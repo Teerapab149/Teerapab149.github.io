@@ -71,15 +71,10 @@
       </a>
     </div>
 
-    <!-- SLOT — replace the whole <figure class="slot"> with:
-         <figure class="hero__shot"><img src="assets/img/megubot/01-hero.webp" …></figure> -->
-    <figure class="slot" style="--ar: 16 / 10; margin-top: clamp(36px, 6vw, 64px)">
-      <div class="slot__box">
-        <span class="slot__num">Main image</span>
-        <b>The bot in use in a Discord channel — a command and its reply</b>
-        <code>assets/img/megubot/01-hero.webp</code>
-      </div>
-      <figcaption>Opening image — a real exchange in the server, with usernames of anyone who is not you blurred</figcaption>
+    <figure class="figure" style="margin-top: clamp(36px, 6vw, 64px); max-width: 620px">
+      <img src="assets/img/megubot/01-profile.webp" width="602" height="665" fetchpriority="high"
+           alt="MeguBot Reborn's Discord profile: the app card with its bio, its status link and the Server Manager, Admin and Super Bot roles">
+      <figcaption>How the bot introduces itself in Discord. “Made by Megu Corp. Team” is the two of us.</figcaption>
     </figure>
   </div>
 </section>
@@ -125,6 +120,13 @@
           working commands, and we went back and forth when reality disagreed with the plan.</p>
       </div>
     </div>
+
+    <figure class="figure reveal" style="margin-top:26px; max-width: 380px; margin-inline: auto">
+      <img src="assets/img/megubot/05-mascot.webp" width="760" height="920" loading="lazy"
+           alt="MeguBot's mascot: a dark blue cat wearing a gold crown, holding a sign reading MEGU INC.">
+      <figcaption style="text-align:center">The bot has a face and a name because something people
+        talk to every day should have one. That call was part of the design too.</figcaption>
+    </figure>
 
     <div class="callout reveal" style="margin-top:26px">
       <p>
@@ -184,35 +186,41 @@
     </div>
 
     <ul class="clean reveal">
-      <li><strong>Voice channel announcements</strong> — the bot speaks who joined and who left, so nobody has to alt-tab to find out</li>
       <li><strong>Text to speech</strong> — anyone without a mic, or who would rather not talk, types and the bot says it in the channel. This is the feature the group leans on most</li>
+      <li><strong>Voice channel announcements</strong> — the bot speaks who joined and who left, so nobody has to alt-tab to find out</li>
       <li><strong>Custom names</strong> — per-person names the bot uses when it speaks, set per server, because Discord display names are not what friends actually call each other</li>
+      <li><strong>Auto-role</strong> — new members get their role assigned on arrival instead of waiting for an admin to notice them</li>
+      <li><strong>Honeypot channel</strong> — a decoy channel that catches spam accounts before they reach a real one. The idea is old; putting it in a friends' server bot is the part I like</li>
       <li><strong>Sound and music playback</strong> — queued audio in the voice channel</li>
-      <li><strong>Small games</strong> — a fishing game you can idle in, a farming game, and other short things to do while waiting for a lobby</li>
       <li><strong>Utility commands</strong> — the small stuff that keeps a server tidy</li>
     </ul>
 
+    <div class="callout callout--plain reveal" style="margin-top:22px">
+      <p>
+        There are also small games — a fishing game you can idle in, a farming game — but they live in
+        the older build and have not been moved onto the version running in the cloud yet, so there
+        are no screenshots of them here.
+      </p>
+    </div>
+
     <div class="figure-grid reveal" style="margin-top:26px">
-      <figure class="slot" style="--ar: 4 / 3">
-        <div class="slot__box">
-          <span class="slot__num">Image 2</span>
-          <b>The command list the bot shows</b>
-          <code>assets/img/megubot/02-commands.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/megubot/02-commands.webp" width="586" height="427" loading="lazy"
+             alt="Discord's slash command list for the bot: autorole disable, set and status, honeypot disable, set and status, and join">
+        <figcaption>Every feature is a slash command with the same shape: <code>disable</code>,
+          <code>set</code>, <code>status</code>. That consistency was a design rule, not an accident</figcaption>
       </figure>
-      <figure class="slot" style="--ar: 4 / 3">
-        <div class="slot__box">
-          <span class="slot__num">Image 3</span>
-          <b>Text to speech in use in a voice channel</b>
-          <code>assets/img/megubot/03-tts.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/megubot/03-tts.webp" width="627" height="123" loading="lazy"
+             alt="The bot confirming it added a message to the text-to-speech queue, showing the language and the voice engine used">
+        <figcaption>Text to speech, queued. The reply says which voice engine spoke it — the person
+          typing gets told what everyone else just heard</figcaption>
       </figure>
-      <figure class="slot" style="--ar: 4 / 3">
-        <div class="slot__box">
-          <span class="slot__num">Image 4</span>
-          <b>One of the games — the fishing or farming screen</b>
-          <code>assets/img/megubot/04-game.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/megubot/04-voice.webp" width="278" height="252" loading="lazy"
+             alt="A Discord voice channel member list with the bot sitting in it alongside several people, whose names are pixelated">
+        <figcaption>The bot sitting in the channel with everyone else · the other members' names are
+          pixelated here — they did not sign up to be in my portfolio</figcaption>
       </figure>
     </div>
   </div>
@@ -234,8 +242,8 @@
           <p>
             While the bot ran locally it was only up when one of us remembered to start it, which
             quietly capped how much anyone relied on it — you do not build a habit around something
-            that is usually offline. Moving it to a cloud host was the change that turned it from a toy
-            into part of the server.
+            that is usually offline. Moving it onto a cloud host (it runs on Render now) was the change
+            that turned it from a toy into part of the server.
           </p>
         </div>
       </div>
@@ -298,7 +306,8 @@
     <ul class="clean reveal">
       <li><strong>I did not write this code</strong> — my friend did, and the repository is his. What is mine is the system design, the feature set and the reasoning behind both</li>
       <li><strong>It is a side project for our own server</strong> — no client, no brief, no deadline. The requirements came from watching how we actually use Discord</li>
-      <li><strong>It is still changing</strong> — the copy on my own machine is already behind what is running, which is why there are no line counts or command counts on this page</li>
+      <li><strong>It is still changing</strong> — the copy on my own machine is already behind what is running, which is why there are no line counts or command counts on this page, and why the games are described but not shown</li>
+      <li><strong>The screenshots are from our own server</strong> — everyone else's name and avatar is pixelated. They are not part of my job application</li>
     </ul>
   </div>
 </section>
