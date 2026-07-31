@@ -115,6 +115,21 @@ a { color: inherit; }
 .bar__mid { display: none; }
 @media (min-width: 720px) { .bar__mid { display: block; } }
 .bar a { transition: color .2s ease; }
+
+/* language switch — a pair of small pills at the right end of the bar */
+.bar__right { display: flex; align-items: center; gap: clamp(10px, 2vw, 20px); }
+.lang { display: inline-flex; gap: 2px; padding: 2px; border-radius: 999px;
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+.lang__btn {
+  font: inherit; font-size: clamp(.625rem, 1.2vw, .75rem); letter-spacing: 0;
+  cursor: pointer; border: 0; background: transparent; color: inherit;
+  padding: 3px 9px; border-radius: 999px; line-height: 1.5;
+  opacity: .6; transition: opacity .2s ease, background .2s ease;
+}
+.lang__btn:hover { opacity: 1; }
+.lang__btn[aria-pressed="true"] {
+  opacity: 1; background: color-mix(in srgb, currentColor 14%, transparent);
+}
 .bar a:hover { color: var(--honey-ink); }
 
 /* While the dark cover sits under the bar, the bar drops its cream fill and goes

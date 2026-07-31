@@ -30,7 +30,15 @@
 <header class="bar">
   <a href="#work">Work</a>
   <span class="bar__mid">Teerapab Boonsri</span>
-  <a href="#contact">Contact</a>
+  <span class="bar__right">
+    <a href="#contact">Contact</a>
+    <!-- English is the page; Thai is applied over it by assets/i18n.js. With JS
+         off these buttons do nothing and the page stays fully readable. -->
+    <span class="lang" role="group" aria-label="Language">
+      <button type="button" class="lang__btn" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" class="lang__btn" data-lang="th" aria-pressed="false">ไทย</button>
+    </span>
+  </span>
 </header>
 
 <p class="count" id="count" aria-hidden="true">00 — scroll</p>
@@ -603,5 +611,6 @@
 </main>
 
 <script src="assets/verdure.js"></script>
+<script src="assets/i18n.js"></script>
 </body>
 </html>

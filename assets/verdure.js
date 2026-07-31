@@ -90,9 +90,13 @@
      rather than guessed, and re-measured on resize, because the answer depends
      on how tall this content lands at this width. */
 
+  /* +14px of slack, not 0: Thai copy runs a couple of pixels taller than English
+     and that was enough to drop a 1366×768 laptop out of the pinned treatment
+     entirely. The cover's bottom padding is 30px on short screens, so anything
+     inside this tolerance clips padding rather than content. */
   const canPin = () => !reduced
     && matchMedia('(min-width: 901px)').matches
-    && !!cover && cover.scrollHeight <= innerHeight + 1;
+    && !!cover && cover.scrollHeight <= innerHeight + 14;
 
   const syncPin = () => {
     const on = canPin();
