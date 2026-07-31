@@ -654,17 +654,29 @@ a { color: inherit; }
 .pick__grid > * { min-width: 0; }
 
 .pick__card {
-  position: relative; display: flex; flex-direction: column; gap: 7px;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 7px;
   padding: clamp(18px, 2.2vw, 26px);
   background: var(--paper-2); border: 1px solid var(--rule); border-radius: 18px;
   text-decoration: none; color: inherit;
-  transition: border-color .2s ease, transform .22s cubic-bezier(.22,.61,.36,1), box-shadow .22s ease;
+  transition: border-color var(--t2) ease, transform var(--t2) var(--ease), box-shadow var(--t2) ease;
 }
 .pick__card:hover, .pick__card:focus-visible {
   border-color: var(--sea); transform: translateY(-4px);
-  box-shadow: 0 26px 50px -32px rgba(27, 54, 43, .45);
+  box-shadow: 0 26px 50px -32px rgba(13, 43, 62, .45);
 }
-@media (prefers-reduced-motion: reduce) { .pick__card:hover { transform: none; } }
+/* an accent rule DRAWS along the foot on hover rather than a colour simply
+   appearing — same grammar as every other line on the site (law L3) */
+.pick__card::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  background: var(--sea); transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t2) var(--ease);
+}
+.pick__card:hover::after, .pick__card:focus-visible::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .pick__card:hover { transform: none; }
+  .pick__card::after { transition: none; }
+}
 
 .pick__n {
   font-family: var(--font-display); font-weight: 800; font-size: 1.6rem;
@@ -718,6 +730,14 @@ a { color: inherit; }
   box-shadow: 0 40px 80px -44px rgba(27, 54, 43, .5);
 }
 .capsule img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+/* Idle life (law L5). Once the entry finishes, a page of perfectly still boxes
+   reads as a screenshot of a website rather than a website. One object breathes
+   in this viewport and one only. It animates `translate`, not `transform`,
+   because .up owns transform here and the two would overwrite each other. */
+@media (prefers-reduced-motion: no-preference) {
+  .capsule { animation: cap-float 7s ease-in-out infinite; }
+}
+@keyframes cap-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
 @media (max-width: 780px) { .capsule { max-width: 320px; margin-inline: auto; } }
 
 .hero__side { align-self: center; }
@@ -1131,10 +1151,16 @@ a { color: inherit; }
    tiny facts column alongside.
    ══════════════════════════════════════════════════════════════════════════ */
 
+/* The rule is a pseudo-element, not a border, for one reason: a border cannot
+   be scaled. This one draws itself left to right when the section arrives. */
 .work__head {
+  position: relative;
   display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 20px;
   padding-bottom: 14px; margin-bottom: clamp(18px, 3vw, 30px);
-  border-bottom: 1px solid var(--rule);
+}
+.work__head::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--rule); transform-origin: left;
 }
 /* honey-deep, not honey: the plain honey measured 2.24:1 on cream, and this
    numeral is real text (the section index), so it has to clear the 3:1 bar for
@@ -1153,12 +1179,18 @@ a { color: inherit; }
 @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
 
 /* the screenshot, with the project name overlapping its lower edge */
-.shot { position: relative; margin: 0; }
+/* The shadow sits on the FIGURE, not the image. The image is what gets wiped
+   open by clip-path, and clip-path cuts a box shadow off with everything else —
+   so the shadow has to live one level up, where nothing clips it. */
+.shot { position: relative; margin: 0; border-radius: clamp(14px, 2vw, 26px); }
 .shot img {
-  width: 100%; border-radius: clamp(14px, 2vw, 26px);
+  display: block; width: 100%; border-radius: inherit;
   background: var(--paper-2); border: 1px solid var(--rule);
-  box-shadow: 0 34px 70px -40px rgba(27, 54, 43, .45);
+  box-shadow: 0 34px 70px -40px rgba(13, 43, 62, .45);
 }
+.js-anim .shot.wipe { box-shadow: 0 34px 70px -40px rgba(13, 43, 62, 0); }
+.js-anim .shot.wipe img { box-shadow: none; }
+.js-anim .shot.wipe.is-in { box-shadow: 0 34px 70px -40px rgba(13, 43, 62, .45); transition: box-shadow var(--t4) ease var(--d, 0ms); }
 .shot__title {
   position: relative; margin: -.34em 0 0 -.02em; z-index: 2;
   mix-blend-mode: normal;
@@ -1331,6 +1363,59 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .js-anim .up { opacity: 1; transform: none; transition: none; }
+}
+
+/* ── the four other ways something can arrive ─────────────────────────────
+   docs/PLAN-AWWWARDS.md law L3: direction carries meaning, so a thing's class
+   says what KIND of thing it is, not just that it should animate.
+
+     .draw   a rule draws itself, left to right      → structure
+     .stamp  an index presses down into place        → a label being applied
+     .wipe   an image is uncovered bottom-edge-up    → a picture developing
+     .deal   a card lands slightly off-square        → an object being placed
+
+   All four are gated the same way as .up — start state under html.js-anim,
+   end state on .is-in from the observer in verdure.js — so none of them can
+   hide anything when the script is missing.
+
+   .deal animates `translate` and `rotate`, the standalone properties, rather
+   than `transform`. .pick__card already spends `transform` on its hover lift,
+   and the entry rule out-specifies the hover rule, so sharing one property
+   silently killed the hover. These compose instead of fighting. */
+
+.js-anim .draw::after { transform: scaleX(0); }
+.js-anim .draw.is-in::after {
+  transform: scaleX(1);
+  transition: transform var(--t4) var(--ease-wipe) calc(var(--d, 0ms) + 60ms);
+}
+
+.js-anim .stamp { opacity: 0; scale: 1.07; }
+.js-anim .stamp.is-in {
+  opacity: 1; scale: 1;
+  transition: opacity var(--t2) ease var(--d, 0ms), scale var(--t2) var(--ease) var(--d, 0ms);
+}
+
+.js-anim .wipe img { clip-path: inset(0 0 100% 0); }
+.js-anim .wipe.is-in img {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path var(--t4) var(--ease-wipe) var(--d, 0ms);
+}
+
+.js-anim .deal { opacity: 0; translate: 0 28px; rotate: var(--rot, 1.1deg); }
+.js-anim .deal.is-in {
+  opacity: 1; translate: none; rotate: none;
+  transition: opacity var(--t3) ease var(--d, 0ms),
+              translate var(--t3) var(--ease) var(--d, 0ms),
+              rotate var(--t3) var(--ease) var(--d, 0ms);
+}
+/* alternating tilt — four cards leaning the same way looks like a mistake */
+.js-anim .pick__grid > :nth-child(even) { --rot: -1.1deg; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-anim .draw::after, .js-anim .stamp, .js-anim .wipe img, .js-anim .deal {
+    opacity: 1; transform: none; scale: 1; rotate: none; translate: none;
+    clip-path: none; transition: none;
+  }
 }
 
 /* ── line-mask ────────────────────────────────────────────────────────────

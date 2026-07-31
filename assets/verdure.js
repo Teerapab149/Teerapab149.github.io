@@ -170,7 +170,7 @@
     return () => { if (!reduced) raf(lmAll); };
   };
 
-  const risers = document.querySelectorAll('.up, .scrawl, .lm');
+  const risers = document.querySelectorAll('.up, .scrawl, .lm, .draw, .stamp, .wipe, .deal');
 
   if (reduced || !('IntersectionObserver' in window)) {
     risers.forEach(el => el.classList.add('is-in'));
