@@ -21,6 +21,13 @@ const TYPES = {
   ".md": "text/plain; charset=utf-8",
 };
 
+/* The webp set under assets/img/ was built by a temporary POST /__save endpoint
+   that lived here plus a throwaway _convert.html page: this machine has no
+   ffmpeg / ImageMagick / cwebp / Python, and the project bans dependencies, so
+   the conversion ran in the browser's canvas and posted the results back. Both
+   are removed again — see docs/HANDOFF.md §14 for how to bring them back when
+   the next batch of screenshots arrives. */
+
 http
   .createServer((req, res) => {
     const clean = decodeURIComponent(req.url.split("?")[0]);

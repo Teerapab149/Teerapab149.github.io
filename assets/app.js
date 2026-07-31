@@ -110,10 +110,12 @@
       var fig = el('figure', 'phone');
       fig.innerHTML =
         '<div class="phone__frame"><img loading="lazy" src="' + src + '" alt="' + m.label + '"></div>' +
-        '<p>' + m.label + '</p>';
-      fig.style.cursor = 'zoom-in';
-      fig.dataset.full = src;
-      fig.dataset.cap = m.label;
+        '<p>' + m.label + '<em>scroll inside · click to open</em></p>';
+      // the frame scrolls; the caption is the click target for the lightbox, so
+      // scrolling a phone never fires it by accident
+      fig.querySelector('p').style.cursor = 'zoom-in';
+      fig.querySelector('p').dataset.full = src;
+      fig.querySelector('p').dataset.cap = m.label;
       strip.appendChild(fig);
     });
   }

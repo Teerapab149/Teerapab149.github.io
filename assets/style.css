@@ -323,18 +323,36 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
 .themes .shot__cap { padding: 8px 12px; font-size: .75rem; }
 
 .phones {
-  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 240px);
-  gap: 18px; overflow-x: auto; padding-bottom: 14px; scroll-snap-type: x mandatory;
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(212px, 252px);
+  gap: 22px; overflow-x: auto; padding-bottom: 14px; scroll-snap-type: x mandatory;
 }
-.phone { scroll-snap-align: start; }
+/* margin:0 is the actual fix for the "squeezed" phones. .phone is a <figure>,
+   and the UA stylesheet gives figures 40px side margins — which ate 80px out of
+   every 210px track and left the device 132px wide inside it. */
+.phone { scroll-snap-align: start; margin: 0; }
 /* dark bezel is kept on purpose — it reads as a phone, and a cream-on-cream
-   frame would make the screenshot edge disappear. Moss, not near-black. */
+   frame would make the screenshot edge disappear. Moss, not near-black.
+
+   These captures are FULL PAGES, not viewport shots: 1141×4000, 611×4000. The
+   old frame was a fixed 420px box with object-fit:cover, so it showed the top
+   tenth of each page in a stubby, too-wide rectangle — the owner's word was
+   "แย่มาก" and he was right. Now the frame is an actual phone (9:19.5) and the
+   page SCROLLS inside it, which is both honest to the source and the only way
+   to see more than the header. Scroll chaining is left on: once the phone
+   bottoms out, the wheel carries on down the page. */
 .phone__frame {
-  border: 8px solid var(--text); border-radius: 26px; overflow: hidden; background: var(--text);
-  height: 420px; box-shadow: var(--shadow-md);
+  border: 9px solid var(--text); border-radius: 34px; background: var(--text);
+  aspect-ratio: 9 / 19.5; overflow: hidden auto;
+  box-shadow: var(--shadow-md);
+  scrollbar-width: none; -ms-overflow-style: none;
 }
-.phone__frame img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.phone__frame::-webkit-scrollbar { display: none; }
+.phone__frame img { width: 100%; height: auto; display: block; }
 .phone p { font-size: .8125rem; color: var(--dim); margin: 10px 0 0; text-align: center; }
+.phone p em {
+  font-style: normal; display: block; font-size: .6875rem; color: var(--brand);
+  letter-spacing: .1em; text-transform: uppercase; margin-top: 3px;
+}
 
 /* ── criteria table ────────────────────────────────────────────────────── */
 

@@ -11,6 +11,7 @@
 <meta property="og:title" content="FMS Credit Tracker — case study">
 <meta property="og:description" content="Upload your grade report as a PDF and the system works out which credit categories are complete and which are still short.">
 <meta property="og:url" content="https://teerapab149.github.io/credit-tracker.html">
+<meta property="og:image" content="https://teerapab149.github.io/assets/img/credit/01-landing.webp">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,15 +67,9 @@
       <span class="chip">Recharts</span>
     </div>
 
-    <!-- SLOT — replace the whole <figure class="slot"> with:
-         <figure class="hero__shot"><img src="assets/img/credit/01-hero.webp" …></figure> -->
-    <figure class="slot" style="--ar: 16 / 10; margin-top: clamp(36px, 6vw, 64px)">
-      <div class="slot__box">
-        <span class="slot__num">Main image</span>
-        <b>Dashboard summarising credit progress by category</b>
-        <code>assets/img/credit/01-hero.webp</code>
-      </div>
-      <figcaption>Opening image of the case study — the dashboard with a ring or bar of progress per category</figcaption>
+    <figure class="hero__shot" style="margin-top: clamp(36px, 6vw, 64px)">
+      <img src="assets/img/credit/01-landing.webp" width="1600" height="796" fetchpriority="high"
+           alt="The Credit Tracker landing page: Track Your Path to Graduation, with an upload button and a three-step explanation">
     </figure>
   </div>
 </section>
@@ -164,21 +159,15 @@
     </div>
 
     <div class="figure-grid reveal" style="margin-top:24px">
-      <figure class="slot" style="--ar: 4 / 3">
-        <div class="slot__box">
-          <span class="slot__num">Image 2</span>
-          <b>Use Case Diagram</b>
-          <code>assets/img/credit/05-usecase.webp</code>
-        </div>
-        <figcaption>From the slide “SYSTEM DESIGN — USE CASE DIAGRAM”</figcaption>
+      <figure class="figure">
+        <img src="assets/img/credit/10-usecase.webp" width="744" height="1009" loading="lazy"
+             alt="Use case diagram showing what a Student can do and what an Admin can do, and where the two overlap">
+        <figcaption>Use case diagram — who is allowed to do what, agreed before any code existed</figcaption>
       </figure>
-      <figure class="slot" style="--ar: 4 / 3">
-        <div class="slot__box">
-          <span class="slot__num">Image 3</span>
-          <b>Context Diagram</b>
-          <code>assets/img/credit/06-context.webp</code>
-        </div>
-        <figcaption>From the slide “SYSTEM DESIGN — CONTEXT DIAGRAM”</figcaption>
+      <figure class="figure">
+        <img src="assets/img/credit/11-context.webp" width="712" height="821" loading="lazy"
+             alt="Context diagram showing the system in the middle with the student and the curriculum admin as external entities">
+        <figcaption>Context diagram — the boundary of the system, and what sits outside it</figcaption>
       </figure>
     </div>
 
@@ -245,13 +234,11 @@
       </div>
     </div>
 
-    <figure class="slot reveal" style="--ar: 16 / 9; margin-top:24px">
-      <div class="slot__box">
-        <span class="slot__num">Image 4</span>
-        <b>ER Diagram of the system</b>
-        <code>assets/img/credit/07-er.webp</code>
-      </div>
-      <figcaption>From the slide “DATABASE DESIGN — ER DIAGRAM”</figcaption>
+    <figure class="figure reveal" style="margin-top:24px">
+      <img src="assets/img/credit/12-er.webp" width="1310" height="965" loading="lazy"
+           alt="ER diagram of the 13 tables, including CurriculumCategory referencing itself through parentId and the SubjectEquivalency pairing table">
+      <figcaption>The 13 tables. The self-reference on <code>CurriculumCategory</code> and the separate
+        <code>SubjectEquivalency</code> table are the two decisions above, drawn.</figcaption>
     </figure>
   </div>
 </section>
@@ -312,26 +299,21 @@
     </div>
 
     <div class="figure-grid reveal" style="margin-top:26px">
-      <figure class="slot" style="--ar: 16 / 10">
-        <div class="slot__box">
-          <span class="slot__num">Image 5</span>
-          <b>The PDF upload screen</b>
-          <code>assets/img/credit/02-upload.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/credit/02-upload.webp" width="1600" height="800" loading="lazy"
+             alt="Upload screen with drop zones for the grade report and the registration slip">
+        <figcaption>Step 1 — the two PDFs the registrar already gives you</figcaption>
       </figure>
-      <figure class="slot" style="--ar: 16 / 10">
-        <div class="slot__box">
-          <span class="slot__num">Image 6</span>
-          <b>Review table for the extracted data</b>
-          <code>assets/img/credit/03-verify.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/credit/03-verify.webp" width="1600" height="801" loading="lazy"
+             alt="Review screen showing the details read out of the PDF and a parsing confidence of 100 percent">
+        <figcaption>Step 2 — what the parser read back, with its confidence stated. The student ID is
+          masked here; it is visible to the student in the real system</figcaption>
       </figure>
-      <figure class="slot" style="--ar: 16 / 10">
-        <div class="slot__box">
-          <span class="slot__num">Image 7</span>
-          <b>Results by category</b>
-          <code>assets/img/credit/04-results.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/credit/05-results.webp" width="1600" height="797" loading="lazy"
+             alt="Results grouped by curriculum category, each with a progress bar and a pass or short marker">
+        <figcaption>Step 3 — every category, how many credits it needs, and how far along it is</figcaption>
       </figure>
     </div>
   </div>
@@ -354,19 +336,25 @@
     </ul>
 
     <div class="figure-grid reveal" style="margin-top:26px">
-      <figure class="slot" style="--ar: 16 / 10">
-        <div class="slot__box">
-          <span class="slot__num">Image 8</span>
-          <b>Course catalogue management</b>
-          <code>assets/img/credit/08-admin-subjects.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/credit/22-admin-subjects.webp" width="1600" height="789" loading="lazy"
+             alt="The central course catalogue listing 561 subjects with their codes, groups and credits">
+        <figcaption>The central catalogue — 561 courses, the single place a course name is edited</figcaption>
       </figure>
-      <figure class="slot" style="--ar: 16 / 10">
-        <div class="slot__box">
-          <span class="slot__num">Image 9</span>
-          <b>Equivalent course mapping</b>
-          <code>assets/img/credit/09-equivalency.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/credit/23-admin-match.webp" width="1600" height="789" loading="lazy"
+             alt="The subject matching screen, pairing course codes that are equivalent across curriculum editions">
+        <figcaption>Matching equivalent codes — the system proposes, the admin confirms</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="assets/img/credit/20-admin-dashboard.webp" width="1600" height="786" loading="lazy"
+             alt="Admin dashboard: 12 curriculum versions, 126 category nodes, 561 subjects, and system health checks">
+        <figcaption>The admin's first screen — 12 curriculum versions and 126 category nodes in the system</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="assets/img/credit/21-admin-curriculum.webp" width="1600" height="788" loading="lazy"
+             alt="Faculty curriculum management screen listing curriculum versions by year">
+        <figcaption>Curricula by year — a new one is cloned from last year's, not retyped</figcaption>
       </figure>
     </div>
   </div>
@@ -452,10 +440,19 @@
         <b>PSU Chatbot</b>
         <em>A student-question chatbot on Azure Bot Service</em>
       </a>
+      <a class="pagenav__card" href="megubot.html">
+
+        <span>Next project</span>
+
+        <b>MeguBot</b>
+
+        <em>A Discord bot I designed and a friend built — analysis without the code</em>
+
+      </a>
       <a class="pagenav__card" href="index.html">
         <span>Back</span>
         <b>Portfolio home</b>
-        <em>All three projects and my background in one place</em>
+        <em>All four projects and my background in one place</em>
       </a>
     </div>
   </div>

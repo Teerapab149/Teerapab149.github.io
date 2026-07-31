@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeguBot — Teerapab Boonsri</title>
+<meta name="description" content="An all-round quality-of-life Discord bot my friend and I run for our own server — I designed the system and the features, he wrote the code.">
+<meta name="theme-color" content="#F7F4ED">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="MeguBot — case study">
+<meta property="og:description" content="The project where I was the analyst and not the developer: I designed how the bot behaves, a friend implemented it.">
+<meta property="og:url" content="https://teerapab149.github.io/megubot.html">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Kanit 700/800 is what carries the Verdure display type in style.css -->
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.classList.add('js-anim');</script>
+</head>
+<body>
+
+<!-- ── nav ─────────────────────────────────────────────────────────────── -->
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__back" href="index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Portfolio
+    </a>
+    <a class="nav__brand" href="#top">MeguBot <span>· case study</span></a>
+    <nav class="nav__links">
+      <a href="#role">My role</a>
+      <a href="#problem">Why it exists</a>
+      <a href="#features">What it does</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#next">What is next</a>
+      <a href="#notes">Straight talk</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ── hero ────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Case study · side project with a friend · ongoing</p>
+    <h1>The project where I was<br>the <em>analyst</em>, not the developer</h1>
+    <p class="hero__sub">
+      MeguBot is an all-round quality-of-life bot for Discord that my friend and I keep running for
+      our own server, and that people there use every day. I designed how it behaves — the flows,
+      the features, the decisions about what it should and should not do. My friend wrote the code.
+      Putting it in this portfolio only makes sense if that split is the first thing you read.
+    </p>
+    <div class="hero__meta">
+      <span class="chip">Discord.js 14</span>
+      <span class="chip">Node.js</span>
+      <span class="chip">@discordjs/voice</span>
+      <span class="chip">Edge / Google TTS</span>
+      <span class="chip">Slash commands</span>
+      <span class="chip">Cloud-hosted</span>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn--ghost" href="https://github.com/OtsutsukiMiho/MeguBot-Reborn" target="_blank" rel="noopener noreferrer">See the repository
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+      </a>
+    </div>
+
+    <!-- SLOT — replace the whole <figure class="slot"> with:
+         <figure class="hero__shot"><img src="assets/img/megubot/01-hero.webp" …></figure> -->
+    <figure class="slot" style="--ar: 16 / 10; margin-top: clamp(36px, 6vw, 64px)">
+      <div class="slot__box">
+        <span class="slot__num">Main image</span>
+        <b>The bot in use in a Discord channel — a command and its reply</b>
+        <code>assets/img/megubot/01-hero.webp</code>
+      </div>
+      <figcaption>Opening image — a real exchange in the server, with usernames of anyone who is not you blurred</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── stats ───────────────────────────────────────────────────────────── -->
+<section id="stats">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b>Design</b><span>the system and the features<br>are mine</span></div>
+      <div class="stat"><b>Code</b><span>written by my friend<br>I did not write it</span></div>
+      <div class="stat"><b>24/7</b><span>moved off a laptop<br>onto a cloud host</span></div>
+      <div class="stat"><b>Daily</b><span>in real use in our server<br>not a demo</span></div>
+      <div class="stat"><b>2</b><span>people<br>one designs, one builds</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── role ────────────────────────────────────────────────────────────── -->
+<section id="role">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">01 — My role, stated plainly</p>
+      <h2>I was the one deciding what it should do and why</h2>
+      <p class="lede">
+        On the other three projects in this portfolio I designed the system and then built it. Here I
+        only did the first half — and that half is the work I actually want to do for a living, so it
+        is worth showing on its own.
+      </p>
+    </div>
+
+    <div class="grid grid--2">
+      <div class="card reveal">
+        <span class="card__num">Mine</span>
+        <h3>The thinking</h3>
+        <p>What the bot is for, which features earn their place, how each one should behave, what the
+          command should feel like to use, what happens in the awkward cases, and what we deliberately
+          leave out. Most of the feature ideas started as mine.</p>
+      </div>
+      <div class="card reveal" style="--d:60ms">
+        <span class="card__num">His</span>
+        <h3>The implementation</h3>
+        <p>My friend wrote every line of the bot. I handed over intent and reasoning, he turned it into
+          working commands, and we went back and forth when reality disagreed with the plan.</p>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top:26px">
+      <p>
+        This is the closest thing I have to the job I am applying for: someone hands the developer a
+        clear picture of what to build and why, stays available while it is built, and takes
+        responsibility when the design turns out to be wrong. The difference from a course project is
+        that there was no brief — the requirements came from watching how our own server actually
+        behaves.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── problem ─────────────────────────────────────────────────────────── -->
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">02 — Why it exists</p>
+      <h2>Small frictions, every single day</h2>
+      <p class="lede">
+        Nothing here is a grand problem. It is a pile of small ones that a group of friends hits
+        constantly while playing together, and each one is worth a few seconds of everybody's attention.
+      </p>
+    </div>
+
+    <div class="grid grid--3">
+      <div class="card reveal">
+        <span class="card__num">01</span>
+        <h3>You cannot see who just walked in</h3>
+        <p>When you are in a game full-screen, someone joining or leaving the voice channel is invisible. The bot says it out loud.</p>
+      </div>
+      <div class="card reveal" style="--d:60ms">
+        <span class="card__num">02</span>
+        <h3>Not everyone can talk</h3>
+        <p>Some people have no microphone, some just do not want to speak. Typing works — but the people in the game are not reading chat.</p>
+      </div>
+      <div class="card reveal" style="--d:120ms">
+        <span class="card__num">03</span>
+        <h3>Somebody has to start the bot</h3>
+        <p>Run it on a laptop and the bot is only alive while that laptop is. That is a design problem, not an inconvenience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── features ────────────────────────────────────────────────────────── -->
+<section id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">03 — What it does</p>
+      <h2>One bot instead of five</h2>
+      <p class="lede">
+        The design goal was deliberately unfashionable: rather than adding five single-purpose bots to
+        the server, put everything the group actually uses into one, and keep every command shaped the
+        same way.
+      </p>
+    </div>
+
+    <ul class="clean reveal">
+      <li><strong>Voice channel announcements</strong> — the bot speaks who joined and who left, so nobody has to alt-tab to find out</li>
+      <li><strong>Text to speech</strong> — anyone without a mic, or who would rather not talk, types and the bot says it in the channel. This is the feature the group leans on most</li>
+      <li><strong>Custom names</strong> — per-person names the bot uses when it speaks, set per server, because Discord display names are not what friends actually call each other</li>
+      <li><strong>Sound and music playback</strong> — queued audio in the voice channel</li>
+      <li><strong>Small games</strong> — a fishing game you can idle in, a farming game, and other short things to do while waiting for a lobby</li>
+      <li><strong>Utility commands</strong> — the small stuff that keeps a server tidy</li>
+    </ul>
+
+    <div class="figure-grid reveal" style="margin-top:26px">
+      <figure class="slot" style="--ar: 4 / 3">
+        <div class="slot__box">
+          <span class="slot__num">Image 2</span>
+          <b>The command list the bot shows</b>
+          <code>assets/img/megubot/02-commands.webp</code>
+        </div>
+      </figure>
+      <figure class="slot" style="--ar: 4 / 3">
+        <div class="slot__box">
+          <span class="slot__num">Image 3</span>
+          <b>Text to speech in use in a voice channel</b>
+          <code>assets/img/megubot/03-tts.webp</code>
+        </div>
+      </figure>
+      <figure class="slot" style="--ar: 4 / 3">
+        <div class="slot__box">
+          <span class="slot__num">Image 4</span>
+          <b>One of the games — the fishing or farming screen</b>
+          <code>assets/img/megubot/04-game.webp</code>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ── decisions ───────────────────────────────────────────────────────── -->
+<section id="decisions">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">04 — Decisions I drove</p>
+      <h2>The two that changed what the bot is</h2>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow__step">
+        <span class="flow__dot">01</span>
+        <div>
+          <h3>Stop hosting it on somebody's computer</h3>
+          <p>
+            While the bot ran locally it was only up when one of us remembered to start it, which
+            quietly capped how much anyone relied on it — you do not build a habit around something
+            that is usually offline. Moving it to a cloud host was the change that turned it from a toy
+            into part of the server.
+          </p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <span class="flow__dot">02</span>
+        <div>
+          <h3>Admit that the bot is built for us, not for everyone</h3>
+          <p>
+            Right now the wording, the jokes and most of the behaviour are tuned to our group. Only a
+            few things — the names it calls people, for instance — differ per server. That is fine
+            while we are the only users and completely wrong the moment anyone else adds it, which is
+            what the next step is about.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── next ────────────────────────────────────────────────────────────── -->
+<section id="next">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">05 — What is next</p>
+      <h2>A web panel, so each server can make it theirs</h2>
+      <p class="lede">
+        Planned, not built. I am writing it here as a plan rather than an achievement.
+      </p>
+    </div>
+
+    <dl class="kv reveal">
+      <div>
+        <dt>The idea</dt>
+        <dd>A website where a server owner signs in with Discord and configures the bot for
+          <strong>their</strong> server: which features are on, what the bot says, the names it uses.</dd>
+      </div>
+      <div>
+        <dt>Why it matters</dt>
+        <dd>It is the difference between a bot our friends use and a bot anyone can use. The design
+          work is the interesting part: deciding what should be configurable and what should stay fixed,
+          because a settings page with everything on it is its own kind of broken.</dd>
+      </div>
+      <div>
+        <dt>The unknown</dt>
+        <dd>It has to talk to Discord's own API for authentication and server data, and I have not
+          proven that end of it yet. Until I have, this stays on the plan, not on the list of things I
+          have done.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<!-- ── honest notes ────────────────────────────────────────────────────── -->
+<section id="notes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">06 — Straight talk</p>
+      <h2>Things worth saying plainly</h2>
+    </div>
+    <ul class="clean reveal">
+      <li><strong>I did not write this code</strong> — my friend did, and the repository is his. What is mine is the system design, the feature set and the reasoning behind both</li>
+      <li><strong>It is a side project for our own server</strong> — no client, no brief, no deadline. The requirements came from watching how we actually use Discord</li>
+      <li><strong>It is still changing</strong> — the copy on my own machine is already behind what is running, which is why there are no line counts or command counts on this page</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── where to go next ────────────────────────────────────────────────── -->
+<section class="pagenav">
+  <div class="wrap">
+    <div class="pagenav__grid">
+      <a class="pagenav__card" href="fms-election.html">
+        <span>Next project</span>
+        <b>FMS Online Voting System</b>
+        <em>An election system in real use, with 3,119 eligible voters</em>
+      </a>
+      <a class="pagenav__card" href="credit-tracker.html">
+        <span>Next project</span>
+        <b>FMS Credit Tracker</b>
+        <em>Reads a PDF transcript and checks it against the curriculum automatically</em>
+      </a>
+      <a class="pagenav__card" href="psu-chatbot.html">
+        <span>Next project</span>
+        <b>PSU Chatbot</b>
+        <em>A student-question chatbot on Azure Bot Service</em>
+      </a>
+      <a class="pagenav__card" href="index.html">
+        <span>Back</span>
+        <b>Portfolio home</b>
+        <em>All four projects and my background in one place</em>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <h2 style="font-size:1.35rem;margin-bottom:14px">Let's talk about work</h2>
+      <ul class="contacts">
+        <li>
+          <a class="link" href="mailto:teerapab.bs@gmail.com">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6 9-6"/></svg>
+            teerapab.bs@gmail.com
+          </a>
+        </li>
+        <li>
+          <a class="link" href="https://github.com/Teerapab149" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.5 9.5 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+            github.com/Teerapab149
+          </a>
+        </li>
+        <li>
+          <a class="link" href="https://www.linkedin.com/in/teerapab-boonsri-bb2404394/" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.64h.05A4.17 4.17 0 0 1 17.6 8.7c4 0 4.4 2.53 4.4 5.82V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21h-4V9Z"/></svg>
+            LinkedIn
+          </a>
+        </li>
+      </ul>
+    </div>
+    <small>
+      Teerapab Boonsri · Prince of Songkla University<br>
+      MeguBot · side project · design and analysis only
+    </small>
+  </div>
+</footer>
+
+<script src="assets/motion.js"></script>
+</body>
+</html>

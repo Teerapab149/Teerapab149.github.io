@@ -11,6 +11,7 @@
 <meta property="og:title" content="PSU Chatbot — case study">
 <meta property="og:description" content="A chatbot on Azure, deployed for real use with HTTPS on an Azure VM.">
 <meta property="og:url" content="https://teerapab149.github.io/psu-chatbot.html">
+<meta property="og:image" content="https://teerapab149.github.io/assets/img/chatbot/01-hero.webp">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,15 +67,9 @@
       <span class="chip">pm2</span>
     </div>
 
-    <!-- SLOT — replace the whole <figure class="slot"> with:
-         <figure class="hero__shot"><img src="assets/img/chatbot/01-hero.webp" …></figure> -->
-    <figure class="slot" style="--ar: 16 / 10; margin-top: clamp(36px, 6vw, 64px)">
-      <div class="slot__box">
-        <span class="slot__num">Main image</span>
-        <b>The PSU Chatbot page with the chat box embedded (light theme)</b>
-        <code>assets/img/chatbot/01-hero.webp</code>
-      </div>
-      <figcaption>Opening image of the case study — the web page from the slide “Step 4: designing the web page (Frontend)”</figcaption>
+    <figure class="hero__shot" style="margin-top: clamp(36px, 6vw, 64px)">
+      <img src="assets/img/chatbot/01-hero.webp" width="1600" height="777" fetchpriority="high"
+           alt="The PSU Chatbot page: the bot answering a question about PSU-WiFi, with quick-reply buttons for follow-up topics">
     </figure>
   </div>
 </section>
@@ -163,13 +158,13 @@
       </div>
     </div>
 
-    <figure class="slot reveal" style="--ar: 16 / 9; margin-top:26px">
-      <div class="slot__box">
-        <span class="slot__num">Image 2</span>
-        <b>System workflow diagram</b>
-        <code>assets/img/chatbot/03-workflow.webp</code>
-      </div>
-      <figcaption>From the slide “SYSTEM WORKFLOW”</figcaption>
+    <figure class="figure reveal" style="margin-top:26px">
+      <img src="assets/img/chatbot/03-workflow.webp" width="1600" height="224" loading="lazy"
+           alt="System workflow: user → website (frontend) → Node.js server connected to Azure Bot Service → the bot pulls an answer from Language Studio (QnA) → the answer is returned to the page">
+      <figcaption>The five hops one message makes. Left to right: the user types on the website · the
+        frontend passes it to the server · Node.js talks to Azure Bot Service · the bot pulls the answer
+        from Language Studio (QnA) · the answer comes back to the page. (Diagram from my own slide deck,
+        in Thai.)</figcaption>
     </figure>
   </div>
 </section>
@@ -229,26 +224,15 @@
     </div>
 
     <div class="figure-grid reveal" style="margin-top:26px">
-      <figure class="slot" style="--ar: 16 / 10">
-        <div class="slot__box">
-          <span class="slot__num">Image 3</span>
-          <b>Language Studio while building the answer store</b>
-          <code>assets/img/chatbot/04-language-studio.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/chatbot/04-language-studio.webp" width="1600" height="1018" loading="lazy"
+             alt="Language Studio with the question-and-answer pairs that make up the bot's knowledge base">
+        <figcaption>Language Studio — the question-and-answer store every reply comes from</figcaption>
       </figure>
-      <figure class="slot" style="--ar: 16 / 10">
-        <div class="slot__box">
-          <span class="slot__num">Image 4</span>
-          <b>Testing the bot in Azure's Web Chat</b>
-          <code>assets/img/chatbot/05-webchat-test.webp</code>
-        </div>
-      </figure>
-      <figure class="slot" style="--ar: 16 / 10">
-        <div class="slot__box">
-          <span class="slot__num">Image 5</span>
-          <b>Dark theme of the page</b>
-          <code>assets/img/chatbot/02-dark.webp</code>
-        </div>
+      <figure class="figure">
+        <img src="assets/img/chatbot/02-mobile.webp" width="480" height="1064" loading="lazy"
+             alt="The chatbot on a phone, answering a question about the sports complex with quick-reply buttons">
+        <figcaption>The same page on a phone — the layout is built for it, not shrunk into it</figcaption>
       </figure>
     </div>
   </div>
@@ -302,13 +286,11 @@ app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class=
       </p>
     </div>
 
-    <figure class="slot reveal" style="--ar: 16 / 9; margin-top:22px">
-      <div class="slot__box">
-        <span class="slot__num">Image 6</span>
-        <b>The Direct Line secret key page in Azure Bot Service</b>
-        <code>assets/img/chatbot/06-direct-line-key.webp</code>
-      </div>
-      <figcaption>From the slide “DIRECT LINE SECRET KEY” — make sure the key in the image is masked before uploading</figcaption>
+    <figure class="figure reveal" style="margin-top:22px; max-width: 720px">
+      <img src="assets/img/chatbot/06-direct-line-key.webp" width="537" height="446" loading="lazy"
+           alt="The Direct Line channel settings in Azure Bot Service, with the secret keys hidden behind dots">
+      <figcaption>Where the secret comes from, in Azure Bot Service · the keys stay masked in the
+        portal, and the only copy lives in a server-side <code>.env</code></figcaption>
     </figure>
   </div>
 </section>
@@ -377,9 +359,10 @@ app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class=
 
     <div class="callout reveal" style="margin-top:26px">
       <p>
-        <strong>What came of it</strong> — after the course finished, the lecturer invited me to build
-        the faculty's own chatbot off the back of this work, which is a signal I value more than the
-        grade.
+        <strong>What came of it</strong> — after the course finished, the faculty's vice-dean, who
+        taught the course, invited me to build the faculty's own chatbot off the back of this project.
+        I had too much on at the time and never followed it up, so the offer went nowhere — but being
+        asked is the part I value more than the grade.
       </p>
     </div>
   </div>
@@ -414,10 +397,19 @@ app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class=
         <b>FMS Credit Tracker</b>
         <em>Reads a PDF transcript and checks it against the curriculum automatically</em>
       </a>
+      <a class="pagenav__card" href="megubot.html">
+
+        <span>Next project</span>
+
+        <b>MeguBot</b>
+
+        <em>A Discord bot I designed and a friend built — analysis without the code</em>
+
+      </a>
       <a class="pagenav__card" href="index.html">
         <span>Back</span>
         <b>Portfolio home</b>
-        <em>All three projects and my background in one place</em>
+        <em>All four projects and my background in one place</em>
       </a>
     </div>
   </div>

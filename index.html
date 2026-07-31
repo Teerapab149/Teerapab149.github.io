@@ -11,7 +11,7 @@
 <meta property="og:title" content="Teerapab Boonsri — System / Business Analyst">
 <meta property="og:description" content="Three systems I designed and built end to end, from requirements to deploy.">
 <meta property="og:url" content="https://teerapab149.github.io/">
-<meta property="og:image" content="https://teerapab149.github.io/assets/img/desktop/04-verdure/1-home.webp">
+<meta property="og:image" content="https://teerapab149.github.io/assets/img/desktop/01-original/1-home.webp">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,59 +37,112 @@
 
 <main>
 
-<!-- ══ 1 · intro — who this is, before anything else ═══════════════════════ -->
-<section class="stage" id="intro">
-  <div class="inner intro__grid">
+<!-- ══ 1 · cover — who this is, before anything else ═══════════════════════
+     The one dark panel above the fold. See the COVER block in verdure.css for
+     why it is staged this way rather than as a centred card. -->
+<section class="stage cover" id="intro">
+ <div class="cover__stack">
+  <div class="inner cover__grid">
 
-    <figure class="portrait up">
-      <div class="portrait__frame">
-        <!-- SLOT — replace the whole <div class="slot slot--fill"> with
-             <img src="assets/img/me/portrait.webp" width="1200" height="1500"
-                  fetchpriority="high" alt="Teerapab Boonsri">
-             See assets/img/me/README.md for what the photo needs to be. -->
-        <div class="slot slot--fill">
-          <em>Photo</em>
-          <b>A portrait of me — 4:5, 1200 × 1500 or larger</b>
-          <code>assets/img/me/portrait.webp</code>
-        </div>
-      </div>
-      <figcaption>Hat Yai, Songkhla · Thailand</figcaption>
-    </figure>
+    <div class="cover__type">
+      <p class="tag rise">01 — About me</p>
 
-    <div class="intro__type up" style="--d:90ms">
-      <p class="tag tag--honey">01 — About me</p>
-
-      <h1 class="big big--l intro__name">
-        Teerapab<br><span class="mark-wrap">Boonsri<svg class="scrawl" viewBox="0 0 300 32" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 22C64 8 152 4 240 11c30 3 48 7 54 11"/><path pathLength="1" d="M18 29C78 17 168 14 246 20" style="opacity:.55"/></svg></span>
+      <!-- one .line per display line: .ln carries the load wipe, .line carries
+           the scroll drift. Two animations, two elements, no fight. -->
+      <h1 class="big big--xl cover__name">
+        <span class="line"><span class="ln" style="--d:100ms">Teerapab</span></span>
+        <span class="line"><span class="ln mark-wrap out" style="--d:260ms">Boonsri<svg class="scrawl" style="--sd:900ms" viewBox="0 0 300 32" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 22C64 8 152 4 240 11c30 3 48 7 54 11"/><path pathLength="1" d="M18 29C78 17 168 14 246 20" style="opacity:.55"/></svg></span></span>
       </h1>
 
-      <p class="small intro__lede">
-        I am a <strong>Business Information Systems</strong> student at the Faculty of Management
-        Sciences, Prince of Songkla University. I sit on the line between the people who use a
-        system and the system itself — gathering requirements, drawing the flows and the data
-        model, and then building the thing and putting it live myself.
-      </p>
+      <hr class="cover__rule" style="--d:420ms">
 
-      <dl class="bio">
-        <div>
-          <dt>Studying</dt>
-          <dd><strong>BBA, Business Information Systems</strong> · Faculty of Management Sciences</dd>
-        </div>
-        <div>
-          <dt>University</dt>
-          <dd>Prince of Songkla University, Hat Yai campus · 2023 – present</dd>
-        </div>
-        <div>
-          <dt>Graduating</dt>
-          <dd>Expected 2027 · GPAX 3.03</dd>
-        </div>
-        <div>
-          <dt>Looking for</dt>
-          <dd><strong>System Analyst</strong> · <strong>Business Analyst</strong> · Management Trainee</dd>
-        </div>
-      </dl>
+      <p class="small cover__lede rise" style="--d:500ms">
+        <strong>Business Information Systems student</strong> at the Faculty of Management Sciences,
+        Prince of Songkla University. I sit on the line between the people who use a system and the
+        system itself — gathering requirements, drawing the flows and the data model, then building
+        the thing and putting it live myself.
+      </p>
     </div>
 
+    <figure class="portrait cover__portrait" style="--d:420ms">
+      <div class="portrait__frame">
+        <img src="assets/img/me/portrait.webp" width="1200" height="1600"
+             fetchpriority="high" alt="Teerapab Boonsri">
+      </div>
+    </figure>
+
+  </div>
+
+  <div class="inner cover__base">
+    <dl class="bio">
+      <div class="rise" style="--d:560ms">
+        <dt>Studying</dt>
+        <dd><strong>BBA, Business Information Systems</strong></dd>
+      </div>
+      <div class="rise" style="--d:610ms">
+        <dt>University</dt>
+        <dd>Prince of Songkla University · Hat Yai, since 2023</dd>
+      </div>
+      <div class="rise" style="--d:660ms">
+        <dt>Graduating</dt>
+        <dd>Expected 2027 · GPAX 3.03</dd>
+      </div>
+      <div class="rise" style="--d:710ms">
+        <dt>Looking for</dt>
+        <dd><strong>Co-op internship · 16 Nov 2026 – 7 Mar 2027</strong><br>System Analyst · Business Analyst · Management Trainee</dd>
+      </div>
+    </dl>
+
+    <a class="cover__cue rise" style="--d:780ms" href="#work">Scroll to the work
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </a>
+  </div>
+ </div>
+</section>
+
+<!-- ══ 1b · chooser — a way in, for people who want one ═══════════════════
+     Deliberately skippable: nothing here is a gate. Ignore it and the next
+     scroll is the same page it always was. -->
+<section class="stage stage--auto pick" id="pick">
+  <div class="inner">
+    <p class="tag up">02 — Where would you like to start?</p>
+    <h2 class="big big--m up" style="--d:60ms;margin:14px 0 clamp(22px,3vw,36px)">
+      Pick the one you care about<br>— or just keep scrolling
+    </h2>
+
+    <div class="pick__grid">
+      <a class="pick__card up" href="#work">
+        <span class="pick__n">01</span>
+        <span class="pick__t">FMS Online<br>Voting System</span>
+        <span class="pick__d">An election system the faculty actually runs, with 3,119 eligible voters</span>
+        <span class="pick__role">System Analyst · Developer · UI/UX</span>
+        <span class="pick__live">Live system</span>
+      </a>
+      <a class="pick__card up" style="--d:70ms" href="#p02">
+        <span class="pick__n">02</span>
+        <span class="pick__t">FMS Credit<br>Tracker</span>
+        <span class="pick__d">Reads your transcript out of a PDF and works out what you still owe</span>
+        <span class="pick__role">System Analyst · Full-stack · UI/UX</span>
+      </a>
+      <a class="pick__card up" style="--d:140ms" href="#p03">
+        <span class="pick__n">03</span>
+        <span class="pick__t">PSU<br>Chatbot</span>
+        <span class="pick__d">A student-question bot on Azure, deployed and running around the clock</span>
+        <span class="pick__role">System Analyst · Cloud · Front-end</span>
+      </a>
+      <a class="pick__card up" style="--d:210ms" href="#p04">
+        <span class="pick__n">04</span>
+        <span class="pick__t">Megu<br>Bot</span>
+        <span class="pick__d">A Discord bot my friends use daily — I designed it, someone else wrote it</span>
+        <span class="pick__role">Analysis and design only</span>
+      </a>
+    </div>
+
+    <p class="small pick__skip up" style="--d:280ms">
+      Not sure? Keep scrolling — the whole thing reads top to bottom, and the
+      <a href="#contact">contact details</a> are at the end either way.
+    </p>
   </div>
 </section>
 
@@ -98,7 +151,7 @@
   <div class="inner hero__grid">
 
     <div class="hero__type up">
-      <p class="tag tag--honey">Open to work · System / Business Analyst</p>
+      <p class="tag tag--honey">Co-op internship · 16 Nov 2026 – 7 Mar 2027</p>
       <!-- h2, not h1: the page's single h1 is the name in the About section above -->
       <h2 class="big big--l">
         I design<br>systems people <span class="mark-wrap">actually use<svg class="scrawl" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M46 76C14 64 16 30 60 20 112 8 218 8 264 20c28 8 32 38-2 52-48 18-166 20-216 6C30 74 22 58 36 46"/></svg></span>
@@ -106,16 +159,16 @@
     </div>
 
     <figure class="capsule up" style="--d:120ms">
-      <img src="assets/img/desktop/04-verdure/1-home.webp" width="1600" height="1100" fetchpriority="high"
+      <img src="assets/img/desktop/01-original/1-home.webp" width="1600" height="1100" fetchpriority="high"
            alt="Home screen of the FMS voting system, Verdure theme">
     </figure>
 
     <div class="hero__side up" style="--d:200ms">
-      <p class="tag">Three projects · one owner</p>
+      <p class="tag">Four projects · one thread</p>
       <p class="small">
-        Across all three projects below I owned the whole cycle: sitting with users to collect
-        requirements, designing the ER diagram and the business flows, then writing the code,
-        building the UI and deploying it.
+        On the first three I owned the whole cycle: sitting with users to collect requirements,
+        designing the ER diagram and the business flows, then writing the code, building the UI and
+        deploying it. On the fourth I did only the design half — and handed it to a developer.
       </p>
       <p class="small">
         Writing code is the tool that makes my system design sharper.
@@ -139,7 +192,7 @@
 <section class="grow" id="work" aria-label="FMS Online Voting System">
   <div class="grow__pin">
     <div class="grow__card">
-      <img src="assets/img/desktop/04-verdure/1-home.webp" width="1600" height="1100" loading="lazy"
+      <img src="assets/img/desktop/01-original/1-home.webp" width="1600" height="1100" loading="lazy"
            alt="Voting system home screen with the countdown medallion and turnout figures">
       <div class="grow__over">
         <p class="tag">Live system · Project 01</p>
@@ -150,7 +203,7 @@
 </section>
 
 <!-- ══ 4 · project 01 detail ═══════════════════════════════════════════════ -->
-<section class="stage stage--auto">
+<section class="stage stage--auto" id="p01">
   <div class="inner">
     <div class="work__head up">
       <p class="work__idx">01</p>
@@ -160,7 +213,7 @@
     <div class="cols">
       <div class="up">
         <figure class="shot">
-          <img src="assets/img/desktop/04-verdure/4-vote-multi.webp" width="1600" height="1100" loading="lazy"
+          <img src="assets/img/desktop/01-original/4-vote-multi.webp" width="1600" height="1100" loading="lazy"
                alt="Ballot screen showing the party options and the confirm button">
         </figure>
         <h2 class="big big--l shot__title">FMS Online<br>Voting System</h2>
@@ -188,15 +241,21 @@
           <span>NextAuth · PSU SSO</span><span>Playwright</span><span>Docker</span>
         </div>
 
-        <a class="btn" href="fms-election.html">Read the full case study
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <div class="btns">
+          <a class="btn" href="fms-election.html">Read the full case study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="https://cvs.fms.psu.ac.th/fms-ovs" target="_blank" rel="noopener noreferrer">Open the live system
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+          </a>
+        </div>
 
         <div class="shot-row" style="margin-top:22px">
-          <img src="assets/img/desktop/04-verdure/7-results-revealed.webp" width="1600" height="1100" loading="lazy"
+          <img src="assets/img/desktop/01-original/7-results-revealed.webp" width="1600" height="1100" loading="lazy"
                alt="Results screen after the count was revealed">
-          <img src="assets/img/desktop/04-verdure/2-candidates.webp" width="1600" height="1100" loading="lazy"
+          <img src="assets/img/desktop/01-original/2-candidates.webp" width="1600" height="1100" loading="lazy"
                alt="Candidate list screen">
         </div>
       </div>
@@ -205,7 +264,7 @@
 </section>
 
 <!-- ══ 5 · project 02 ══════════════════════════════════════════════════════ -->
-<section class="stage stage--auto">
+<section class="stage stage--auto" id="p02">
   <div class="inner">
     <div class="work__head up">
       <p class="work__idx">02</p>
@@ -214,12 +273,9 @@
 
     <div class="cols">
       <div class="up">
-        <!-- SLOT — swap the whole <figure class="slot"> for
-             <figure class="shot"><img src="…" alt="…"></figure> -->
-        <figure class="slot" style="--ar: 16 / 10">
-          <em>Image 1</em>
-          <b>Dashboard summarising credit progress by category</b>
-          <code>assets/img/credit/01-hero.webp</code>
+        <figure class="shot">
+          <img src="assets/img/credit/01-landing.webp" width="1600" height="796" loading="lazy"
+               alt="The Credit Tracker landing page: Track Your Path to Graduation">
         </figure>
         <h2 class="big big--l shot__title">FMS Credit<br>Tracker</h2>
       </div>
@@ -252,14 +308,10 @@
         </a>
 
         <div class="shot-row" style="margin-top:22px">
-          <figure class="slot" style="--ar: 16 / 10">
-            <em>Image 2</em><b>PDF upload screen</b>
-            <code>credit/02-upload.webp</code>
-          </figure>
-          <figure class="slot" style="--ar: 16 / 10">
-            <em>Image 3</em><b>Review table before saving</b>
-            <code>credit/03-verify.webp</code>
-          </figure>
+          <img src="assets/img/credit/02-upload.webp" width="1600" height="800" loading="lazy"
+               alt="PDF upload screen">
+          <img src="assets/img/credit/05-results.webp" width="1600" height="797" loading="lazy"
+               alt="Results by curriculum category">
         </div>
       </div>
     </div>
@@ -267,7 +319,7 @@
 </section>
 
 <!-- ══ 6 · project 03 ══════════════════════════════════════════════════════ -->
-<section class="stage stage--auto">
+<section class="stage stage--auto" id="p03">
   <div class="inner">
     <div class="work__head up">
       <p class="work__idx">03</p>
@@ -276,10 +328,9 @@
 
     <div class="cols">
       <div class="up">
-        <figure class="slot" style="--ar: 16 / 10">
-          <em>Image 1</em>
-          <b>The PSU Chatbot page with the bot embedded (light theme)</b>
-          <code>assets/img/chatbot/01-hero.webp</code>
+        <figure class="shot">
+          <img src="assets/img/chatbot/01-hero.webp" width="1600" height="777" loading="lazy"
+               alt="The PSU Chatbot page with the bot answering a student question">
         </figure>
         <h2 class="big big--l shot__title">PSU<br>Chatbot</h2>
       </div>
@@ -312,13 +363,77 @@
         </a>
 
         <div class="shot-row" style="margin-top:22px">
+          <img src="assets/img/chatbot/04-language-studio.webp" width="1600" height="1018" loading="lazy"
+               alt="Language Studio with the trained question-and-answer pairs">
+          <img src="assets/img/chatbot/03-workflow.webp" width="1600" height="224" loading="lazy"
+               alt="System workflow diagram">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 6b · project 04 — the one where I did not write the code ════════════ -->
+<section class="stage stage--auto" id="p04">
+  <div class="inner">
+    <div class="work__head up">
+      <p class="work__idx">04</p>
+      <p class="tag">Side project with a friend · ongoing</p>
+    </div>
+
+    <div class="cols">
+      <div class="up">
+        <!-- SLOT — swap for <figure class="shot"><img …></figure> once the
+             Discord captures land. See assets/img/megubot/README.md. -->
+        <figure class="slot" style="--ar: 16 / 10">
+          <em>Image 1</em>
+          <b>MeguBot answering a command in a Discord channel</b>
+          <code>assets/img/megubot/01-hero.webp</code>
+        </figure>
+        <h2 class="big big--l shot__title">Megu<br>Bot</h2>
+      </div>
+
+      <div class="up" style="--d:90ms">
+        <p class="tag tag--honey">System Analyst · Feature owner · not the developer</p>
+        <p class="small" style="margin:14px 0 22px">
+          An all-round quality-of-life bot our Discord server uses every day: it speaks who joins and
+          leaves a voice channel, reads out messages for people without a microphone, keeps per-person
+          names, plays audio, and hides a few small games for the wait between matches.
+          <strong>I designed the system and the features; my friend wrote the code.</strong> It is the
+          project that looks most like the job I am applying for.
+        </p>
+
+        <div class="facts">
+          <div><b>Design</b><span>system and features, mine</span></div>
+          <div><b>Code</b><span>my friend's, not mine</span></div>
+          <div><b>24/7</b><span>moved from a laptop to the cloud</span></div>
+          <div><b>Daily</b><span>real use, not a demo</span></div>
+        </div>
+
+        <div class="chips">
+          <span>Discord.js 14</span><span>Node.js</span><span>@discordjs/voice</span>
+          <span>Edge / Google TTS</span><span>Slash commands</span><span>Cloud-hosted</span>
+        </div>
+
+        <div class="btns">
+          <a class="btn" href="megubot.html">Read the full case study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="https://github.com/OtsutsukiMiho/MeguBot-Reborn" target="_blank" rel="noopener noreferrer">Repository
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+          </a>
+        </div>
+
+        <div class="shot-row" style="margin-top:22px">
           <figure class="slot" style="--ar: 16 / 10">
-            <em>Image 2</em><b>Dark theme of the page</b>
-            <code>chatbot/02-dark.webp</code>
+            <em>Image 2</em><b>Text to speech in a voice channel</b>
+            <code>megubot/03-tts.webp</code>
           </figure>
           <figure class="slot" style="--ar: 16 / 10">
-            <em>Image 3</em><b>Testing in Web Chat</b>
-            <code>chatbot/05-webchat-test.webp</code>
+            <em>Image 3</em><b>One of the small games</b>
+            <code>megubot/04-game.webp</code>
           </figure>
         </div>
       </div>
@@ -339,10 +454,11 @@
         <p class="role__n">First choice</p>
         <h3 class="role__t">System Analyst<br>Business Analyst</h3>
         <p class="small">
-          The closest match to what I have actually done — in all three projects I started by
+          The closest match to what I have actually done — in every project here I started by
           collecting requirements, writing use cases, designing the ER diagram and setting the
-          business rules before touching the first line of code. My advantage is that I can talk
-          to developers on their own terms, because I have written it myself.
+          business rules before touching the first line of code. On MeguBot I did exactly this and
+          then handed it to a developer. My advantage is that I can talk to developers on their own
+          terms, because I have written it myself.
         </p>
       </div>
       <div class="role up">
@@ -371,7 +487,7 @@
 <section class="stage stage--auto" id="cv">
   <div class="inner">
     <p class="tag up">03 — Skills</p>
-    <h2 class="big big--m up" style="--d:60ms;margin:14px 0 clamp(26px,4vw,44px)">What I actually used in the three projects above</h2>
+    <h2 class="big big--m up" style="--d:60ms;margin:14px 0 clamp(26px,4vw,44px)">What I actually used in the projects above</h2>
 
     <div class="grid2">
       <div class="block up">
@@ -416,8 +532,9 @@
           <h3>An Azure chatbot deployed for real use</h3>
           <p class="small">
             Designed the conversation flow and the cloud architecture under a tight budget, finishing
-            with a deploy to an Azure VM with HTTPS · the course lecturer invited me to build the
-            faculty's own chatbot off the back of this work.
+            with a deploy to an Azure VM with HTTPS · the faculty's vice-dean, who taught the course,
+            invited me to build the faculty's own chatbot on the strength of it — I had too much on at
+            the time and never followed it up.
           </p>
         </div>
       </div>
@@ -465,9 +582,10 @@
     </h2>
 
     <p class="small up" style="--d:110ms;max-width:52ch">
-      I am looking for a job or an internship as a <strong>System Analyst</strong>,
-      <strong>Business Analyst</strong> or <strong>Management Trainee</strong>. Happy to go deep on
-      any of the projects above, code included.
+      I am looking for a <strong>co-operative education internship from 16 November 2026 to
+      7 March 2027</strong> as a <strong>System Analyst</strong>, <strong>Business Analyst</strong>
+      or <strong>Management Trainee</strong>. Happy to go deep on any of the projects above, code
+      included.
     </p>
 
     <div class="btns up" style="--d:160ms;margin-top:30px">

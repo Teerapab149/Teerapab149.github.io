@@ -52,6 +52,54 @@
   const grow = document.querySelector('.grow');
   const card = document.querySelector('.grow__card');
 
+  /* ── the cover ───────────────────────────────────────────────────────────
+     Three things, all cosmetic:
+       · --cp, how far the cream hero has ridden up over the cover (0 → 1). CSS
+         spends it on scale, opacity and the two name lines parting.
+       · --py, a small parallax on the portrait, from the same progress.
+       · the top bar going transparent while the dark panel is behind it.
+     With this file absent --cp and --py stay 0, the bar stays cream, and the
+     cover renders finished. */
+
+  const cover = document.getElementById('intro');
+  const hero = document.getElementById('top');
+  const portrait = document.querySelector('.cover__portrait');
+  const bar = document.querySelector('.bar');
+  const PARALLAX = 34;   // px of travel across one full screen of scrolling
+
+  /* ── entry: start the camera as soon as the shot is worth looking at ──────
+     Kanit swapping mid-move would make the letters jump, so we wait for the
+     font — but only briefly. The first frames are a 6× blur, which hides a late
+     swap completely, so 320ms is plenty and a slow font CDN can never strand the
+     cover in its start state. */
+
+  const ready = () => document.documentElement.classList.add('is-ready');
+
+  if (reduced) {
+    ready();
+  } else {
+    let fired = false;
+    const go = () => { if (!fired) { fired = true; raf(() => raf(ready)); } };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+    setTimeout(go, 320);
+  }
+
+  /* ── pin the cover only when it genuinely fits ────────────────────────────
+     The overlap move needs the whole cover on screen at once; pinning a panel
+     taller than the viewport would bury its lower half permanently. Measured
+     rather than guessed, and re-measured on resize, because the answer depends
+     on how tall this content lands at this width. */
+
+  const canPin = () => !reduced
+    && matchMedia('(min-width: 901px)').matches
+    && !!cover && cover.scrollHeight <= innerHeight + 1;
+
+  const syncPin = () => {
+    const on = canPin();
+    document.documentElement.classList.toggle('is-pinned', on);
+    if (!on && cover) cover.style.setProperty('--cp', '0');
+  };
+
   /* ── scroll readout ──────────────────────────────────────────────────── */
 
   const count = document.getElementById('count');
@@ -63,6 +111,22 @@
       const r = grow.getBoundingClientRect();
       const travel = r.height - innerHeight;
       card.style.setProperty('--p', travel > 0 ? clamp01(-r.top / travel).toFixed(4) : 0);
+    }
+
+    if (cover && hero) {
+      // measured from the HERO, not the cover: the cover is sticky on desktop, so
+      // its own rect stops moving the moment it pins. The hero's top edge is what
+      // actually travels — innerHeight away → 0 as it finishes covering.
+      const top = hero.getBoundingClientRect().top;
+      const p = 1 - clamp01(top / Math.max(1, innerHeight));
+
+      if (!reduced) {
+        cover.style.setProperty('--cp', p.toFixed(4));
+        if (portrait) portrait.style.setProperty('--py', (-PARALLAX * p).toFixed(2) + 'px');
+      }
+      // the bar is 58px tall; go back to cream the moment the cream hero reaches
+      // it, not when the cover has fully left
+      if (bar) bar.classList.toggle('bar--dark', top > 58);
     }
 
     if (count) {
@@ -77,8 +141,11 @@
   const request = () => { if (!queued) { queued = true; raf(onScroll); } };
 
   addEventListener('scroll', request, { passive: true });
-  addEventListener('resize', request, { passive: true });
-  raf(onScroll);
+  addEventListener('resize', () => { syncPin(); request(); }, { passive: true });
+  // synchronously, not in a frame callback: --cam has to be on the element before
+  // the first paint or the cover flashes at 1× and then snaps to the 2.2× framing
+  syncPin();
+  onScroll();
 
   /* ── counters ──────────────────────────────────────────────────────────
      The markup already holds the final string ("3,119", "~1,600"). Read it,

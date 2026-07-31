@@ -1,3 +1,9 @@
+# Original camera/screenshot files. They stay on disk so the webp set can be
+# rebuilt, but they must never be committed: everything under assets/img/ is
+# published by GitHub Pages, and the originals still show the real student ID
+# and the PSU Passport username that the published webp versions paint out.
+_source-images/
+
 # nothing is built here — these are just editor / OS noise
 .DS_Store
 Thumbs.db

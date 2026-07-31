@@ -15,8 +15,9 @@
 
 | ไฟล์ | คืออะไร | CSS | JS |
 |---|---|---|---|
-| `index.html` | หน้าแรก **Verdure** · section แรกคือ About me + รูปตัวเอง แล้วค่อย hero → capsule → 3 โปรเจกต์ | verdure | verdure |
+| `index.html` | หน้าแรก **Verdure** · จอแรกเป็น cover About me (แผงมอสเต็มจอ ดู HANDOFF §13) แล้วค่อย hero → capsule → 3 โปรเจกต์ | verdure | verdure |
 | `fms-election.html` | case study ระบบเลือกตั้ง | style | app |
+| `megubot.html` | case study บอต Discord — **เจ้าของออกแบบ เพื่อนเขียนโค้ด** ต้องบอกให้ชัดเสมอ | style | motion |
 | `credit-tracker.html` | case study ระบบติดตามหน่วยกิต | style | motion |
 | `psu-chatbot.html` | case study แชตบอตบน Azure | style | motion |
 
