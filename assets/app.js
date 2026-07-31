@@ -147,13 +147,154 @@
     paint('01-original');
   }
 
-  // ── theme grid ──────────────────────────────────────────────────────────
-  var themeGrid = $('#themeGrid');
-  if (themeGrid) {
-    THEMES.forEach(function (t) {
-      var name = t.replace(/^\d+-/, '');
-      themeGrid.appendChild(shotButton('assets/img/themes/' + t + '.webp', name, ''));
+  // ── the 23-theme deck ───────────────────────────────────────────────────
+  // Name, one-line character and accent hex per theme. The hexes are read out
+  // of the election repo's palette files (originalPalettes.js, gumroadPalettes
+  // .js, studioDarkPalettes.js, verdurePalettes.js, blossomPalettes.js,
+  // receiptPalettes.js) — the same rule the live demo above follows: copied,
+  // never sampled off a screenshot. The descriptions are translations of those
+  // files' own comments, so a theme cannot end up described as something it is
+  // not.
+  var DECK = [
+    ['Original',            'Original',      '#8A2680', 'SAMO purple on white — the identity the faculty actually runs'],
+    ['Gumroad',             'Gumroad',       '#FF9CE9', 'Warm pop: chunky black frames, pink and lime tiles'],
+    ['Gumroad Cyber',       'Gumroad',       '#00F0FF', 'Light gray, pitch-black frames, neon cyan and electric violet'],
+    ['Gumroad Retro',       'Gumroad',       '#FF9233', 'Y2K arcade: pastel-yellow paper, tangerine and teal'],
+    ['Gumroad Acid',        'Gumroad',       '#CCFF00', 'Acid industrial: stark off-white, volt lime, hot coral'],
+    ['Gumroad Premium',     'Gumroad',       '#FF4B91', 'Cyber-pop premium: vivid pink with cyber-blue and mint bento'],
+    ['Gumroad Bubblegum',   'Gumroad',       '#FF74C4', 'Pink-first pastel pop'],
+    ['Studio Dark',         'Studio Dark',   '#D5FF3F', 'A warm dark canvas, hairline rules, one electric lime'],
+    ['Studio Dark Cyber',   'Studio Dark',   '#38BDF8', 'Cool blue-blacks with a sky-cyan accent — technical, crisp'],
+    ['Studio Dark Magenta', 'Studio Dark',   '#F472B6', 'Plum-tinted blacks, hot magenta — expressive, bold'],
+    ['Studio Dark Amber',   'Studio Dark',   '#F59E0B', 'Amber-blacks and molten gold — prestigious, warm'],
+    ['Verdure',             'Verdure',       '#722F55', 'Classic premium: deep forest and rich burgundy on ivory'],
+    ['Verdure Honey',       'Verdure',       '#A9863F', 'Modern academic: deep navy and muted gold on warm gray'],
+    ['Verdure Teal',        'Verdure',       '#AF5232', 'Contemporary: terracotta accent, sage button, pale sand'],
+    ['Verdure Berry',       'Verdure',       '#4F46E5', 'Minimal tech: ink black and electric indigo on off-white'],
+    ['Blossom',             'Blossom',       '#FF6FBF', 'Soft-pop civic: candy pink on calm blush paper'],
+    ['Blossom Sky',         'Blossom',       '#6FB4FF', 'Friendly sky blue'],
+    ['Blossom Mint',        'Blossom',       '#5BD6A0', 'Fresh mint green'],
+    ['Blossom Butter',      'Blossom',       '#FFC85C', 'Warm butter yellow'],
+    ['Receipt Paper',       'Receipt Paper', '#8A2680', 'Everything on screen is something that could be printed'],
+    ['Receipt Ink Blue',    'Receipt Paper', '#2E5297', 'Ink-blue print on cool-white office paper'],
+    ['Receipt Teal',        'Receipt Paper', '#00657A', 'Teal-navy on carbonless blue copy paper'],
+    ['Receipt Carbon',      'Receipt Paper', '#4E463C', 'Warm dark gray on gray copy paper'],
+  ];
+
+  var deck = $('#themeDeck');
+  if (deck && DECK.length === THEMES.length) {
+    var stage = el('div', 'deck__stage');
+    stage.tabIndex = 0;
+    stage.setAttribute('role', 'group');
+    stage.setAttribute('aria-label', 'Theme cards — use the left and right arrow keys');
+    var track = el('ul', 'deck__track');
+
+    THEMES.forEach(function (slug, i) {
+      var d = DECK[i];
+      var src = 'assets/img/themes/' + slug + '.webp';
+      // the six base themes are named after their family, so "Blossom · Blossom"
+      var cap = d[0] === d[1] ? d[0] : d[0] + ' · ' + d[1];
+      var li = el('li', 'deck__item');
+      li.style.setProperty('--o', i);
+      li.innerHTML =
+        '<button type="button" class="deck__card" data-i="' + i + '"' +
+        ' data-full="' + src + '" data-cap="' + cap + '">' +
+        '<img loading="lazy" src="' + src + '" alt="The home page rendered in the ' + d[0] + ' theme">' +
+        '<span class="deck__tag" style="--c:' + d[2] + '">' + d[0] + '</span>' +
+        '</button>';
+      track.appendChild(li);
     });
+
+    stage.appendChild(track);
+
+    var bar = el('div', 'deck__bar');
+    bar.innerHTML =
+      '<button type="button" class="deck__nav" data-d="-1" aria-label="Previous theme">&#8249;</button>' +
+      '<div class="deck__meta">' +
+      '<p class="deck__idx"><b>01</b> / ' + THEMES.length + '</p>' +
+      '<h3 class="deck__name"></h3><p class="deck__desc"></p></div>' +
+      '<button type="button" class="deck__nav" data-d="1" aria-label="Next theme">&#8250;</button>';
+
+    var rail = el('ol', 'deck__rail');
+    DECK.forEach(function (d, i) {
+      var li = el('li');
+      li.innerHTML = '<button type="button" style="--c:' + d[2] + '" data-i="' + i + '"' +
+        ' aria-label="Theme ' + (i + 1) + ', ' + d[0] + '"></button>';
+      rail.appendChild(li);
+    });
+
+    deck.appendChild(stage);
+    deck.appendChild(bar);
+    deck.appendChild(rail);
+
+    var items = $$('.deck__item', track);
+    var railBtns = $$('button', rail);
+    var idxEl = $('.deck__idx b', bar);
+    var nameEl = $('.deck__name', bar);
+    var descEl = $('.deck__desc', bar);
+    var navs = $$('.deck__nav', bar);
+    var at = -1;
+
+    var N = DECK.length;
+
+    /* The deck WRAPS. Not for the sake of infinite scrolling — it is so there
+       is always a card peeking on both sides, which is what makes it read as a
+       deck instead of a lone screenshot with a stray one beside it. Offsets are
+       folded into [-11, +11]; the cards that jump the seam are past three deep,
+       so they are already hidden when they teleport. */
+    function go(i) {
+      i = ((i % N) + N) % N;
+      if (i === at) return;
+      at = i;
+      items.forEach(function (li, k) {
+        var o = k - i;
+        if (o >  N / 2) o -= N;
+        if (o < -N / 2) o += N;
+        li.style.setProperty('--o', o);
+        li.classList.toggle('is-on', o === 0);
+        // past three deep a card is invisible anyway; keep it out of the
+        // compositor rather than stacking 23 transformed layers
+        li.classList.toggle('is-far', Math.abs(o) > 3);
+      });
+      railBtns.forEach(function (b, k) { b.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+      idxEl.textContent = String(i + 1).padStart(2, '0');
+      nameEl.textContent = DECK[i][0];
+      descEl.textContent = DECK[i][3];
+    }
+
+    navs.forEach(function (b) {
+      b.addEventListener('click', function () { go(at + Number(b.dataset.d)); });
+    });
+    railBtns.forEach(function (b) {
+      b.addEventListener('click', function () { go(Number(b.dataset.i)); });
+    });
+
+    // a card that is not the active one moves the deck; the active one opens
+    track.addEventListener('click', function (e) {
+      var card = e.target.closest ? e.target.closest('.deck__card') : null;
+      if (!card) return;
+      var i = Number(card.dataset.i);
+      if (i !== at) { go(i); return; }
+      openLb(card.dataset.full, card.dataset.cap);
+    });
+
+    deck.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { go(at - 1); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { go(at + 1); e.preventDefault(); }
+    });
+
+    // drag / swipe — pointer events cover mouse, touch and pen in one path
+    var x0 = null;
+    stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    stage.addEventListener('pointerup', function (e) {
+      if (x0 === null) return;
+      var dx = e.clientX - x0;
+      x0 = null;
+      if (Math.abs(dx) > 44) go(at - Math.sign(dx));
+    });
+    stage.addEventListener('pointercancel', function () { x0 = null; });
+
+    go(0);
   }
 
   // ── mobile strip ────────────────────────────────────────────────────────

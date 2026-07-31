@@ -53,18 +53,27 @@
   <div class="inner cover__grid">
 
     <div class="cover__type">
-      <p class="tag rise">01 — About me</p>
+      <!-- The opening beat: a drafting dimension line over the name. The number
+           is written by verdure.js from the bar's measured width; the markup
+           ships "0" and the whole thing is aria-hidden, so with no JS it is a
+           ruled line that claims nothing. -->
+      <div class="measure" aria-hidden="true">
+        <span class="measure__bar"></span>
+        <span class="measure__n"><b data-measure>0</b><i>px</i></span>
+      </div>
+
+      <p class="tag rise" style="--d:220ms">01 — About me</p>
 
       <!-- one .line per display line: .ln carries the load wipe, .line carries
            the scroll drift. Two animations, two elements, no fight. -->
       <h1 class="big big--xl cover__name">
-        <span class="line"><span class="ln" style="--d:100ms">Teerapab</span></span>
-        <span class="line"><span class="ln mark-wrap out" style="--d:260ms">Boonsri<svg class="scrawl" style="--sd:900ms" viewBox="0 0 300 32" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 22C64 8 152 4 240 11c30 3 48 7 54 11"/><path pathLength="1" d="M18 29C78 17 168 14 246 20" style="opacity:.55"/></svg></span></span>
+        <span class="line"><span class="ln" style="--d:320ms">Teerapab</span></span>
+        <span class="line"><span class="ln mark-wrap out" style="--d:410ms">Boonsri<svg class="scrawl" style="--sd:800ms" viewBox="0 0 300 32" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 22C64 8 152 4 240 11c30 3 48 7 54 11"/><path pathLength="1" d="M18 29C78 17 168 14 246 20" style="opacity:.55"/></svg></span></span>
       </h1>
 
-      <hr class="cover__rule" style="--d:420ms">
+      <hr class="cover__rule" style="--d:620ms">
 
-      <p class="small cover__lede rise" style="--d:500ms">
+      <p class="small cover__lede rise" style="--d:700ms">
         <strong>Business Information Systems student</strong> at the Faculty of Management Sciences,
         Prince of Songkla University. I sit on the line between the people who use a system and the
         system itself — gathering requirements, drawing the flows and the data model, then building
@@ -72,7 +81,7 @@
       </p>
     </div>
 
-    <figure class="portrait cover__portrait" style="--d:420ms">
+    <figure class="portrait cover__portrait" style="--d:560ms">
       <div class="portrait__frame">
         <img src="assets/img/me/portrait.webp" width="1200" height="1600"
              fetchpriority="high" alt="Teerapab Boonsri">
@@ -83,25 +92,25 @@
 
   <div class="inner cover__base">
     <dl class="bio">
-      <div class="rise" style="--d:560ms">
+      <div class="rise" style="--d:760ms">
         <dt>Studying</dt>
         <dd><strong>BBA, Business Information Systems</strong></dd>
       </div>
-      <div class="rise" style="--d:610ms">
+      <div class="rise" style="--d:820ms">
         <dt>University</dt>
         <dd>Prince of Songkla University · Hat Yai, since 2023</dd>
       </div>
-      <div class="rise" style="--d:660ms">
+      <div class="rise" style="--d:880ms">
         <dt>Graduating</dt>
         <dd>Expected 2027 · GPAX 3.03</dd>
       </div>
-      <div class="rise" style="--d:710ms">
+      <div class="rise" style="--d:940ms">
         <dt>Looking for</dt>
         <dd><strong>Co-op internship · 16 Nov 2026 – 7 Mar 2027</strong><br>System Analyst · Business Analyst · Management Trainee</dd>
       </div>
     </dl>
 
-    <a class="cover__cue rise" style="--d:780ms" href="#work">Scroll to the work
+    <a class="cover__cue rise" style="--d:980ms" href="#work">Scroll to the work
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </a>
@@ -158,10 +167,12 @@
 <section class="stage" id="top">
   <div class="inner hero__grid">
 
-    <div class="hero__type up">
-      <p class="tag tag--honey">Co-op internship · 16 Nov 2026 – 7 Mar 2027</p>
-      <!-- h2, not h1: the page's single h1 is the name in the About section above -->
-      <h2 class="big big--l">
+    <div class="hero__type">
+      <p class="tag tag--honey up">Co-op internship · 16 Nov 2026 – 7 Mar 2027</p>
+      <!-- h2, not h1: the page's single h1 is the name in the About section above.
+           .lm + .up together on purpose: verdure.js swaps .up off only once the
+           line split has actually succeeded, so a failed split still animates. -->
+      <h2 class="big big--l lm up">
         I design<br>systems people <span class="mark-wrap">actually use<svg class="scrawl" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M46 76C14 64 16 30 60 20 112 8 218 8 264 20c28 8 32 38-2 52-48 18-166 20-216 6C30 74 22 58 36 46"/></svg></span>
       </h2>
     </div>
@@ -197,20 +208,117 @@
   </div>
 </section>
 
-<!-- ══ 3 · the capsule opens ═══════════════════════════════════════════════
-     A card growing to full-bleed as you scroll — the move the reference site is
-     built around. This one is the DESKTOP capture: it opens to the full width of
-     the viewport, which a phone screenshot cannot fill. (The hero capsule above
-     it is deliberately the phone shot — see the note there.) --p is written by
-     verdure.js; with JS off it stays 0 and this is simply a card with a caption. -->
-<section class="grow" id="work" aria-label="FMS Online Voting System">
+<!-- ══ 3 · one system, every width ═════════════════════════════════════════
+     A browser window that starts phone-sized and opens to full bleed as you
+     scroll. What is inside is NOT a screenshot — it is the FMS home page
+     rebuilt in plain HTML, so the layout genuinely reflows on the way out:
+     hamburger → nav links, one stacked column → two, the poster changing
+     aspect. The container queries in verdure.css use the election system's own
+     Tailwind breakpoints (640 / 768 / 1024 / 1280) read out of
+     src/components/home/OriginalHome.js, so the moments it snaps are the real
+     ones. Colours come from src/utils/originalPalettes.js verbatim.
+
+     --p is written by verdure.js. With JS off it stays 0 and this renders as a
+     phone-width window showing the mobile layout, caption and all. -->
+<section class="grow" id="work"
+         aria-label="The FMS Online Voting System home page, rebuilt so it reflows from phone to desktop as the window grows">
   <div class="grow__pin">
     <div class="grow__card">
-      <img src="assets/img/desktop/01-original/1-home.webp" width="1600" height="1100" loading="lazy"
-           alt="Voting system home screen with the countdown medallion and turnout figures">
+      <div class="grow__screen">
+
+        <div class="grow__chrome">
+          <span class="grow__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="grow__url">cvs.fms.psu.ac.th/fms-ovs</span>
+          <!-- lit purely by container queries — no JS involved -->
+          <span class="grow__bps" aria-hidden="true"><i>sm</i><i>md</i><i>lg</i><i>xl</i></span>
+          <!-- verdure.js overwrites this with the live width; the fallback is honest on its own -->
+          <span class="grow__meas">responsive</span>
+        </div>
+
+        <div class="grow__view">
+          <!-- A rebuild of another product's UI, in Thai. Hidden from the
+               accessibility tree on purpose: the section's own label already
+               says what it is, and reading out a fake interface helps nobody. -->
+          <div class="fms" aria-hidden="true">
+            <div class="fms__bg"></div>
+
+            <header class="fms__nav">
+              <img class="fms__logo" src="assets/img/fms/logo.webp" width="760" height="161" loading="lazy" alt="">
+              <nav class="fms__links">
+                <span class="is-on">หน้าแรก</span>
+                <span>ผลการลงคะแนนเสียง</span>
+                <span class="fms__pill">Meet Candidates</span>
+              </nav>
+              <span class="fms__burger"><i></i><i></i><i></i></span>
+            </header>
+
+            <main class="fms__main">
+              <div class="fms__left">
+                <div class="fms__count">
+                  <span class="fms__cbadge">STARTS IN</span>
+                  <span class="fms__time"><b>02</b>d<i>:</i><b>14</b>h<i>:</i><b>30</b>m<i>:</i><b>55</b>s</span>
+                </div>
+
+                <h1 class="fms__h1"><span>SAMO</span><span class="fms__num">50<i></i></span></h1>
+                <p class="fms__h2">โครงการเลือกตั้ง<em>คณะกรรมการบริหาร</em></p>
+                <p class="fms__h3">สโมสรนักศึกษาคณะวิทยาการจัดการ</p>
+                <span class="fms__chip">ประจำปีการศึกษา 2569</span>
+
+                <span class="fms__cta">เข้าสู่ระบบ / Sign in</span>
+
+                <div class="fms__meet">
+                  <div class="fms__meetTxt">
+                    <span class="fms__meetTag">FMS ELECTION 2026</span>
+                    <p class="fms__meetH">รู้จักผู้สมัคร<br><em>ของคุณหรือยัง?</em></p>
+                    <span class="fms__meetBtn">ดูรายชื่อพรรค →</span>
+                  </div>
+                  <span class="fms__meetIcon"></span>
+                </div>
+              </div>
+
+              <div class="fms__right">
+                <div class="fms__statsHead">
+                  <span class="fms__statsIcon"></span>
+                  <span>
+                    <b>สถิติผู้เข้าร่วมลงคะแนนโหวต</b>
+                    <i>อัปเดตข้อมูลแบบ Real-time</i>
+                  </span>
+                </div>
+
+                <!-- Figures are the real ones this portfolio already cites:
+                     3,119 eligible, ~1,600 cast → 51.3%. Nothing invented. -->
+                <div class="fms__bento">
+                  <div class="fms__hero">
+                    <span class="fms__heroTag">ใช้สิทธิแล้ว (VOTED)</span>
+                    <span class="fms__heroNum">1,600<i>คน</i></span>
+                  </div>
+                  <div class="fms__sub">
+                    <span class="fms__subTag">ความคืบหน้า</span>
+                    <b class="fms__pct">51.3<i>%</i></b>
+                    <span class="fms__bar"><i></i></span>
+                  </div>
+                  <div class="fms__sub">
+                    <span class="fms__subTag">ผู้มีสิทธิรวม</span>
+                    <b class="fms__tot">3,119<i>คน</i></b>
+                  </div>
+                </div>
+
+                <figure class="fms__poster">
+                  <img src="assets/img/fms/poster.webp" width="800" height="588" loading="lazy" alt="">
+                </figure>
+              </div>
+            </main>
+
+            <footer class="fms__foot">© FMS@PSU 2027. ALL RIGHTS RESERVED.</footer>
+          </div>
+        </div>
+
+      </div>
+
       <div class="grow__over">
         <p class="tag">Live system · Project 01</p>
         <p class="big big--m">FMS Online Voting System</p>
+        <p class="grow__note">Not a screenshot — the interface rebuilt in plain HTML, breaking at the system's own widths</p>
       </div>
     </div>
   </div>

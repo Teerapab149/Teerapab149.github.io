@@ -59,6 +59,7 @@ portfolio-teerapab/
 ├── fms-election.html        ← case study ระบบเลือกตั้ง — เดิมคือ index.html
 ├── credit-tracker.html      ← case study ระบบติดตามหน่วยกิต
 ├── psu-chatbot.html         ← case study แชตบอต
+├── megubot.html             ← case study บอต Discord (เจ้าของออกแบบ · เพื่อนเขียนโค้ด)
 ├── serve.js                 ← static server สำหรับพรีวิว (node serve.js → :4173)
 ├── .claude/launch.json      ← ให้ preview tool รัน serve.js ได้เอง
 ├── assets/
@@ -66,15 +67,17 @@ portfolio-teerapab/
 │   ├── verdure.js           ← reveal + count-up + capsule ที่ขยาย + scroll readout ของหน้าแรก
 │   ├── style.css            ← design system ของ case study 3 หน้า (พาเลตต์ Verdure เหมือนกัน)
 │   ├── motion.js            ← scroll reveal + count-up + scroll-spy (credit-tracker, psu-chatbot)
-│   ├── app.js               ← gallery + lightbox + scroll-spy ของหน้า fms-election
+│   ├── app.js               ← gallery + lightbox + deck 23 ธีม + scroll-spy ของหน้า fms-election
+│   ├── i18n.js              ← สลับ TH/EN ของหน้าแรก (EN คือ DOM จริง · TH ทับด้วย selector map)
 │   └── img/
 │       ├── desktop/01-original … 06-receipt/   6 ตระกูล × 9 หน้า
 │       ├── mobile/01-original … 06-receipt/    6 ตระกูล × 4 หน้า
 │       ├── themes/01 … 23                      ทุกธีม หน้าแรก
 │       ├── admin/1 … 7                         หน้า admin
-│       ├── me/README.md                        ⬜ ว่าง — รูปตัวเอง 1 รูป (portrait.webp)
-│       ├── credit/README.md                    ⬜ ว่าง — ตารางบอกว่าต้องใส่ไฟล์ชื่ออะไร
-│       └── chatbot/README.md                   ⬜ ว่าง — ตารางบอกว่าต้องใส่ไฟล์ชื่ออะไร
+│       ├── fms/{logo,poster}.webp              ของจริงจาก repo เลือกตั้ง — ใช้ใน `.fms` §15
+│       ├── me/ · credit/ · chatbot/ · megubot/ ครบแล้ว (README ในนั้นบอกว่าไฟล์ไหนคืออะไร)
+│       └── …
+├── _source-images/          ← ต้นฉบับก่อนปิดข้อมูล · **gitignore ไว้ ห้ามย้ายกลับ** (§14)
 ├── docs/
 │   ├── HANDOFF.md           ← ไฟล์นี้
 │   └── CONTENT-SOURCE.md    ← ข้อเท็จจริงทุกตัวเลขของ *ระบบเลือกตั้ง* + เวอร์ชันสั้นสำหรับ resume/LinkedIn
@@ -405,3 +408,49 @@ end state ใต้ `.js-anim.is-ready`) · JS ใหม่ใน `verdure.js`: 
 - `credit/20…24-admin-*.webp` — บรรทัด `รหัสนักศึกษา@psu.ac.th` ที่มุมล่างซ้ายของ sidebar ทุกหน้า
 - ต้นฉบับทั้งหมดย้ายไป `_source-images/` แล้ว และใส่ `.gitignore` ไว้ — **อย่าย้ายกลับ**
   เพราะทุกอย่างใต้ `assets/img/` ถูก GitHub Pages เสิร์ฟหมด ใครเดา URL ก็โหลดได้
+
+## 15. `.grow` ไม่ใช่ภาพหน้าจอแล้ว — เป็นหน้าเว็บจริงที่ reflow (ใหม่ 2026-07-31)
+
+เจ้าของสั่งว่า *"section ในภาพนี้ ควรเป็น เริ่มจาก mobile เเล้วยิ่งๆเลื่อนก็กลายเป็น pc ไปเรื่อยๆ"*
+พร้อมบอกว่าเข้าไปดึงของจริงจาก `E:/fms-election/fms_election69` ได้
+
+ภาพนิ่งทำแบบนั้นไม่ได้ ดังนั้น **ข้างในกรอบตอนนี้เป็นหน้า home ของระบบเลือกตั้งที่เขียนใหม่ด้วย
+HTML/CSS ล้วน** (`.fms*` ใน `index.html` + `assets/verdure.css`) แล้วให้ `.grow__screen` เป็น
+`container-type: inline-size` — พอกรอบกว้างขึ้น container query ทำงานจริง เมนูแฮมเบอร์เกอร์กลายเป็น
+ลิงก์ · คอลัมน์เดียวแตกเป็นสอง · โปสเตอร์เปลี่ยนสัดส่วน
+
+**ที่มาของทุกค่า — ห้ามเดาเอง**
+- สี → `src/utils/originalPalettes.js` ธีม `original` (deep `#691E61` · brand `#8A2680`
+  · bright `#C026D3` · glow `#D946EF` · soft `#FAF5FF` · line `#E9D5FF` · bg `#F8F9FD`)
+  บวก slate ramp ของ Tailwind
+- layout กับ breakpoint → `src/components/home/OriginalHome.js` และ `OriginalNavbar.js`
+  breakpoint จริงคือ 640 / 768 / **1024 (อันสำคัญ — `flex-col lg:flex-row`)** / 1280
+- ตัวเลขในการ์ดสถิติ → 3,119 กับ ~1,600 ที่หน้าเว็บอ้างอยู่แล้ว (51.3% = 1600/3119)
+  **ไม่ได้ลอกจากภาพหน้าจอ** ที่เป็นข้อมูลทดสอบ (342 / 1,200)
+- โลโก้กับโปสเตอร์ → `public/images/logo/FMS_Standard_Logo_PNG.png` และ
+  `public/images/prob/samo49_1.png` แปลงเป็น `assets/img/fms/{logo,poster}.webp` ด้วย pipeline §14
+  (ต้นฉบับอยู่ `_source-images/fms/` ซึ่ง gitignore ไว้)
+
+**ตัวแปรที่ขับ**
+- `--p` (0→1) `verdure.js` เขียนตลอดช่วง pin · `--g = clamp(0, --p / .78, 1)` คือ geometry
+  → กรอบเปิดสุดที่ 78% แล้ว **ค้างไว้** ให้อ่านหน้า desktop ทัน
+- caption ผูกกับ `--p` ไม่ใช่ `--g` (`(--p - .84) * 8`) จะได้ไม่ทับจังหวะ reflow
+- กรอบสูงแค่ `100svh - 58px` แล้ว `translateY(29px)` — เพื่อให้แถบ chrome ของกรอบ
+  ไปจอดใต้แถบบนของเว็บพอดี ไม่โดนบัง (URL กับตัวเลขความกว้างคือสิ่งที่อธิบาย section นี้)
+- ตัวเลข "1455 px · desktop" `verdure.js` เขียน · ถ้า JS ตาย markup มีคำว่า `responsive` อยู่แล้ว
+- ไฟ sm/md/lg/xl ในแถบ chrome เป็น container query ล้วน ไม่มี JS
+
+**ต้องพูดเสมอว่าไม่ใช่ภาพหน้าจอ** — `.grow__note` เขียนไว้ทั้ง EN และ TH (`i18n.js`)
+ถ้าไปลบออก มันจะกลายเป็นการอ้างว่าฝังระบบจริงมา ซึ่งไม่จริง
+
+## 16. 23 ธีม เป็น deck ไม่ใช่ grid (ใหม่ 2026-07-31)
+
+เจ้าของบอกว่า *"อยากให้มัน slide show สวยงาม ไม่ได้วางเรียงเเบบทั่วไป"*
+`#themeGrid` ถูกแทนด้วย `#themeDeck` (`.deck*` ใน `style.css` · สร้างใน `app.js`)
+
+- การ์ดแต่ละใบถือ `--o` = ระยะห่างจากใบที่เลือก · CSS แปลงเลขตัวเดียวเป็นตำแหน่ง/ความลึก/
+  การหมุน/ความจาง · `abs()` เขียนเป็น `max(x, -x)` เพราะ Safari เพิ่งได้ `abs()`
+- **วน (wrap)** เพื่อให้มีการ์ดโผล่ทั้งสองข้างเสมอ ไม่ใช่เพื่อเลื่อนไม่จบ
+- แถบข้างล่าง = accent จริงของทั้ง 23 ธีม (ดึงจาก palette files เหมือนเดิม ห้าม sample จากภาพ)
+- คลิกใบที่ไม่ได้เลือก = เลื่อนไปหา · คลิกใบที่เลือกอยู่ = เปิด lightbox · ลาก/ปัด/ลูกศรซ้ายขวาได้
+- `#familyShots` เปลี่ยนเป็น filmstrip (`.shots--strip`) — 9 หน้าเรียงเป็นเส้นเรื่อง ไม่ใช่ตาราง

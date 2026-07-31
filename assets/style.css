@@ -67,6 +67,15 @@
   --font-body: 'IBM Plex Sans Thai', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
 
+  /* ── motion tokens ───────────────────────────────────────────────────────
+     Identical to the block in assets/verdure.css — same rule as the palette:
+     CHANGE ONE AND YOU MUST CHANGE THE OTHER. See docs/PLAN-AWWWARDS.md L6 for
+     why every duration on the site has to come out of one scale. */
+  --ease:      cubic-bezier(.22, .7, .24, 1);
+  --ease-wipe: cubic-bezier(.16, 1, .3, 1);
+  --t1: 150ms; --t2: 300ms; --t3: 600ms; --t4: 900ms;
+  --dscale: 1;
+
   color-scheme: light;
 }
 
@@ -403,9 +412,111 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
 }
 .shot__cap span { font-family: var(--font-mono); font-size: .6875rem; color: var(--dim); }
 
-.themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-.themes .shot__frame { aspect-ratio: 16 / 10; }
-.themes .shot__cap { padding: 8px 12px; font-size: .75rem; }
+/* the nine pages of one family, read left to right instead of tiled */
+.shots--strip {
+  display: flex; gap: 16px; overflow-x: auto; padding-bottom: 14px;
+  scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  scrollbar-color: var(--line) transparent;
+}
+.shots--strip > .shot { flex: 0 0 clamp(250px, 30vw, 360px); scroll-snap-align: start; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DECK — the 23 themes as a card deck rather than a grid of thumbnails.
+
+   Each card carries --o, its distance from the active one, and CSS turns that
+   single number into position, depth, rotation and opacity. abs() is spelled
+   max(x, -x) because Safari only shipped abs() recently and this needs no
+   fallback path. app.js writes --o and the is-on / is-far classes; nothing else.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.deck__stage {
+  position: relative; height: clamp(220px, 33vw, 440px);
+  perspective: 1600px; overflow: hidden; touch-action: pan-y;
+  border-radius: 14px;
+  /* the cards behind should trail off, not hit a wall at the stage edge */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+.deck__stage:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
+.deck__track { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+
+.deck__item {
+  --o: 0;
+  --a: max(var(--o), calc(var(--o) * -1));
+  position: absolute; top: 0; left: 50%; height: 100%;
+  width: min(64%, 640px);
+  transform:
+    translateX(-50%)
+    translateX(calc(var(--o) * 62%))
+    translateZ(calc(var(--a) * -240px))
+    rotateY(calc(var(--o) * -15deg))
+    scale(calc(1 - var(--a) * .05));
+  opacity: max(0, calc(1 - var(--a) * .46));
+  z-index: calc(10 - var(--a));
+  transition: transform .55s cubic-bezier(.22, .7, .24, 1), opacity .45s ease;
+}
+.deck__item.is-far { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .deck__item { transition: none; } }
+
+.deck__card {
+  display: block; width: 100%; height: 100%; padding: 0; position: relative;
+  border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  background: var(--surface-2); cursor: pointer; font: inherit; color: inherit;
+  box-shadow: 0 30px 60px -34px rgba(13, 43, 62, .6);
+}
+.deck__item:not(.is-on) .deck__card { filter: saturate(.6); }
+.deck__item.is-on .deck__card {
+  cursor: zoom-in; border-color: var(--brand-2);
+  box-shadow: 0 40px 70px -34px rgba(13, 43, 62, .7);
+}
+.deck__card img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+.deck__tag {
+  position: absolute; left: 12px; bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 13px; border-radius: 999px;
+  background: var(--text); color: var(--bg);
+  font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .02em;
+  opacity: 0; transition: opacity .3s ease;
+}
+.deck__tag::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--c); }
+.deck__item.is-on .deck__tag { opacity: 1; }
+
+.deck__bar { display: flex; align-items: center; gap: 16px; margin-top: 18px; }
+.deck__meta { flex: 1 1 auto; min-width: 0; text-align: center; }
+.deck__idx { font-family: var(--font-mono); font-size: .75rem; color: var(--dim); }
+.deck__idx b { color: var(--brand); font-size: .9375rem; }
+.deck__name { margin: 3px 0 4px; font-size: clamp(1.1rem, 2.3vw, 1.6rem); }
+.deck__desc { font-size: .875rem; color: var(--muted); }
+.deck__nav {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  cursor: pointer; font-size: 1.15rem; line-height: 1;
+  transition: border-color .2s ease, background .2s ease;
+}
+.deck__nav:hover { border-color: var(--brand-2); background: var(--surface-2); }
+
+/* the rail IS the palette: one tick per theme, filled with that theme's own
+   accent value — so the spread of the system is visible before you click */
+.deck__rail { display: flex; gap: 4px; margin-top: 20px; list-style: none; padding: 0; }
+.deck__rail li { flex: 1 1 0; min-width: 0; }
+.deck__rail button {
+  display: block; width: 100%; height: 26px; padding: 0; border: 0; background: none; cursor: pointer;
+  position: relative;
+}
+.deck__rail button::after {
+  content: ''; position: absolute; left: 0; right: 0; top: 11px; bottom: 11px;
+  border-radius: 999px; background: var(--c); opacity: .3;
+  transition: opacity .2s ease, top .2s ease, bottom .2s ease;
+}
+.deck__rail button:hover::after { opacity: .7; }
+.deck__rail button[aria-current="true"]::after { top: 7px; bottom: 7px; opacity: 1; }
+
+@media (max-width: 640px) {
+  .deck__item { width: 80%; }
+  .deck__bar { gap: 10px; }
+  .deck__nav { width: 38px; height: 38px; }
+  .deck__rail { gap: 3px; }
+}
 
 .phones {
   display: grid; grid-auto-flow: column; grid-auto-columns: minmax(212px, 252px);

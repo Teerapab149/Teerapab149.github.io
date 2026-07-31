@@ -78,6 +78,7 @@
 
     /* ── project 01 ──────────────────────────────────────────────────────── */
     '.grow__over .tag': 'ระบบใช้งานจริง · โปรเจค 01',
+    '.grow__note': 'ไม่ใช่ภาพหน้าจอ — หน้านี้ถูกสร้างใหม่ด้วย HTML ล้วน และหักที่ breakpoint จริงของระบบ',
     '#p01 .work__head .tag': 'ใช้งานจริง · ธ.ค. 2025 – ปัจจุบัน',
     '#p01 .tag--honey': 'System Analyst · Core Developer · UI/UX',
     '#p01 .cols p.small': 'ระบบเลือกตั้งสโมสรนักศึกษา คณะวิทยาการจัดการ ม.อ. ที่ผมทำคนเดียวทั้งระบบ ' +
@@ -198,6 +199,11 @@
 
   const apply = lang => {
     const toThai = lang === 'th';
+    /* verdure.js may have split some headings into per-line spans. Writing over
+       that would destroy the split AND cache the split markup as the English
+       original, so it unwinds first and re-splits after. Absent on the case
+       study pages, which do not load verdure.js. */
+    const resplit = window.__lmRestore ? window.__lmRestore() : null;
     for (const sel in TH) {
       let el;
       try { el = document.querySelector(sel); } catch { continue; }
@@ -209,6 +215,7 @@
     document.querySelectorAll('.lang__btn').forEach(b =>
       b.setAttribute('aria-pressed', String(b.dataset.lang === (toThai ? 'th' : 'en'))));
     try { localStorage.setItem(KEY, toThai ? 'th' : 'en'); } catch {}
+    if (resplit) resplit();
   };
 
   document.addEventListener('click', e => {

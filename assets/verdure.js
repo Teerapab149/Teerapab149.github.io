@@ -13,6 +13,7 @@
 (() => {
   'use strict';
 
+  const root = document.documentElement;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const raf = requestAnimationFrame;
   const clamp01 = n => n < 0 ? 0 : n > 1 ? 1 : n;
@@ -22,7 +23,154 @@
      inside a revealed block inherits .is-in from its ancestor, and a standalone
      one is observed directly. */
 
-  const risers = document.querySelectorAll('.up, .scrawl');
+  /* ── line-mask ───────────────────────────────────────────────────────────
+     Headings arrive one line at a time, sliding up from behind their own edge.
+     docs/PLAN-AWWWARDS.md law L3: type slides out of a mask, it does not fade.
+
+     THREE-TIER FALLBACK, in order of how badly things went:
+       · no JS at all      → no .is-split, no start state, text simply visible
+       · split refused/failed → the element keeps its .up reveal (both classes
+                                are in the markup; .is-split is what switches
+                                .up off), so it still animates, just plainly
+       · reduced motion    → CSS jumps every line to its end state
+
+     COST. The measuring pass is the expensive part, so it is kept small and
+     honest about it:
+       · opt-in — only elements marked .lm are touched, and never a paragraph
+         (masking a body paragraph line by line just slows down reading)
+       · one Range measurement per WORD, all reads batched before any write, so
+         the whole split costs a single layout rather than one per word
+       · re-split only when an element's own INLINE size actually changed —
+         ResizeObserver fires on height too, and a split changes height, which
+         is exactly how this turns into an infinite loop if you skip the check
+       · 180ms trailing debounce, then the work happens inside one rAF
+
+     THAI. Never split Thai below line level: sระ and tone marks are combining
+     characters, and Thai has no spaces between words. Lines are safe; anything
+     finer is not. See CLAUDE.md and the plan. */
+
+  const LM_STAGGER = 80;                 // ms between consecutive lines
+  const lmEls = Array.from(document.querySelectorAll('.lm'));
+  const lmWidth = new WeakMap();
+
+  const lmSplit = el => {
+    // always measure from the original markup, never from a previous split
+    if (el.__lmHTML == null) el.__lmHTML = el.innerHTML;
+    else el.innerHTML = el.__lmHTML;
+    el.classList.remove('is-split');
+
+    const tokens = [];
+    let ok = true;
+
+    el.childNodes.forEach(node => {
+      if (node.nodeType === 3) {
+        const re = /\S+\s*/g;
+        let m;
+        while ((m = re.exec(node.data))) tokens.push({ node, s: m.index, e: m.index + m[0].length });
+      } else if (node.nodeType === 1) {
+        // a child element is ATOMIC: breaking one apart would strip an <svg> of
+        // its namespace and cut .mark-wrap away from the scrawl it positions
+        if (node.tagName === 'BR') tokens.push({ br: true });
+        else tokens.push({ el: node });
+      }
+    });
+    if (tokens.length < 2) return false;
+
+    // ── every read happens here, before a single write ──
+    const range = document.createRange();
+    const lh = parseFloat(getComputedStyle(el).lineHeight);
+    const rects = tokens.map(t => {
+      if (t.br) return null;
+      if (t.el) return t.el.getBoundingClientRect();
+      range.setStart(t.node, t.s);
+      range.setEnd(t.node, t.e);
+      return range.getBoundingClientRect();
+    });
+
+    // an atomic child that wrapped over two lines cannot be masked as one line
+    rects.forEach(r => { if (r && lh && r.height > lh * 1.65) ok = false; });
+    if (!ok) return false;
+
+    const lines = [];
+    let cur = null, top = 0;
+    tokens.forEach((t, i) => {
+      if (t.br) { cur = null; return; }
+      const r = rects[i];
+      if (!r) return;
+      if (!cur || Math.abs(r.top - top) > 2) { cur = []; lines.push(cur); top = r.top; }
+      cur.push(t);
+    });
+    if (!lines.length) return false;
+
+    // ── now the writes, one fragment, one insertion ──
+    const frag = document.createDocumentFragment();
+    lines.forEach((line, i) => {
+      const outer = document.createElement('span');
+      outer.className = 'lm__l';
+      const inner = document.createElement('span');
+      inner.className = 'lm__i';
+      inner.style.setProperty('--i', i);
+      line.forEach(t => inner.appendChild(
+        t.el ? t.el : document.createTextNode(t.node.data.slice(t.s, t.e))
+      ));
+      outer.appendChild(inner);
+      frag.appendChild(outer);
+    });
+    while (el.firstChild) el.removeChild(el.firstChild);
+    el.appendChild(frag);
+    el.classList.add('is-split');
+    lmWidth.set(el, Math.round(el.getBoundingClientRect().width));
+    return true;
+  };
+
+  const lmTry = el => {
+    // Splitting something the visitor is already looking at would flash: the
+    // text is on screen, then hidden, then re-revealed. Leave those to .up.
+    const r = el.getBoundingClientRect();
+    if (r.top < innerHeight && r.bottom > 0) return;
+    try { lmSplit(el); } catch { el.innerHTML = el.__lmHTML || el.innerHTML; el.classList.remove('is-split'); }
+  };
+
+  const lmAll = () => lmEls.forEach(lmTry);
+
+  if (!reduced) {
+    lmAll();
+
+    // fonts change where lines break, so the first split is provisional
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => raf(lmAll));
+
+    if ('ResizeObserver' in window) {
+      let timer = 0;
+      const ro = new ResizeObserver(entries => {
+        let dirty = false;
+        entries.forEach(e => {
+          const w = Math.round(e.contentRect.width);
+          // WIDTH only. Height changes when we split, and reacting to those is
+          // how this becomes a loop that never settles.
+          if (lmWidth.get(e.target) !== w) { lmWidth.set(e.target, w); e.__dirty = true; dirty = true; }
+        });
+        if (!dirty) return;
+        clearTimeout(timer);
+        timer = setTimeout(() => raf(lmAll), 180);
+      });
+      lmEls.forEach(el => ro.observe(el));
+    }
+  }
+
+  /* i18n.js replaces innerHTML wholesale. If it wrote into a split element it
+     would both destroy the split and cache the split markup as "the English
+     version". So it hands control back here: restore the originals, let it
+     swap the language, then split whatever the new text turned out to be. */
+  window.__lmRestore = () => {
+    lmEls.forEach(el => {
+      if (el.__lmHTML != null) { el.innerHTML = el.__lmHTML; el.__lmHTML = null; }
+      el.classList.remove('is-split');
+      lmWidth.delete(el);
+    });
+    return () => { if (!reduced) raf(lmAll); };
+  };
+
+  const risers = document.querySelectorAll('.up, .scrawl, .lm');
 
   if (reduced || !('IntersectionObserver' in window)) {
     risers.forEach(el => el.classList.add('is-in'));
@@ -51,6 +199,12 @@
 
   const grow = document.querySelector('.grow');
   const card = document.querySelector('.grow__card');
+  /* The readout in the chrome bar. Measured off the SCREEN, not the card: the
+     bezel is padding, and the breakpoints inside are container queries on the
+     screen. Its fallback text ("responsive") is already in the markup. */
+  const screen = document.querySelector('.grow__screen');
+  const meas = document.querySelector('.grow__meas');
+  let lastMeas = '';
 
   /* ── the cover ───────────────────────────────────────────────────────────
      Three things, all cosmetic:
@@ -73,7 +227,46 @@
      swap completely, so 320ms is plenty and a slow font CDN can never strand the
      cover in its start state. */
 
-  const ready = () => document.documentElement.classList.add('is-ready');
+  /* Nobody should sit through a title sequence twice. Second load in the same
+     session plays it at half length; a new tab or a new day gets the full one. */
+  let dscale = 1;
+  try {
+    if (sessionStorage.getItem('seen')) { dscale = .5; root.style.setProperty('--dscale', '.5'); }
+    sessionStorage.setItem('seen', '1');
+  } catch { /* private mode — full length every time is the harmless default */ }
+
+  /* Scroll, click or type and you are done watching: the rest of the sequence
+     collapses to a 180ms catch-up. Freezing it mid-move would be worse than
+     never playing it, and an entrance you cannot escape is a trap. */
+  const skip = () => root.classList.add('is-skip');
+  ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(t =>
+    addEventListener(t, skip, { once: true, passive: true }));
+  addEventListener('scroll', () => { if (scrollY > 4) skip(); }, { once: true, passive: true });
+
+  /* The dimension line's readout. It counts to the width of the bar beside it —
+     it is measuring that line, not claiming to measure the viewport. */
+  const mNum = document.querySelector('[data-measure]');
+  const mBar = document.querySelector('.measure__bar');
+
+  /* offsetWidth, not getBoundingClientRect: the bar starts at scaleX(0) and a
+     client rect is the TRANSFORMED box, so the readout would count to zero. */
+  const measureNow = () => (mNum && mBar) ? mBar.offsetWidth : 0;
+
+  const runMeasure = () => {
+    const w = measureNow();
+    if (!w) return;
+    if (reduced) { mNum.textContent = String(w); return; }
+    const dur = 900 * dscale;
+    const t0 = performance.now() + 120 * dscale;
+    const step = now => {
+      const p = clamp01((now - t0) / dur);
+      mNum.textContent = String(Math.round(w * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf(step);
+    };
+    raf(step);
+  };
+
+  const ready = () => { root.classList.add('is-ready'); runMeasure(); };
 
   if (reduced) {
     ready();
@@ -106,6 +299,13 @@
       const r = grow.getBoundingClientRect();
       const travel = r.height - innerHeight;
       card.style.setProperty('--p', travel > 0 ? clamp01(-r.top / travel).toFixed(4) : 0);
+
+      if (screen && meas) {
+        const w = Math.round(screen.getBoundingClientRect().width);
+        // the names the breakpoints actually mean, not the Tailwind initials
+        const txt = w + ' px · ' + (w < 640 ? 'phone' : w < 1024 ? 'tablet' : w < 1280 ? 'laptop' : 'desktop');
+        if (txt !== lastMeas) { meas.textContent = txt; lastMeas = txt; }
+      }
     }
 
     if (cover && hero) {
@@ -137,6 +337,10 @@
 
   addEventListener('scroll', request, { passive: true });
   addEventListener('resize', request, { passive: true });
+  // the readout is a measurement, so it has to stay true after a resize —
+  // set, not re-animated: counting up again on every drag would be noise
+  addEventListener('resize', () => { const w = measureNow(); if (w && mNum) mNum.textContent = String(w); },
+    { passive: true });
   onScroll();
 
   /* ── counters ──────────────────────────────────────────────────────────

@@ -362,13 +362,21 @@
       </div>
     </div>
 
-    <div class="shots" id="familyShots"><!-- filled by app.js; every image really exists on the server --></div>
+    <!-- a filmstrip, not a grid: these nine are one journey through the system,
+         and reading them in order is the point -->
+    <div class="shots shots--strip" id="familyShots"><!-- filled by app.js; every image really exists on the server --></div>
 
     <div class="section-head" style="margin-top:56px">
       <h2>23 themes, the same page</h2>
-      <p class="lede">Every image below is the same home page, differing only in which theme is active — click to see it full size</p>
+      <p class="lede">
+        One page, one screenshot each, nothing else changed. Drag it, use the arrows, or pick a
+        colour off the rail — the rail is the 23 accent values themselves, straight out of the
+        palette files.
+      </p>
     </div>
-    <div class="themes" id="themeGrid"></div>
+    <!-- Script-built, like the two galleries above it: 23 cards of hand-written
+         markup would be worse for everyone. See the note at the top of app.js. -->
+    <div class="deck" id="themeDeck" aria-roledescription="carousel" aria-label="The 23 themes"></div>
 
     <div class="grid grid--3" style="margin-top:40px">
       <div class="card">
