@@ -41,25 +41,29 @@
      testing candidates against the floors this project sets: 4.5:1 for small
      text, 3:1 for large. assets/style.css carries the same palette under its own
      names — CHANGE ONE AND YOU MUST CHANGE THE OTHER. */
-  --paper:    #E7EFF0;   /* cool paper. Was #F0F5F6 and read as plain white next to
-                            the navy — this is the same hue, ~6% less luminous */
-  --paper-2:  #F5F9FA;   /* NOT pure white: cards should lift off the paper,
+  --paper:    #D8E4E7;   /* cool paper. #F0F5F6 → #E7EFF0 → here: the first two steps
+                            still read as white. This one is 16% less luminous than
+                            the original and the tint finally registers as a colour */
+  --paper-2:  #E6EEF0;   /* NOT pure white: cards should lift off the paper,
                             not glare against it */
-  --paper-3:  #D9E5E8;
-  --deep:     #0D2B3E;   /* deep navy · 12.6:1 on --paper */
+  --paper-3:  #C6D8DC;
+  --deep:     #0D2B3E;   /* deep navy · 11.3:1 on --paper */
   --deep-2:   #16455C;
-  --deep-3:   #2C5F76;   /*  6.0:1 on --paper — secondary prose */
-  --deep-4:   #3A6B80;   /*  5.0:1 on --paper · 4.5:1 on --paper-3 — smallest legible */
+  --deep-3:   #2C5F76;   /*  5.4:1 on --paper — secondary prose */
+  --deep-4:   #34606F;   /*  5.3:1 on --paper · 4.7:1 on --paper-3 — smallest legible.
+                            Darkened with the paper: the old #3A6B80 fell to 4.0:1 on
+                            --paper-3, which is the pair that governs how deep the
+                            paper is allowed to go. */
 
   /* ── sea accent ──────────────────────────────────────────────────────────
      Same three-step discipline the honey channel had: one bright decorative
      tone, one that clears 3:1 for large type, one that clears 4.5:1 for body. */
   --sea:      #62D0C4;  /* mint · 1.7:1 on paper — DECORATIVE ONLY (scrawls, rules,
                            fills, and text on the dark cover where it is 7.1:1) */
-  --sea-deep: #1E8A80;  /* 3.6:1 on --paper — large text only, e.g. the section numerals */
-  --sea-ink:  #0C6F66;  /* 5.2:1 on --paper · 5.7:1 on --paper-2 — the only accent for body text */
+  --sea-deep: #1E8A80;  /* 3.2:1 on --paper — large text only, e.g. the section numerals */
+  --sea-ink:  #0A625A;  /* 5.6:1 on --paper · 6.1:1 on --paper-2 · 4.9:1 on --paper-3 — the only accent for body text */
 
-  --rule:  #BFD3D7;
+  --rule:  #AFC7CD;
 
   /* The cover panel only: --deep lifted 4% toward paper (#163345). Any lighter
      and --sea stops clearing 4.5:1 against it, which is what caps this value —
