@@ -298,6 +298,82 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
   color: var(--bg); background: var(--text); border-color: var(--text); font-weight: 600;
 }
 
+/* ── live theme demo ───────────────────────────────────────────────────────
+   The section claims the whole site re-themes from one token layer. Twenty-three
+   screenshots only prove there are twenty-three pictures; this proves the claim,
+   because every colour below resolves from the six --t-* variables that the
+   chips rewrite. Values come from the election repo's own palette files.
+   With JS off the demo simply stays on Original — still a real card. */
+
+.demo { margin: 26px 0 30px; }
+.demo__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.demo__chip {
+  font: inherit; font-family: var(--font-display); font-size: .8125rem; cursor: pointer;
+  background: var(--surface); color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px;
+  transition: color .18s ease, border-color .18s ease, background .18s ease;
+}
+.demo__chip:hover { color: var(--text); border-color: var(--brand-2); }
+.demo__chip.is-on { color: var(--bg); background: var(--text); border-color: var(--text); font-weight: 600; }
+
+.demo__stage {
+  display: grid; gap: clamp(16px, 2vw, 26px); align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 150px);
+  background: var(--t-bg); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: clamp(18px, 3vw, 34px);
+  transition: background .45s ease;
+}
+@media (max-width: 620px) { .demo__stage { grid-template-columns: 1fr; } }
+
+.demo__card {
+  background: var(--t-surface); border: 1px solid var(--t-line);
+  border-radius: 14px; padding: clamp(16px, 2.2vw, 24px);
+  transition: background .45s ease, border-color .45s ease;
+}
+.demo__eyebrow {
+  font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--t-accent); margin: 0 0 8px;
+  transition: color .45s ease;
+}
+.demo__title {
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(1.4rem, 3vw, 2rem);
+  letter-spacing: -.04em; color: var(--t-ink); margin: 0 0 14px;
+  transition: color .45s ease;
+}
+.demo__opt {
+  display: flex; align-items: center; gap: 10px;
+  border: 1px solid var(--t-line); border-radius: 10px;
+  padding: 11px 14px; margin-bottom: 8px;
+  font-size: .875rem; color: var(--t-ink);
+  transition: color .45s ease, border-color .45s ease, background .45s ease;
+}
+.demo__opt.is-picked { border-color: var(--t-accent); background: var(--t-soft); }
+.demo__dot {
+  width: 12px; height: 12px; border-radius: 50%; flex: none;
+  border: 2px solid var(--t-line); transition: border-color .45s ease, background .45s ease;
+}
+.demo__opt.is-picked .demo__dot { border-color: var(--t-accent); background: var(--t-accent); }
+.demo__cta {
+  width: 100%; margin-top: 6px; font: inherit; font-family: var(--font-display); font-weight: 600;
+  font-size: .875rem; padding: 11px 18px; border-radius: 999px; cursor: default;
+  background: var(--t-accent); color: var(--t-accent-ink); border: 0;
+  transition: background .45s ease, color .45s ease;
+}
+.demo__note {
+  font-size: .75rem; color: var(--t-muted); margin: 12px 0 0;
+  transition: color .45s ease;
+}
+.demo__swatches { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.demo__swatches li {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: .625rem; color: var(--t-muted);
+  transition: color .45s ease;
+}
+.demo__swatches i {
+  width: 16px; height: 16px; border-radius: 5px; flex: none;
+  border: 1px solid var(--t-line); transition: background .45s ease, border-color .45s ease;
+}
+
 .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .shot {
   display: block; width: 100%;

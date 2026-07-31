@@ -334,13 +334,32 @@
       </p>
     </div>
 
-    <div class="tabs" role="tablist" aria-label="Choose a theme family">
-      <button class="tab" role="tab" aria-selected="true"  data-family="01-original">Original</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="02-gumroad">Gumroad</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="03-studio-dark">Studio Dark</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="04-verdure">Verdure</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="05-blossom">Blossom</button>
-      <button class="tab" role="tab" aria-selected="false" data-family="06-receipt">Receipt Paper</button>
+    <!-- A working miniature of the thing being described. The chips below write
+         Layer-1 tokens onto #themeDemo and everything inside recolours from
+         those variables alone — which is the actual claim this section makes.
+         Values are copied from the real palette files in the election repo
+         (src/utils/*Palettes.js), not eyeballed from the screenshots. -->
+    <div class="demo" id="themeDemo" data-theme="01-original">
+      <div class="demo__chips" role="group" aria-label="Try a theme family">
+        <button type="button" class="demo__chip is-on" data-family="01-original">Original</button>
+        <button type="button" class="demo__chip" data-family="02-gumroad">Gumroad</button>
+        <button type="button" class="demo__chip" data-family="03-studio-dark">Studio Dark</button>
+        <button type="button" class="demo__chip" data-family="04-verdure">Verdure</button>
+        <button type="button" class="demo__chip" data-family="05-blossom">Blossom</button>
+        <button type="button" class="demo__chip" data-family="06-receipt">Receipt Paper</button>
+      </div>
+
+      <div class="demo__stage">
+        <div class="demo__card">
+          <p class="demo__eyebrow">FMS Election · <span id="demoName">Original</span></p>
+          <p class="demo__title">Choose one.</p>
+          <div class="demo__opt is-picked"><span class="demo__dot"></span>The Unity Concord of FMS</div>
+          <div class="demo__opt"><span class="demo__dot"></span>พรรคสร้างสรรค์วิทยาการจัดการ</div>
+          <button type="button" class="demo__cta" tabindex="-1">ยืนยันการลงคะแนน</button>
+          <p class="demo__note">Every colour on this card comes from six tokens. Nothing else changes.</p>
+        </div>
+        <ul class="demo__swatches" aria-hidden="true"></ul>
+      </div>
     </div>
 
     <div class="shots" id="familyShots"><!-- filled by app.js; every image really exists on the server --></div>

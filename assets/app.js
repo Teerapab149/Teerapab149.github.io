@@ -93,6 +93,60 @@
   });
   renderFamily('01-original');
 
+  // ── live theme demo ─────────────────────────────────────────────────────
+  // Six Layer-1 tokens per family, lifted verbatim from the election repo's own
+  // palette files (src/utils/*Palettes.js) — NOT sampled off the screenshots, so
+  // the demo cannot drift into being "about right". Each family is represented
+  // by its base theme, the one shipped as that family's identity.
+  var DEMO = {
+    '01-original':    { name: 'Original',      bg: '#F8F9FD', surface: '#FFFFFF', ink: '#0F172A', muted: '#5B6478', line: '#E9D5FF', accent: '#8A2680', accentInk: '#FFFFFF', soft: '#FAF5FF' },
+    '02-gumroad':     { name: 'Gumroad',       bg: '#FFF6EC', surface: '#FFFDFA', ink: '#26271C', muted: '#5C5A4B', line: '#26271C', accent: '#FF9CE9', accentInk: '#26271C', soft: '#C2F47E' },
+    '03-studio-dark': { name: 'Studio Dark',   bg: '#14140F', surface: '#1B1B14', ink: '#F2EDDF', muted: '#B5B0A2', line: '#2E2E22', accent: '#D5FF3F', accentInk: '#14140F', soft: '#232319' },
+    '04-verdure':     { name: 'Verdure',       bg: '#F0EBDF', surface: '#FDFBF7', ink: '#1B362B', muted: '#3A5E4D', line: '#E6DFD2', accent: '#722F55', accentInk: '#FDFBF7', soft: '#F0EBDF' },
+    '05-blossom':     { name: 'Blossom',       bg: '#FCF9FA', surface: '#FFFFFF', ink: '#2B2028', muted: '#B02E7A', line: '#EDE2E8', accent: '#FF6FBF', accentInk: '#2B2028', soft: '#FFE1F0' },
+    '06-receipt':     { name: 'Receipt Paper', bg: '#F7F4EE', surface: '#FDFCF9', ink: '#1C1815', muted: '#6B6155', line: '#E2DCD1', accent: '#1C1815', accentInk: '#FDFCF9', soft: '#F5EDDA' },
+  };
+
+  var demo = $('#themeDemo');
+  if (demo) {
+    var swatches = $('.demo__swatches', demo);
+    var demoName = $('#demoName', demo);
+
+    var paint = function (key) {
+      var t = DEMO[key]; if (!t) return;
+      demo.dataset.theme = key;
+      var s = demo.querySelector('.demo__stage').style;
+      s.setProperty('--t-bg', t.bg);
+      s.setProperty('--t-surface', t.surface);
+      s.setProperty('--t-ink', t.ink);
+      s.setProperty('--t-muted', t.muted);
+      s.setProperty('--t-line', t.line);
+      s.setProperty('--t-accent', t.accent);
+      s.setProperty('--t-accent-ink', t.accentInk);
+      s.setProperty('--t-soft', t.soft);
+      if (demoName) demoName.textContent = t.name;
+      if (swatches) {
+        swatches.innerHTML = ['bg', 'surface', 'ink', 'line', 'accent', 'soft']
+          .map(function (k) {
+            return '<li><i style="background:' + t[k] + '"></i>' + t[k].toUpperCase() + '</li>';
+          }).join('');
+      }
+      $$('.demo__chip', demo).forEach(function (c) {
+        c.classList.toggle('is-on', c.dataset.family === key);
+      });
+    };
+
+    $$('.demo__chip', demo).forEach(function (c) {
+      c.addEventListener('click', function () {
+        paint(c.dataset.family);
+        // these chips replaced the old .tabs row — one control, not two doing the
+        // same job — so they drive the screenshot gallery directly
+        renderFamily(c.dataset.family);
+      });
+    });
+    paint('01-original');
+  }
+
   // ── theme grid ──────────────────────────────────────────────────────────
   var themeGrid = $('#themeGrid');
   if (themeGrid) {
