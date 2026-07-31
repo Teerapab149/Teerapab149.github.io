@@ -41,34 +41,45 @@
      testing candidates against the floors this project sets: 4.5:1 for small
      text, 3:1 for large. assets/style.css carries the same palette under its own
      names — CHANGE ONE AND YOU MUST CHANGE THE OTHER. */
-  --paper:    #D8E4E7;   /* cool paper. #F0F5F6 → #E7EFF0 → here: the first two steps
-                            still read as white. This one is 16% less luminous than
-                            the original and the tint finally registers as a colour */
-  --paper-2:  #E6EEF0;   /* NOT pure white: cards should lift off the paper,
+  /* 2026-07-31: the paper went from cool blue-grey (#D8E4E7) to a soft sage.
+     The owner's read after living with it was that the blue was tiring to look
+     at for any length of time, which is the ordinary problem with a cool
+     high-luminance field. Sage is the restful end of the spectrum and it also
+     belongs to the mint accent that was already here, so nothing else had to
+     move: the navy ink, the mint and the whole dark third act are untouched.
+
+     Luminance was held at the previous level on purpose — 0.757 against 0.759.
+     Two earlier rounds of "still too bright" established where this sits, and
+     this change is about HUE, not about lightness. */
+  --paper:    #DFE3DA;
+  --paper-2:  #EBEEE7;   /* NOT pure white: cards should lift off the paper,
                             not glare against it */
-  --paper-3:  #C6D8DC;
-  --deep:     #0D2B3E;   /* deep navy · 11.3:1 on --paper */
+  --paper-3:  #D2D8CB;   /* Lifted a step with the retone. --deep-4 on this fill
+                            is the pair that governs how deep the paper may go,
+                            and the first sage draft dropped it to 4.43:1. At
+                            this value it measures 4.73:1 — more headroom than
+                            the blue it replaces (4.68:1). */
+  --deep:     #0D2B3E;   /* deep navy · 11.27:1 on --paper */
   --deep-2:   #16455C;
-  --deep-3:   #2C5F76;   /*  5.4:1 on --paper — secondary prose */
-  --deep-4:   #34606F;   /*  5.3:1 on --paper · 4.7:1 on --paper-3 — smallest legible.
-                            Darkened with the paper: the old #3A6B80 fell to 4.0:1 on
-                            --paper-3, which is the pair that governs how deep the
-                            paper is allowed to go. */
+  --deep-3:   #2C5F76;   /*  5.37:1 on --paper — secondary prose */
+  --deep-4:   #34606F;   /*  5.29:1 on --paper · 5.88:1 on --paper-2 · 4.73:1 on
+                            --paper-3 — the smallest legible ink, and the last pair
+                            re-measured on every retone. */
 
   /* ── sea accent ──────────────────────────────────────────────────────────
      Same three-step discipline the honey channel had: one bright decorative
      tone, one that clears 3:1 for large type, one that clears 4.5:1 for body. */
-  --sea:      #62D0C4;  /* mint · 1.7:1 on paper — DECORATIVE ONLY (scrawls, rules,
-                           fills, and text on the dark cover where it is 7.1:1) */
-  --sea-deep: #1E8A80;  /* 3.2:1 on --paper — large text only, e.g. the section numerals */
-  --sea-ink:  #0A625A;  /* 5.6:1 on --paper · 6.1:1 on --paper-2 · 4.9:1 on --paper-3 — the only accent for body text */
+  --sea:      #62D0C4;  /* mint · DECORATIVE ONLY on paper (scrawls, rules, fills);
+                           on the dark cover panel it is 7.21:1 and carries text */
+  --sea-deep: #1E8A80;  /* 3.23:1 on --paper — large text only, e.g. the section numerals */
+  --sea-ink:  #0A625A;  /* 5.55:1 on --paper · 4.96:1 on --paper-3 — the only accent for body text */
 
-  --rule:  #AFC7CD;
+  --rule:  #B3BCA8;
 
-  /* The cover panel only: --deep lifted 4% toward paper (#163345). Any lighter
-     and --sea stops clearing 4.5:1 against it, which is what caps this value —
-     the mint label on the dark panel is the constraint, not taste.
-     paper 12.0:1 · sea 7.1:1 · both measured. */
+  /* The cover panel only: --deep lifted 4% toward paper (#153244 after the sage
+     retone). Any lighter and --sea stops clearing 4.5:1 against it, which is what
+     caps this value — the mint label on the dark panel is the constraint, not
+     taste. paper 10.27:1 · sea 7.21:1 · both measured. */
   --cover-bg: color-mix(in srgb, var(--deep) 96%, var(--paper));
 
   --maxw:  1440px;
@@ -1347,20 +1358,24 @@ a { color: inherit; }
    .role, .block, .btn one at a time would have been the version that rots.
 
    Measured on --paper #0D2B3E, which is what the section paints:
-     --deep   #E6EEF0  12.5:1    --deep-3 #AFC7CD  8.3:1
-     --deep-4 #9DBAC2   7.2:1 (5.0:1 on the --paper-2 card fill)
-     --sea-ink #62D0C4  7.9:1 — on dark the bright mint is the READABLE accent,
+     --deep   #EBEEE7  12.51:1   --deep-3 #B3BCA8  7.45:1
+     --deep-4 #A8B3A0   6.72:1 (4.72:1 on the --paper-2 card fill, the tightest
+                        pair in the act)
+     --sea-ink #62D0C4  7.92:1 — on dark the bright mint is the READABLE accent,
                         which is the exact inverse of its role on paper
+   The light values here are the sage paper family, not the old cool one: the
+   act inverts the page, so if it kept blue-grey ink it would read as a
+   different site rather than the same one with the lamp turned off.
    Static CSS, not a JS toggle: with the script gone the act is still dark and
    still correct. */
 .act-dark {
   --paper:    #0D2B3E;
   --paper-2:  #16455C;
   --paper-3:  #1D5065;
-  --deep:     #E6EEF0;
-  --deep-2:   #C6D8DC;
-  --deep-3:   #AFC7CD;
-  --deep-4:   #9DBAC2;
+  --deep:     #EBEEE7;
+  --deep-2:   #D2D8CB;
+  --deep-3:   #B3BCA8;
+  --deep-4:   #A8B3A0;
   --rule:     #2C5F76;
   --sea-ink:  #62D0C4;
   --sea-deep: #62D0C4;
@@ -1591,4 +1606,44 @@ body { transition: background-color var(--t3) ease; }
 
 @media (prefers-reduced-motion: reduce) {
   .js-anim .lm.is-split .lm__i { transform: none; transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NAV — the wipe between pages. Built by assets/nav.js; the arriving half is
+   an html::before so it can exist before first paint. Identical block in
+   assets/verdure.css and assets/style.css — CHANGE ONE, CHANGE THE OTHER.
+
+   The panel travels UPWARD both times: it covers the page you are leaving from
+   the bottom edge, and on the next page it carries on in the same direction
+   and uncovers what is underneath. One gesture split across a page load,
+   rather than two unrelated animations that happen to be adjacent.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.nav-panel {
+  position: fixed; inset: 0; z-index: 200; pointer-events: none;
+  background: var(--deep);
+  clip-path: inset(100% 0 0 0);
+  display: grid; place-items: center;
+}
+.nav-panel.is-in { clip-path: inset(0 0 0 0); transition: clip-path 380ms var(--ease-wipe); }
+
+html.nav-in::before {
+  content: ''; position: fixed; inset: 0; z-index: 200; pointer-events: none;
+  background: var(--deep);
+}
+html.nav-in.nav-out::before {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 460ms var(--ease-wipe) 40ms;
+}
+
+.nav-label {
+  position: fixed; inset: auto auto 34px 34px; z-index: 201; pointer-events: none;
+  font-family: var(--font-display); font-weight: 600; font-size: .6875rem;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--sea);
+}
+.nav-panel .nav-label { position: static; }
+html.nav-in.nav-out .nav-label { opacity: 0; transition: opacity 260ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-panel, html.nav-in::before, .nav-label { display: none; }
 }

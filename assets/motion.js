@@ -1,4 +1,7 @@
-/* home.js — landing page only. Vanilla, no dependency, no build step.
+/* motion.js — the three case-study pages that are not fms-election (which uses
+   app.js instead). Vanilla, no dependency, no build step.
+   The header used to say "home.js — landing page only", which stopped being
+   true two renames ago.
 
    Everything here is PROGRESSIVE. The page is fully readable with this file
    deleted: the reveal start-state lives behind html.js-anim (set inline in
@@ -32,34 +35,11 @@
   }
 
   /* ── reveal on enter ─────────────────────────────────────────────────────
-     IntersectionObserver is used rather than CSS animation-timeline because
-     scroll-driven CSS animations still only ship in Chromium — this behaves
-     the same in every browser. No IO support at all → reveal everything now. */
-
-  const revealables = document.querySelectorAll('.reveal');
-
-  if (reduced || !('IntersectionObserver' in window)) {
-    revealables.forEach(el => el.classList.add('is-in'));
-  } else {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-in');
-        io.unobserve(entry.target);   // reveal once; re-animating on every
-                                      // pass makes long pages feel twitchy
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-
-    revealables.forEach(el => io.observe(el));
-
-    /* Anything already above the fold when the observer attaches would
-       otherwise sit at opacity:0 until the first scroll. */
-    requestAnimationFrame(() => {
-      revealables.forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-in');
-      });
-    });
-  }
+     GONE FROM HERE. assets/reveal.js now owns .is-in for every entrance class
+     on every page — .reveal included — and it is loaded before this file.
+     Observing an element twice means two observers racing for one class, and
+     the real hazard is the mirror image of that: an element dropped from both
+     lists sits at opacity:0 for good. One owner, one list. */
 
   /* ── number count-up ─────────────────────────────────────────────────────
      The markup already holds the final string ("3,119", "~1,600", "23").

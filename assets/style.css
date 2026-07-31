@@ -29,23 +29,52 @@
        --surface   = --paper-2    --muted = --deep-3   --brand-2  = --sea
        --surface-2 = --paper-3    --dim   = --deep-4   --brand-ink= --deep
      Moved off the Verdure cream/moss/honey in 2026-07: too close to the
-     template it was borrowed from. Every ratio below is measured. */
-  --bg:        #D8E4E7;   /* cool paper — identical to verdure.css --paper */
-  --surface:   #E6EEF0;   /* deliberately not pure white */
-  --surface-2: #C6D8DC;
-  --line:      #AFC7CD;
-  --line-soft: #C6D8DC;
+     template it was borrowed from. Every ratio below is measured.
 
-  --text:      #0D2B3E;   /* deep navy · 11.3:1 on --bg */
-  --muted:     #2C5F76;   /* deep-3    ·  5.4:1 on --bg */
-  --dim:       #34606F;   /* deep-4    ·  5.3:1 on --bg · 4.7:1 on --surface-2 — smallest legible */
+     2026-07-31: the paper went from cool blue-grey (#D8E4E7) to a soft sage,
+     mirroring the same change in verdure.css — the owner's read after living
+     with it was that the blue was tiring over any length of time, the ordinary
+     problem with a cool high-luminance field. Only the five paper tokens moved.
+     Every ink, accent and code-island value is untouched, and LUMINANCE was
+     held at the old level on purpose: 0.757 against 0.759. This is a change of
+     HUE, not of lightness — two earlier rounds already settled how bright the
+     paper is allowed to be. Every ratio below was re-measured on the new
+     paper, not carried over. */
+  --bg:        #DFE3DA;   /* sage paper — identical to verdure.css --paper */
+  --surface:   #EBEEE7;   /* deliberately not pure white: cards lift off the
+                             paper rather than glaring against it */
+  --surface-2: #D2D8CB;   /* Lifted a step with the retone. --dim on this fill is
+                             the pair that governs how deep the paper may go, and
+                             the first sage draft dropped it to 4.43:1. At this
+                             value it is 4.73:1 — more headroom than the blue it
+                             replaces (4.68:1). */
+  --line:      #B3BCA8;   /* 1.51:1 on --bg — a hairline, never a text colour */
+  --line-soft: #D2D8CB;
 
-  --brand:     #0A625A;   /* sea-ink · 5.6:1 on --bg — the only accent that may carry body text */
-  --brand-2:   #62D0C4;   /* sea · 1.7:1 — decorative only: rules, washes, hover fills */
+  --text:      #0D2B3E;   /* deep navy · 11.27:1 on --bg · 12.51:1 on --surface */
+  --muted:     #2C5F76;   /* deep-3    ·  5.37:1 on --bg ·  4.80:1 on --surface-2 */
+  --dim:       #34606F;   /* deep-4    ·  5.29:1 on --bg ·  5.88:1 on --surface ·
+                             4.73:1 on --surface-2 — the smallest legible ink, and
+                             the pair to re-measure on every single retone */
+
+  --brand:     #0A625A;   /* sea-ink · 5.55:1 on --bg · 4.96:1 on --surface-2 —
+                             the only accent that may carry body text */
+  --brand-2:   #62D0C4;   /* sea · 1.42:1 on --bg — DECORATIVE ONLY: rules, washes,
+                             hover fills. Re-measured 2026-07-31; the comment here
+                             used to claim 1.7:1 and was simply wrong. It is under
+                             the 3:1 bar for a UI component, so nothing may signal
+                             state with this colour ALONE — everywhere it marks a
+                             state (nav hover/active, .shot hover) the text or
+                             border also moves to a pair that clears 4.5:1. */
   --brand-ink: #0D2B3E;   /* solid fills (buttons, active chips) are the navy, as on the landing page */
-  --accent:    #14664A;   /* "verified / pass" semantics only; 6.2:1 on --bg — deliberately a
-                             different green from --brand so "passed" never reads as "accent" */
-  --warn:      #0C6F66;
+  --accent:    #14664A;   /* "verified / pass" semantics only; 5.33:1 on --bg ·
+                             5.91:1 on --surface · 4.76:1 on --surface-2 —
+                             deliberately a different green from --brand so
+                             "passed" never reads as "accent" */
+  --warn:      #0C6F66;   /* 4.64:1 on --bg · 5.15:1 on --surface. NOT used by any
+                             rule in this sheet today; it measures 4.14:1 on
+                             --surface-2, so if it is ever wired up it must not
+                             land on that fill without being darkened first. */
 
   /* code blocks stay dark on purpose — a light page reads better with one
      inverted island than with grey-on-grey syntax highlighting. The island is
@@ -158,11 +187,31 @@ p:last-child { margin-bottom: 0; }
 .nav__brand span { color: var(--dim); font-weight: 400; }
 .nav__links { display: flex; gap: 22px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
 .nav__links::-webkit-scrollbar { display: none; }
+/* P7. The underline is DRAWN left to right, not switched on. A border can only
+   fade; a pseudo-element can scale from its left edge, which is the same
+   gesture .draw makes everywhere else on the page — one vocabulary, not two.
+   The transparent border stays so the row keeps the exact height it had.
+   Colour is unchanged from the border it replaces (--brand-2), so no new pair
+   to measure; and hover/active still moves the TEXT colour to --text (11.3:1),
+   so the state never rests on the hairline alone. */
 .nav__links a {
+  position: relative;
   font-size: .875rem; color: var(--muted); text-decoration: none; white-space: nowrap;
-  padding: 4px 0; border-bottom: 1px solid transparent; transition: color .2s ease, border-color .2s ease;
+  padding: 4px 0; border-bottom: 1px solid transparent; transition: color var(--t1) ease;
 }
-.nav__links a:hover, .nav__links a.is-active { color: var(--text); border-color: var(--brand-2); }
+.nav__links a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: var(--brand-2);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t1) var(--ease);
+}
+.nav__links a:hover, .nav__links a:focus-visible, .nav__links a.is-active { color: var(--text); }
+.nav__links a:hover::after,
+.nav__links a:focus-visible::after,
+.nav__links a.is-active::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .nav__links a::after { transition: none; }
+}
 @media (max-width: 780px) { .nav__links { display: none; } }
 /* at 360px the back link + full brand would push the bar sideways */
 @media (max-width: 560px) { .nav__brand span { display: none; } }
@@ -401,11 +450,25 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
   transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .shot:hover { border-color: var(--brand-2); transform: translateY(-2px); box-shadow: var(--shadow-md); }
-@media (prefers-reduced-motion: reduce) { .shot:hover { transform: none; } }
 /* display:block matters — these are <span>s inside a <button>, and aspect-ratio
    + overflow do nothing on an inline box (thumbnails render as a zoomed crop). */
 .shot__frame { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface-2); }
-.shot__frame img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+/* P7. The picture pushes very slightly past its own frame on hover — 1.03, and
+   the frame's overflow:hidden is what turns that into "the image is alive
+   inside the card" rather than "the card grew". Scaling the FRAME instead
+   would move the caption too, and the whole thumbnail already lifts 2px. */
+.shot__frame img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top center;
+  transition: transform var(--t2) var(--ease);
+}
+.shot:hover .shot__frame img,
+.shot:focus-visible .shot__frame img { transform: scale(1.03); }
+@media (prefers-reduced-motion: reduce) {
+  .shot:hover { transform: none; }
+  .shot__frame img,
+  .shot:hover .shot__frame img,
+  .shot:focus-visible .shot__frame img { transform: none; transition: none; }
+}
 .shot__cap {
   padding: 10px 14px; font-size: .8125rem; color: var(--muted);
   display: flex; justify-content: space-between; gap: 10px; align-items: center;
@@ -605,14 +668,36 @@ tr:last-child td { border-bottom: 0; }
 
 .footer { padding-block: 56px 72px; border-top: 1px solid var(--line-soft); }
 .footer__row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between; }
-.footer a.link {
+/* P7. Un-nested from .footer: every .link on the site is currently in a footer,
+   but this is the in-content link treatment too, and scoping it to one section
+   is what makes a second, slightly-different link style get invented later.
+
+   TWO hairlines, not one colour transition. The grey rule is always there so
+   the thing still reads as a link at rest; the brand rule DRAWS over it on
+   hover. Fading grey into green reads as a state change; drawing reads as a
+   gesture, which is the point of P7. Both colours already existed here. */
+a.link {
+  position: relative;
   display: inline-flex; align-items: center; gap: 9px; text-decoration: none;
-  border-bottom: 1px solid var(--line); padding-bottom: 3px;
-  transition: border-color .2s ease, color .2s ease;
+  padding-bottom: 3px;
+  transition: color var(--t1) ease;
 }
-.footer a.link:hover { border-color: var(--brand); color: var(--brand); }
-.footer a.link svg { flex: none; opacity: .7; }
-.footer a.link:hover svg { opacity: 1; }
+a.link::before, a.link::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+}
+a.link::before { background: var(--line); }
+a.link::after {
+  background: var(--brand);          /* 5.6:1 on --bg — the accent that may carry text */
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t1) var(--ease);
+}
+a.link:hover, a.link:focus-visible { color: var(--brand); }
+a.link:hover::after, a.link:focus-visible::after { transform: scaleX(1); }
+a.link svg { flex: none; opacity: .7; }
+a.link:hover svg, a.link:focus-visible svg { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  a.link::after { transition: none; }
+}
 .contacts { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-size: .9375rem; }
 .footer small { color: var(--dim); font-size: .8125rem; line-height: 1.7; }
 
@@ -736,19 +821,217 @@ tr:last-child td { border-bottom: 0; }
    PROJECT RULE: content is never hidden behind JS. The opacity:0 start state
    only exists under html.js-anim, and that class is set by an inline script in
    <head>. If JS is blocked, fails, or the browser is old, the class is never
-   added and every element renders at its normal, fully visible state. */
+   added and every element renders at its normal, fully visible state.
 
-.js-anim .reveal {
+   .up is the landing page's name for this same rise and is an alias here, not
+   a second implementation: index.html marks up .lm elements as "lm up" so the
+   plain rise is the fallback when a split is refused, and that pattern has to
+   keep working when the same markup is copied into a case study. One rule,
+   two names — never two rules. */
+
+.js-anim .reveal,
+.js-anim .up {
   opacity: 0;
   transform: translateY(18px);
   transition: opacity .55s cubic-bezier(.22, .61, .36, 1),
               transform .55s cubic-bezier(.22, .61, .36, 1);
   transition-delay: var(--d, 0ms);
 }
-.js-anim .reveal.is-in { opacity: 1; transform: none; }
+.js-anim .reveal.is-in,
+.js-anim .up.is-in { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .js-anim .reveal { opacity: 1; transform: none; transition: none; }
+  .js-anim .reveal,
+  .js-anim .up { opacity: 1; transform: none; transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ENTRANCE PRIMITIVES — ported from assets/verdure.css 2026-07-31 (P6) so the
+   case studies speak the same motion language as the landing page. Same rules,
+   this sheet's token names: --paper→--bg, --paper-2→--surface, --deep→--text,
+   --deep-3→--muted, --deep-4→--dim, --rule→--line, --sea-ink→--brand,
+   --sea→--brand-2. CHANGE ONE SHEET, CHANGE THE OTHER.
+
+   docs/PLAN-AWWWARDS.md law L3: direction carries meaning, so a thing's class
+   says what KIND of thing it is, not just that it should animate.
+
+     .draw   a rule draws itself, left to right      → structure
+     .stamp  an index presses down into place        → a label being applied
+     .wipe   an image is uncovered bottom-edge-up    → a picture developing
+     .deal   a card lands slightly off-square        → an object being placed
+
+   All four are gated exactly like .reveal — start state under html.js-anim,
+   end state on .is-in from the observer in assets/reveal.js — so none of them
+   can hide anything when the script is missing. No new colour pairs: every
+   value below is a token that was already on the page.
+
+   .deal animates `translate` and `rotate`, the standalone properties, rather
+   than `transform`. Cards here already spend `transform` on their hover lift
+   (.pagenav__card, .shot), and an entry rule out-specifies a hover rule, so
+   sharing one property silently kills the hover. These compose instead.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* The rule .draw scales is a pseudo-element and not a border for one reason:
+   a border cannot be scaled. A host that already draws its own hairline may
+   restyle .draw::after; it only has to keep transform-origin at the left. */
+.draw { position: relative; }
+.draw::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--line); transform-origin: left;
+}
+
+.js-anim .draw::after { transform: scaleX(0); }
+.js-anim .draw.is-in::after {
+  transform: scaleX(1);
+  transition: transform var(--t4) var(--ease-wipe) calc(var(--d, 0ms) + 60ms);
+}
+
+.js-anim .stamp { opacity: 0; scale: 1.07; }
+.js-anim .stamp.is-in {
+  opacity: 1; scale: 1;
+  transition: opacity var(--t2) ease var(--d, 0ms), scale var(--t2) var(--ease) var(--d, 0ms);
+}
+
+.js-anim .wipe img { clip-path: inset(0 0 100% 0); }
+.js-anim .wipe.is-in img {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path var(--t4) var(--ease-wipe) var(--d, 0ms);
+}
+/* clip-path cuts a box-shadow off along with everything else, so an image that
+   gets wiped open cannot be the thing carrying the shadow — it has to move one
+   level up, to the wrapper, where nothing clips. Only .figure needs the swap:
+   a .shot already keeps its shadow on the button and its <img> has none.
+   Both ends of the transition list the SAME two shadow layers, because
+   box-shadow only interpolates when the layer counts match — a bare `none` at
+   one end makes it snap. */
+.js-anim .figure.wipe img { box-shadow: none; }
+.js-anim .figure.wipe {
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(13, 43, 62, 0), 0 18px 40px -24px rgba(13, 43, 62, 0);
+}
+.js-anim .figure.wipe.is-in {
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--t4) ease var(--d, 0ms);
+}
+
+.js-anim .deal { opacity: 0; translate: 0 28px; rotate: var(--rot, 1.1deg); }
+.js-anim .deal.is-in {
+  opacity: 1; translate: none; rotate: none;
+  transition: opacity var(--t3) ease var(--d, 0ms),
+              translate var(--t3) var(--ease) var(--d, 0ms),
+              rotate var(--t3) var(--ease) var(--d, 0ms);
+}
+/* alternating tilt — a row of cards all leaning the same way looks like a bug */
+.js-anim .deal:nth-child(even) { --rot: -1.1deg; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-anim .draw::after, .js-anim .stamp, .js-anim .wipe img, .js-anim .deal,
+  .js-anim .figure.wipe, .js-anim .figure.wipe.is-in {
+    opacity: 1; transform: none; scale: 1; rotate: none; translate: none;
+    clip-path: none; transition: none;
+  }
+  .js-anim .figure.wipe { box-shadow: var(--shadow-md); }
+}
+
+/* ── line-mask ────────────────────────────────────────────────────────────
+   Built by assets/reveal.js: each display line becomes .lm__l (the mask)
+   wrapping .lm__i (the thing that moves). Nothing here applies until the split
+   has actually succeeded and .is-split is on the element — which is what makes
+   the .reveal / .up fallback safe to leave in the markup alongside it.
+
+   The clip box is grown vertically and pulled back with a matching negative
+   margin. A line box is not tall enough to contain what sits in it: descenders
+   overhang it. Clipping to the line box alone slices them off. The travel then
+   has to clear the PADDED box, not the line — hence 100% + .42em rather than a
+   flat 110%. */
+.lm__l { display: block; overflow: hidden; padding-block: .34em; margin-block: -.34em; }
+.lm__i { display: block; }
+
+.js-anim .lm.is-split .lm__i { transform: translateY(calc(100% + .42em)); }
+.js-anim .lm.is-split.is-in .lm__i {
+  transform: none;
+  transition: transform var(--t3) var(--ease-wipe);
+  transition-delay: calc((var(--d, 0ms) + var(--i, 0) * 80ms) * var(--dscale, 1));
+}
+/* a successful split takes over from the plain rise completely — running both
+   would move the same words twice, which is exactly the mush this exists to
+   avoid. Both fallback names are listed because either may be in the markup. */
+.js-anim .lm.is-split.up,
+.js-anim .lm.is-split.reveal { opacity: 1; transform: none; transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-anim .lm.is-split .lm__i { transform: none; transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   P7 MICRO-INTERACTIONS — the label swap. The other two (links drawing their
+   underline, thumbnails scaling inside their frame) live with the components
+   they belong to, up at .nav__links a / a.link / .shot__frame img.
+
+   MARKUP. The visible label always lives in a child <span> — a text node
+   cannot be transformed, so there is no wrapper-free version of this. The
+   SECOND copy, the one that arrives, comes either from a second span or from
+   data-label, whichever suits the label:
+
+     <a class="btn" href="…"><span class="swap">
+        <span>Open the live site</span>
+        <span aria-hidden="true">Open the live site</span>
+     </span></a>
+
+     <span class="swap" data-label="Open"><span>Open</span></span>
+
+   Prefer the two-span form for anything long: aria-hidden keeps the duplicate
+   out of a screen reader, whereas ::after content is announced by some of them.
+
+   Nothing is hidden either way: with no hover and no JS the first copy is the
+   only thing in the box and reads normally. The mask is padded and pulled back
+   by the same .14em for the same reason .lm__l is — a line box does not contain
+   its own descenders, and a clipped "g" is worse than no effect at all.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.swap {
+  position: relative; display: inline-block; overflow: hidden;
+  vertical-align: bottom; padding-block: .14em; margin-block: -.14em;
+}
+.swap > span { display: block; transition: transform var(--t1) var(--ease); }
+/* the incoming copy waits one full box below, outside the mask */
+.swap > span + span,
+.swap[data-label]::after {
+  position: absolute; left: 0; top: .14em; width: 100%; display: block;
+  transform: translateY(calc(100% + .14em));
+  transition: transform var(--t1) var(--ease);
+}
+.swap[data-label]::after { content: attr(data-label); }
+
+/* Hover is read off the interactive ANCESTOR, not off .swap itself: the label
+   sits inside a button's padding, and a visitor over the padding is hovering
+   the button. .swap:hover would leave a dead ring around the text.
+   :first-child, so the parked copy is not dragged up along with it. */
+a:hover .swap > span:first-child, a:focus-visible .swap > span:first-child,
+button:hover .swap > span:first-child, button:focus-visible .swap > span:first-child {
+  transform: translateY(calc(-100% - .14em));
+}
+a:hover .swap > span + span, a:focus-visible .swap > span + span,
+button:hover .swap > span + span, button:focus-visible .swap > span + span,
+a:hover .swap[data-label]::after, a:focus-visible .swap[data-label]::after,
+button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::after {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* no swap at all rather than an instant jump: teleporting a word is a glitch,
+     not a reduced version of a slide. Both copies stay exactly where they are. */
+  .swap > span, .swap > span + span, .swap[data-label]::after { transition: none; }
+  a:hover .swap > span:first-child, a:focus-visible .swap > span:first-child,
+  button:hover .swap > span:first-child, button:focus-visible .swap > span:first-child {
+    transform: none;
+  }
+  a:hover .swap > span + span, a:focus-visible .swap > span + span,
+  button:hover .swap > span + span, button:focus-visible .swap > span + span,
+  a:hover .swap[data-label]::after, a:focus-visible .swap[data-label]::after,
+  button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::after {
+    transform: translateY(calc(100% + .14em));
+  }
 }
 
 /* ── case-study footer nav (where to go after the last section) ────────── */
@@ -770,3 +1053,43 @@ tr:last-child td { border-bottom: 0; }
 }
 .pagenav__card b { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 600; display: block; }
 .pagenav__card em { font-style: normal; display: block; font-size: .875rem; color: var(--muted); margin-top: 4px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NAV — the wipe between pages. Built by assets/nav.js; the arriving half is
+   an html::before so it can exist before first paint. Identical block in
+   assets/verdure.css and assets/style.css — CHANGE ONE, CHANGE THE OTHER.
+
+   The panel travels UPWARD both times: it covers the page you are leaving from
+   the bottom edge, and on the next page it carries on in the same direction
+   and uncovers what is underneath. One gesture split across a page load,
+   rather than two unrelated animations that happen to be adjacent.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.nav-panel {
+  position: fixed; inset: 0; z-index: 200; pointer-events: none;
+  background: var(--text);
+  clip-path: inset(100% 0 0 0);
+  display: grid; place-items: center;
+}
+.nav-panel.is-in { clip-path: inset(0 0 0 0); transition: clip-path 380ms var(--ease-wipe); }
+
+html.nav-in::before {
+  content: ''; position: fixed; inset: 0; z-index: 200; pointer-events: none;
+  background: var(--text);
+}
+html.nav-in.nav-out::before {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 460ms var(--ease-wipe) 40ms;
+}
+
+.nav-label {
+  position: fixed; inset: auto auto 34px 34px; z-index: 201; pointer-events: none;
+  font-family: var(--font-mono); font-weight: 600; font-size: .6875rem;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--brand-2);
+}
+.nav-panel .nav-label { position: static; }
+html.nav-in.nav-out .nav-label { opacity: 0; transition: opacity 260ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-panel, html.nav-in::before, .nav-label { display: none; }
+}

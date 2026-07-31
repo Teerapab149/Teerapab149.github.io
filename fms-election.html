@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FMS Online Voting System — Teerapab Boonsri</title>
 <meta name="description" content="The online election system for the student council of the Faculty of Management Sciences, PSU — anonymous ballots that can still be checked for tampering, a 23-theme system, and a design built to be handed to next year's team.">
-<meta name="theme-color" content="#D8E4E7">
+<meta name="theme-color" content="#DFE3DA">
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="FMS Online Voting System — case study">
@@ -24,6 +24,9 @@
 <!-- gates every opacity:0 reveal in the stylesheet. If this line never runs,
      the class is absent and all content renders visible — see style.css. -->
 <script>document.documentElement.classList.add('js-anim');</script>
+<!-- The arriving half of the page wipe. It has to run before first paint,
+     which is why it is here and not in nav.js. See assets/nav.js. -->
+<script>try{if(sessionStorage.getItem('nav'))document.documentElement.classList.add('nav-in');}catch(e){}</script>
 </head>
 <body>
 
@@ -53,15 +56,23 @@
 <!-- ── hero ────────────────────────────────────────────────────────────── -->
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow">Case study · 2026</p>
-    <h1>An online election system<br>that can <em>prove</em> the count is untouched</h1>
-    <p class="hero__sub">
+    <!-- Mini title card. Five beats inside ~440ms, the short version of the
+         cover sequence on index.html: the label is stamped on, the headline
+         arrives a line at a time, the supporting copy and the chips rise, and
+         the screenshot is uncovered last — the picture is the payoff, so it
+         lands after the words rather than with them.
+         .stamp on this eyebrow and .up on every other eyebrow on the page is
+         deliberate: only the title card gets the loud entrance (plan law L1,
+         one hero move per scene). -->
+    <p class="eyebrow stamp">Case study · 2026</p>
+    <h1 class="lm up" style="--d:100ms">An online election system<br>that can <em>prove</em> the count is untouched</h1>
+    <p class="hero__sub up" style="--d:240ms">
       FMS Online Voting System — the voting system for the student council of the Faculty of
       Management Sciences, Prince of Songkla University. Students sign in with PSU Passport and vote
       once each. Every ballot is encrypted separately from the voter's identity and threaded into a
       hash chain that can be verified across the whole table after the fact.
     </p>
-    <div class="hero__meta">
+    <div class="hero__meta up" style="--d:320ms">
       <span class="chip">Next.js 14</span>
       <span class="chip">PostgreSQL · Prisma</span>
       <span class="chip">NextAuth · PSU SSO</span>
@@ -71,7 +82,7 @@
       <span class="chip">Docker</span>
     </div>
 
-    <div class="btn-row">
+    <div class="btn-row up" style="--d:380ms">
       <a class="btn" href="https://cvs.fms.psu.ac.th/fms-ovs" target="_blank" rel="noopener noreferrer">Open the live system
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
@@ -80,7 +91,7 @@
     </div>
 
     <!-- Original: the theme the faculty actually runs. The other 22 are in §05. -->
-    <figure class="hero__shot">
+    <figure class="hero__shot wipe" style="--d:440ms">
       <img src="assets/img/desktop/01-original/1-home.webp" width="1600" height="1100"
            alt="Home screen of the voting system with the SAMO event name, a countdown and live turnout figures">
     </figure>
@@ -90,7 +101,7 @@
 <!-- ── stats ───────────────────────────────────────────────────────────── -->
 <section id="stats">
   <div class="wrap">
-    <div class="stats">
+    <div class="stats up">
       <div class="stat"><b>3,119</b><span>eligible voters<br>imported through the university API</span></div>
       <div class="stat"><b>~1,600</b><span>ballots actually cast<br>roughly 51% turnout</span></div>
       <div class="stat"><b>587</b><span>commits over 7 months<br>built solo</span></div>
@@ -104,10 +115,10 @@
 <!-- ── context + problem ───────────────────────────────────────────────── -->
 <section id="problem">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">01 — Context and problem</p>
-      <h2>Why an election system is not just a form with a submit button</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">01 — Context and problem</p>
+      <h2 class="lm up" style="--d:80ms">Why an election system is not just a form with a submit button</h2>
+      <p class="lede up" style="--d:160ms">
         I was responsible for the whole project on my own: talking through requirements with the
         election committee, designing the database, designing how ballots are stored, building every
         page, and writing the handover documentation for next year's council team — none of whom are
@@ -116,33 +127,33 @@
     </div>
 
     <div class="grid grid--2">
-      <div class="card">
-        <span class="card__num">01</span>
+      <div class="card up">
+        <span class="card__num stamp">01</span>
         <h3>The result has to be credible</h3>
         <p>If the count comes out close, there has to be a technical way to prove nobody altered it — not just an appeal to trust the committee.</p>
       </div>
-      <div class="card">
-        <span class="card__num">02</span>
+      <div class="card up" style="--d:60ms">
+        <span class="card__num stamp">02</span>
         <h3>The ballot has to stay secret</h3>
         <p>An online system that stores “this user chose this party” in one row means anyone with database access knows everything — which breaks the principle of a secret ballot.</p>
       </div>
-      <div class="card">
-        <span class="card__num">03</span>
+      <div class="card up" style="--d:120ms">
+        <span class="card__num stamp">03</span>
         <h3>Double voting has to be genuinely impossible</h3>
         <p>It has to hold even when a user submits from several tabs at once, not only when the network is slow and luck is on our side.</p>
       </div>
-      <div class="card">
-        <span class="card__num">04</span>
+      <div class="card up" style="--d:180ms">
+        <span class="card__num stamp">04</span>
         <h3>It has to survive being handed on every year</h3>
         <p>The council changes annually and nobody there writes code, so the year, the candidate list and the look of the site all have to be changeable without touching code.</p>
       </div>
-      <div class="card">
-        <span class="card__num">05</span>
+      <div class="card up" style="--d:240ms">
+        <span class="card__num stamp">05</span>
         <h3>A site people actually want to open</h3>
         <p>The usual officious government look puts students off entirely. It had to feel contemporary and genuinely work on a phone.</p>
       </div>
-      <div class="card">
-        <span class="card__num">06</span>
+      <div class="card up" style="--d:300ms">
+        <span class="card__num stamp">06</span>
         <h3>Results must stay sealed until the hour</h3>
         <p>Partial counts sway the people who have not voted yet, so results are closed off at the API layer, not merely hidden behind a button in the UI.</p>
       </div>
@@ -153,17 +164,17 @@
 <!-- ── architecture ────────────────────────────────────────────────────── -->
 <section id="architecture">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">02 — Architecture</p>
-      <h2>The system map</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">02 — Architecture</p>
+      <h2 class="lm up" style="--d:80ms">The system map</h2>
+      <p class="lede up" style="--d:160ms">
         A single Next.js App Router app serves the public pages, the admin console and the API,
         talks to PostgreSQL through Prisma, and deploys with Docker under the
         <code>/fms-ovs</code> subpath.
       </p>
     </div>
 
-    <div class="arch">
+    <div class="arch up">
       <p class="arch__label">Users</p>
       <div class="arch__row">
         <div class="arch__box"><b>Students</b><span>almost all of them on a phone</span></div>
@@ -201,10 +212,10 @@
 <!-- ── ballot security ─────────────────────────────────────────────────── -->
 <section id="ballot">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">03 — The hardest part</p>
-      <h2>Anonymous ballots that can still be checked for tampering</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">03 — The hardest part</p>
+      <h2 class="lm up" style="--d:80ms">Anonymous ballots that can still be checked for tampering</h2>
+      <p class="lede up" style="--d:160ms">
         Designed from scratch with nothing but <code>node:crypto</code> — not one new dependency. The
         goal was two things that normally contradict each other: fully auditable after the fact, yet
         impossible to trace back to a voter.
@@ -212,42 +223,42 @@
     </div>
 
     <div class="flow">
-      <div class="flow__step">
+      <div class="flow__step up">
         <div class="flow__dot">01</div>
         <div>
           <h3>Separate the identity from the choice</h3>
           <p>Casting a vote writes to two different tables — it stamps <code>isVoted</code> on the user, and drops an encrypted ballot into the Ballot table. No key joins the two. The column that once linked them was deliberately deleted.</p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:60ms">
         <div class="flow__dot">02</div>
         <div>
           <h3>Encrypt the ballot with RSA-OAEP + a nonce</h3>
           <p>The plaintext is <code>{ c: candidateId, n: 128-bit nonce }</code> — the nonce means two ballots for the same party never produce the same ciphertext, closing the dictionary-guessing gap you get when candidate ids only take a handful of values.</p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:120ms">
         <div class="flow__dot">03</div>
         <div>
           <h3>Thread them into a hash chain with HMAC</h3>
           <p>Every ballot stores <code>prevHash</code> and <code>rowHash = HMAC(secret, prevHash‖payload‖seq)</code>. Delete, insert or edit a ballot in the middle of the table and the chain breaks at exactly that point — verifiable across the whole table with one script.</p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:180ms">
         <div class="flow__dot">04</div>
         <div>
           <h3>Timestamps leak too, so only the hour is kept</h3>
           <p>A precise timestamp on a ballot can be joined against the moment a user pressed vote to pair them back up. So the Ballot table keeps only a coarse hour bucket; the precise time stays with the user, where it is not a secret.</p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:240ms">
         <div class="flow__dot">05</div>
         <div>
           <h3>The decryption key is never on the server</h3>
           <p>A key ceremony is held once a year on an offline machine; the private key is printed on paper and split between the staff and the faculty advisor. The server holds only the public key — seize the server and the ballots still cannot be decrypted.</p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:300ms">
         <div class="flow__dot">06</div>
         <div>
           <h3>Database-level rights: the app can only INSERT</h3>
@@ -256,7 +267,7 @@
       </div>
     </div>
 
-    <div class="callout" style="margin-top:28px">
+    <div class="callout up" style="margin-top:28px">
       <p>
         <strong>Fail closed</strong> — if the key variables on the server are incomplete, the vote
         endpoint answers 503 immediately. There is no fallback that stores the choice in readable
@@ -270,17 +281,17 @@
 <!-- ── one person one vote ─────────────────────────────────────────────── -->
 <section id="race">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">04 — Concurrency</p>
-      <h2>One person, one vote — when two requests arrive at the same instant</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">04 — Concurrency</p>
+      <h2 class="lm up" style="--d:80ms">One person, one vote — when two requests arrive at the same instant</h2>
+      <p class="lede up" style="--d:160ms">
         The naive approach is “check whether they have voted, then save”, which leaves a gap between
         the two steps (TOCTOU). Submit from two tabs at once and both can pass the check and both get
         saved. The answer is a single transaction that gives three guarantees at the same time.
       </p>
     </div>
 
-    <div class="code">
+    <div class="code up">
       <div class="code__bar">src/app/api/vote/route.js</div>
 <pre><span class="c">// (a) TOCTOU one-shot · (b) chain serialization · (c) tally — in one transaction</span>
 <span class="k">const</span> outcome = <span class="k">await</span> db.<span class="f">$transaction</span>(<span class="k">async</span> (tx) => {
@@ -305,15 +316,15 @@
     </div>
 
     <div class="grid grid--3" style="margin-top:18px">
-      <div class="card">
+      <div class="card up">
         <h3>Encrypt before entering the transaction</h3>
         <p>The ciphertext does not depend on the state of the chain, so it can be computed beforehand — which keeps the row lock held for the shortest time possible.</p>
       </div>
-      <div class="card">
+      <div class="card up" style="--d:60ms">
         <h3>Proved by a test, not by an argument</h3>
         <p>An e2e test fires two simultaneous requests from one user: exactly one must succeed, one must be rejected, and the total must go up by exactly one.</p>
       </div>
-      <div class="card">
+      <div class="card up" style="--d:120ms">
         <h3>A rate limit on top</h3>
         <p>Requests per user are capped on the vote and login endpoints to stop rapid-fire attempts, even though the double-vote guard already handles them.</p>
       </div>
@@ -324,10 +335,10 @@
 <!-- ── template system ─────────────────────────────────────────────────── -->
 <section id="templates">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">05 — The theme system</p>
-      <h2>The look of the entire site changes from admin, in one click</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">05 — The theme system</p>
+      <h2 class="lm up" style="--d:80ms">The look of the entire site changes from admin, in one click</h2>
+      <p class="lede up" style="--d:160ms">
         6 families, 23 themes. Each family has its own layout for every page — this is not a colour
         swap. All of it comes from a single palette file per family, so adding a new theme means
         editing 3 places and the rest flows through the whole system.
@@ -339,7 +350,7 @@
          those variables alone — which is the actual claim this section makes.
          Values are copied from the real palette files in the election repo
          (src/utils/*Palettes.js), not eyeballed from the screenshots. -->
-    <div class="demo" id="themeDemo" data-theme="01-original">
+    <div class="demo up" id="themeDemo" data-theme="01-original">
       <div class="demo__chips" role="group" aria-label="Try a theme family">
         <button type="button" class="demo__chip is-on" data-family="01-original">Original</button>
         <button type="button" class="demo__chip" data-family="02-gumroad">Gumroad</button>
@@ -364,11 +375,11 @@
 
     <!-- a filmstrip, not a grid: these nine are one journey through the system,
          and reading them in order is the point -->
-    <div class="shots shots--strip" id="familyShots"><!-- filled by app.js; every image really exists on the server --></div>
+    <div class="shots shots--strip up" id="familyShots"><!-- filled by app.js; every image really exists on the server --></div>
 
-    <div class="section-head" style="margin-top:56px">
-      <h2>23 themes, the same page</h2>
-      <p class="lede">
+    <div class="section-head draw" style="margin-top:56px">
+      <h2 class="lm up" style="--d:80ms">23 themes, the same page</h2>
+      <p class="lede up" style="--d:160ms">
         One page, one screenshot each, nothing else changed. Drag it, use the arrows, or pick a
         colour off the rail — the rail is the 23 accent values themselves, straight out of the
         palette files.
@@ -376,18 +387,18 @@
     </div>
     <!-- Script-built, like the two galleries above it: 23 cards of hand-written
          markup would be worse for everyone. See the note at the top of app.js. -->
-    <div class="deck" id="themeDeck" aria-roledescription="carousel" aria-label="The 23 themes"></div>
+    <div class="deck up" id="themeDeck" aria-roledescription="carousel" aria-label="The 23 themes"></div>
 
     <div class="grid grid--3" style="margin-top:40px">
-      <div class="card">
+      <div class="card up">
         <h3>Two token layers</h3>
         <p>Layer 1 is theme-level colour, layer 2 is element-level variables, with a rule that any colour variable must reference a token — never a raw hex value.</p>
       </div>
-      <div class="card">
+      <div class="card up" style="--d:60ms">
         <h3>The preview has to match reality</h3>
         <p>What the preview renders and what production renders must map to the same values, guarded by 7 invariants — because a preview that lies is more dangerous than having no preview at all.</p>
       </div>
-      <div class="card">
+      <div class="card up" style="--d:120ms">
         <h3>You can really try it before choosing</h3>
         <p>The preview page walks the whole flow (home → login → vote → success) without touching the database, so a non-developer decides by using it, not by looking at a still image.</p>
       </div>
@@ -398,17 +409,17 @@
 <!-- ── UX / UI ─────────────────────────────────────────────────────────── -->
 <section id="uxui">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">06 — UX / UI</p>
-      <h2>The criteria I judged the design against</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">06 — UX / UI</p>
+      <h2 class="lm up" style="--d:80ms">The criteria I judged the design against</h2>
+      <p class="lede up" style="--d:160ms">
         Set before starting, and every one of them checkable rather than a matter of feel. The
         principle is beauty from basic craft, not from gimmicks — no 3D, no particles, no artificially
         long loading screens for the sake of looking cool.
       </p>
     </div>
 
-    <div class="table-scroll">
+    <div class="table-scroll up">
       <table>
         <thead><tr><th>Dimension</th><th>What it has to pass</th></tr></thead>
         <tbody>
@@ -421,47 +432,47 @@
       </table>
     </div>
 
-    <div class="section-head" style="margin-top:56px">
-      <h2>Mobile-first as a gate, not as a slogan</h2>
-      <p class="lede">
+    <div class="section-head draw" style="margin-top:56px">
+      <h2 class="lm up" style="--d:80ms">Mobile-first as a gate, not as a slogan</h2>
+      <p class="lede up" style="--d:160ms">
         Every page is reviewed at 375px before desktop, because nearly all real users voted from a
         phone while walking around the faculty — mobile has to be designed, not shrunk down from
         desktop.
       </p>
     </div>
-    <div class="phones" id="phoneStrip"></div>
+    <div class="phones up" id="phoneStrip"></div>
 
-    <div class="section-head" style="margin-top:56px">
-      <h2>Decisions I can account for</h2>
+    <div class="section-head draw" style="margin-top:56px">
+      <h2 class="lm up" style="--d:80ms">Decisions I can account for</h2>
     </div>
     <div class="grid grid--2">
-      <div class="card">
-        <span class="card__num">01</span>
+      <div class="card up">
+        <span class="card__num stamp">01</span>
         <h3>A single-party race needs 3 options</h3>
         <p>When only one party stands, allowing nothing but “choose” is coercion. So the ballot becomes approve / reject / abstain, with fixed semantic colours that <strong>do not change with the theme</strong>, because what a colour means matters more than how well it fits the palette.</p>
       </div>
-      <div class="card">
-        <span class="card__num">02</span>
+      <div class="card up" style="--d:60ms">
+        <span class="card__num stamp">02</span>
         <h3>Results before the hour need a designed “locked” page</h3>
         <p>Not a hidden menu that leaves people confused: whoever arrives should know why they cannot see it yet and when they can. The count itself is closed at the API layer, with tests proving it does not leak.</p>
       </div>
-      <div class="card">
-        <span class="card__num">03</span>
+      <div class="card up" style="--d:120ms">
+        <span class="card__num stamp">03</span>
         <h3>Never hide important content behind an animation</h3>
         <p>A rule made after being burnt — the ballot once sat at opacity 0 waiting for a reveal, the reveal failed on some machines, and the entire ballot vanished. Since then the ballot, the party list and the results may not depend on a JS reveal, and it is checked against real computed style.</p>
       </div>
-      <div class="card">
-        <span class="card__num">04</span>
+      <div class="card up" style="--d:180ms">
+        <span class="card__num stamp">04</span>
         <h3>Secondary buttons must not steal the scene</h3>
         <p>A lesson from the results page, where the secondary button outweighed the primary CTA and people went the wrong way. Fixed by making the secondary button lighter, not the primary one heavier.</p>
       </div>
-      <div class="card">
-        <span class="card__num">05</span>
+      <div class="card up" style="--d:240ms">
+        <span class="card__num stamp">05</span>
         <h3>Every theme gets its own ritual</h3>
         <p>Verdure closes with a wax seal being pressed · Receipt Paper is a receipt roll dropping into the box · Gumroad is loud neo-brutalist — because the second you finish voting should feel like your vote was counted, not like the word “success” appeared.</p>
       </div>
-      <div class="card">
-        <span class="card__num">06</span>
+      <div class="card up" style="--d:300ms">
+        <span class="card__num stamp">06</span>
         <h3>Cutting the editor I had built by hand</h3>
         <p>The system once had a Canva-like editor for admins to drag and drop their own layouts. It got far, and I cut it — what users actually needed was a variety of ready-made looks, not a design tool with nobody to maintain it.</p>
       </div>
@@ -472,48 +483,48 @@
 <!-- ── handover ────────────────────────────────────────────────────────── -->
 <section id="handover">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">07 — Handover</p>
-      <h2>Designed to keep working without me</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">07 — Handover</p>
+      <h2 class="lm up" style="--d:80ms">Designed to keep working without me</h2>
+      <p class="lede up" style="--d:160ms">
         The council team changes every year, so the annual work is designed as part of the product
         rather than as knowledge living in one person's head.
       </p>
     </div>
 
     <div class="grid grid--2" style="margin-bottom:24px">
-      <div class="card">
+      <div class="card up">
         <h3>A readiness button with 14 checks</h3>
         <p>Verifies the config, the keys, the dates, the lists and the theme before the polls open. Read-only; it writes nothing to the database.</p>
       </div>
-      <div class="card">
+      <div class="card up" style="--d:60ms">
         <h3>Audit log + protection against misclicks</h3>
         <p>Every admin action is recorded, and the reset button is locked while voting is open — the system has to be stopped first.</p>
       </div>
-      <div class="card">
+      <div class="card up" style="--d:120ms">
         <h3>A script for rolling over the academic year</h3>
         <p>preflight → archive last year → import the new roll → set the dates and pick a theme in admin → run that year's new key ceremony.</p>
       </div>
-      <div class="card">
+      <div class="card up" style="--d:180ms">
         <h3>A test database that cannot touch the real one</h3>
         <p>The e2e suite creates its own database on a separate port, and every delete or reset command has a guard that checks the database name first.</p>
       </div>
     </div>
 
     <div class="shots">
-      <button class="shot" data-full="assets/img/admin/2-template-chooser.webp" data-cap="Admin · choosing the site-wide theme">
+      <button class="shot wipe" data-full="assets/img/admin/2-template-chooser.webp" data-cap="Admin · choosing the site-wide theme">
         <span class="shot__frame"><img loading="lazy" src="assets/img/admin/2-template-chooser.webp" alt="The admin page for choosing a theme, listing theme families with colour swatches and slides of the real screens"></span>
         <span class="shot__cap">Site-wide theme picker <span>admin</span></span>
       </button>
-      <button class="shot" data-full="assets/img/admin/5-readiness.webp" data-cap="Admin · the 14-item readiness check">
+      <button class="shot wipe" style="--d:90ms" data-full="assets/img/admin/5-readiness.webp" data-cap="Admin · the 14-item readiness check">
         <span class="shot__frame"><img loading="lazy" src="assets/img/admin/5-readiness.webp" alt="Readiness check results listing items that passed, warned and failed"></span>
         <span class="shot__cap">Readiness check before opening the polls <span>admin</span></span>
       </button>
-      <button class="shot" data-full="assets/img/admin/7-global-config.webp" data-cap="Admin · setting the year and the election dates">
+      <button class="shot wipe" style="--d:180ms" data-full="assets/img/admin/7-global-config.webp" data-cap="Admin · setting the year and the election dates">
         <span class="shot__frame"><img loading="lazy" src="assets/img/admin/7-global-config.webp" alt="General settings page for the academic year, the event name and the open and close times"></span>
         <span class="shot__cap">Year, dates and event name <span>admin</span></span>
       </button>
-      <button class="shot" data-full="assets/img/admin/1-overview.webp" data-cap="Admin · system overview">
+      <button class="shot wipe" style="--d:270ms" data-full="assets/img/admin/1-overview.webp" data-cap="Admin · system overview">
         <span class="shot__frame"><img loading="lazy" src="assets/img/admin/1-overview.webp" alt="Overview page of the admin console"></span>
         <span class="shot__cap">System overview <span>admin</span></span>
       </button>
@@ -524,12 +535,12 @@
 <!-- ── quality ─────────────────────────────────────────────────────────── -->
 <section id="quality">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">08 — Quality</p>
-      <h2>The gates every deploy has to pass</h2>
+    <div class="section-head draw">
+      <p class="eyebrow up">08 — Quality</p>
+      <h2 class="lm up" style="--d:80ms">The gates every deploy has to pass</h2>
     </div>
 
-    <div class="table-scroll">
+    <div class="table-scroll up">
       <table>
         <thead><tr><th>Layer</th><th>What it covers</th></tr></thead>
         <tbody>
@@ -541,7 +552,7 @@
       </table>
     </div>
 
-    <div class="callout callout--plain" style="margin-top:24px">
+    <div class="callout callout--plain up" style="margin-top:24px">
       <p>
         The gate order is build → smoke → e2e → readiness, and the documentation to match is all
         there: a deploy checklist, a runbook for the administrator, a database request form for the IT
@@ -555,11 +566,11 @@
 <!-- ── honest notes ────────────────────────────────────────────────────── -->
 <section id="notes">
   <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">09 — Straight talk</p>
-      <h2>Things worth saying plainly</h2>
+    <div class="section-head draw">
+      <p class="eyebrow up">09 — Straight talk</p>
+      <h2 class="lm up" style="--d:80ms">Things worth saying plainly</h2>
     </div>
-    <ul class="clean">
+    <ul class="clean up">
       <li><strong>Status</strong> — the system was used in a real student council election: 3,119 eligible voters imported through the university API with no bad records, and roughly 1,600 ballots actually cast</li>
       <li><strong>AI helped build it</strong> — I used AI as a thinking partner throughout, while every architectural and security decision was mine, and I wrote up my working rules and a pitfall log so the same mistakes do not return</li>
       <li><strong>Every image on this page</strong> — captured from the system's preview mode, which runs on entirely fictional data; no real name or student ID appears anywhere</li>
@@ -571,17 +582,17 @@
 <section class="pagenav">
   <div class="wrap">
     <div class="pagenav__grid">
-      <a class="pagenav__card" href="credit-tracker.html">
+      <a class="pagenav__card up" href="credit-tracker.html">
         <span>Next project</span>
         <b>FMS Credit Tracker</b>
         <em>Reads a PDF transcript and checks it against the curriculum automatically</em>
       </a>
-      <a class="pagenav__card" href="psu-chatbot.html">
+      <a class="pagenav__card up" style="--d:70ms" href="psu-chatbot.html">
         <span>Next project</span>
         <b>PSU Chatbot</b>
         <em>A student-question chatbot on Azure Bot Service</em>
       </a>
-      <a class="pagenav__card" href="megubot.html">
+      <a class="pagenav__card up" style="--d:140ms" href="megubot.html">
 
         <span>Next project</span>
 
@@ -590,7 +601,7 @@
         <em>A Discord bot I designed and a friend built — analysis without the code</em>
 
       </a>
-      <a class="pagenav__card" href="index.html">
+      <a class="pagenav__card up" style="--d:210ms" href="index.html">
         <span>Back</span>
         <b>Portfolio home</b>
         <em>All four projects and my background in one place</em>
@@ -639,6 +650,8 @@
   <p class="lb__cap" id="lbCap"></p>
 </div>
 
+<script src="assets/reveal.js"></script>
 <script src="assets/app.js"></script>
+<script src="assets/nav.js"></script>
 </body>
 </html>

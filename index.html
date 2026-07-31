@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Teerapab Boonsri — System / Business Analyst</title>
 <meta name="description" content="Portfolio of Teerapab Boonsri, a Business Information Systems student at Prince of Songkla University — an online voting system in real use, a credit tracker that reads transcripts, and a chatbot on Azure.">
-<meta name="theme-color" content="#D8E4E7">
+<meta name="theme-color" content="#DFE3DA">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Teerapab Boonsri — System / Business Analyst">
@@ -24,6 +24,9 @@
 <!-- Gates every faded start-state in the stylesheet. If this line never runs,
      the class is absent and the page renders fully visible. -->
 <script>document.documentElement.classList.add('js-anim');</script>
+<!-- The arriving half of the page wipe. It has to run before first paint,
+     which is why it is here and not in nav.js. See assets/nav.js. -->
+<script>try{if(sessionStorage.getItem('nav'))document.documentElement.classList.add('nav-in');}catch(e){}</script>
 </head>
 <body>
 
@@ -780,7 +783,9 @@
 
 </main>
 
+<script src="assets/reveal.js"></script>
 <script src="assets/verdure.js"></script>
 <script src="assets/i18n.js"></script>
+<script src="assets/nav.js"></script>
 </body>
 </html>

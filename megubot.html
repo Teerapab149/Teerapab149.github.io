@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MeguBot — Teerapab Boonsri</title>
 <meta name="description" content="An all-round quality-of-life Discord bot my friend and I run for our own server — I designed the system and the features, he wrote the code.">
-<meta name="theme-color" content="#D8E4E7">
+<meta name="theme-color" content="#DFE3DA">
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="MeguBot — case study">
@@ -19,6 +19,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <script>document.documentElement.classList.add('js-anim');</script>
+<!-- The arriving half of the page wipe. It has to run before first paint,
+     which is why it is here and not in nav.js. See assets/nav.js. -->
+<script>try{if(sessionStorage.getItem('nav'))document.documentElement.classList.add('nav-in');}catch(e){}</script>
 </head>
 <body>
 
@@ -47,15 +50,24 @@
 <!-- ── hero ────────────────────────────────────────────────────────────── -->
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow">Case study · side project with a friend · ongoing</p>
-    <h1>The project where I was<br>the <em>analyst</em>, not the developer</h1>
-    <p class="hero__sub">
+    <!-- Mini title card. Five beats inside ~440ms, the short version of the
+         cover sequence on index.html: the label is stamped on, the headline
+         arrives a line at a time, the copy and chips rise, and the picture is
+         uncovered last.
+         The paragraph below is the beat that matters most on this page — it is
+         where the split of credit is stated (I designed the system and the
+         features, my friend wrote the code). It rises as one block on purpose:
+         .lm is never put on a body paragraph, because masking a claim line by
+         line slows down the one sentence a reader must not skim. -->
+    <p class="eyebrow stamp">Case study · side project with a friend · ongoing</p>
+    <h1 class="lm up" style="--d:100ms">The project where I was<br>the <em>analyst</em>, not the developer</h1>
+    <p class="hero__sub up" style="--d:240ms">
       MeguBot is an all-round quality-of-life bot for Discord that my friend and I keep running for
       our own server, and that people there use every day. I designed how it behaves — the flows,
       the features, the decisions about what it should and should not do. My friend wrote the code.
       Putting it in this portfolio only makes sense if that split is the first thing you read.
     </p>
-    <div class="hero__meta">
+    <div class="hero__meta up" style="--d:320ms">
       <span class="chip">Discord.js 14</span>
       <span class="chip">Node.js</span>
       <span class="chip">@discordjs/voice</span>
@@ -64,14 +76,14 @@
       <span class="chip">Cloud-hosted</span>
     </div>
 
-    <div class="btn-row">
+    <div class="btn-row up" style="--d:380ms">
       <a class="btn btn--ghost" href="https://github.com/OtsutsukiMiho/MeguBot-Reborn" target="_blank" rel="noopener noreferrer">See the repository
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
       </a>
     </div>
 
-    <figure class="figure" style="margin-top: clamp(36px, 6vw, 64px); max-width: 620px">
+    <figure class="figure wipe" style="margin-top: clamp(36px, 6vw, 64px); max-width: 620px; --d:440ms">
       <img src="assets/img/megubot/01-profile.webp" width="602" height="665" fetchpriority="high"
            alt="MeguBot Reborn's Discord profile: the app card with its bio, its status link and the Server Manager, Admin and Super Bot roles">
       <figcaption>How the bot introduces itself in Discord. “Made by Megu Corp. Team” is the two of us.</figcaption>
@@ -82,7 +94,7 @@
 <!-- ── stats ───────────────────────────────────────────────────────────── -->
 <section id="stats">
   <div class="wrap">
-    <div class="stats reveal">
+    <div class="stats up">
       <div class="stat"><b>Design</b><span>the system and the features<br>are mine</span></div>
       <div class="stat"><b>Code</b><span>written by my friend<br>I did not write it</span></div>
       <div class="stat"><b>24/7</b><span>moved off a laptop<br>onto a cloud host</span></div>
@@ -95,10 +107,10 @@
 <!-- ── role ────────────────────────────────────────────────────────────── -->
 <section id="role">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">01 — My role, stated plainly</p>
-      <h2>I was the one deciding what it should do and why</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">01 — My role, stated plainly</p>
+      <h2 class="lm up" style="--d:80ms">I was the one deciding what it should do and why</h2>
+      <p class="lede up" style="--d:160ms">
         On the other three projects in this portfolio I designed the system and then built it. Here I
         only did the first half — and that half is the work I actually want to do for a living, so it
         is worth showing on its own.
@@ -106,29 +118,29 @@
     </div>
 
     <div class="grid grid--2">
-      <div class="card reveal">
-        <span class="card__num">Mine</span>
+      <div class="card up">
+        <span class="card__num stamp">Mine</span>
         <h3>The thinking</h3>
         <p>What the bot is for, which features earn their place, how each one should behave, what the
           command should feel like to use, what happens in the awkward cases, and what we deliberately
           leave out. Most of the feature ideas started as mine.</p>
       </div>
-      <div class="card reveal" style="--d:60ms">
-        <span class="card__num">His</span>
+      <div class="card up" style="--d:60ms">
+        <span class="card__num stamp">His</span>
         <h3>The implementation</h3>
         <p>My friend wrote every line of the bot. I handed over intent and reasoning, he turned it into
           working commands, and we went back and forth when reality disagreed with the plan.</p>
       </div>
     </div>
 
-    <figure class="figure reveal" style="margin-top:26px; max-width: 380px; margin-inline: auto">
+    <figure class="figure wipe" style="margin-top:26px; max-width: 380px; margin-inline: auto">
       <img src="assets/img/megubot/05-mascot.webp" width="760" height="920" loading="lazy"
            alt="MeguBot's mascot: a dark blue cat wearing a gold crown, holding a sign reading MEGU INC.">
       <figcaption style="text-align:center">The bot has a face and a name because something people
         talk to every day should have one. That call was part of the design too.</figcaption>
     </figure>
 
-    <div class="callout reveal" style="margin-top:26px">
+    <div class="callout up" style="margin-top:26px">
       <p>
         This is the closest thing I have to the job I am applying for: someone hands the developer a
         clear picture of what to build and why, stays available while it is built, and takes
@@ -143,28 +155,28 @@
 <!-- ── problem ─────────────────────────────────────────────────────────── -->
 <section id="problem">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">02 — Why it exists</p>
-      <h2>Small frictions, every single day</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">02 — Why it exists</p>
+      <h2 class="lm up" style="--d:80ms">Small frictions, every single day</h2>
+      <p class="lede up" style="--d:160ms">
         Nothing here is a grand problem. It is a pile of small ones that a group of friends hits
         constantly while playing together, and each one is worth a few seconds of everybody's attention.
       </p>
     </div>
 
     <div class="grid grid--3">
-      <div class="card reveal">
-        <span class="card__num">01</span>
+      <div class="card up">
+        <span class="card__num stamp">01</span>
         <h3>You cannot see who just walked in</h3>
         <p>When you are in a game full-screen, someone joining or leaving the voice channel is invisible. The bot says it out loud.</p>
       </div>
-      <div class="card reveal" style="--d:60ms">
-        <span class="card__num">02</span>
+      <div class="card up" style="--d:60ms">
+        <span class="card__num stamp">02</span>
         <h3>Not everyone can talk</h3>
         <p>Some people have no microphone, some just do not want to speak. Typing works — but the people in the game are not reading chat.</p>
       </div>
-      <div class="card reveal" style="--d:120ms">
-        <span class="card__num">03</span>
+      <div class="card up" style="--d:120ms">
+        <span class="card__num stamp">03</span>
         <h3>Somebody has to start the bot</h3>
         <p>Run it on a laptop and the bot is only alive while that laptop is. That is a design problem, not an inconvenience.</p>
       </div>
@@ -175,17 +187,17 @@
 <!-- ── features ────────────────────────────────────────────────────────── -->
 <section id="features">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">03 — What it does</p>
-      <h2>One bot instead of five</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">03 — What it does</p>
+      <h2 class="lm up" style="--d:80ms">One bot instead of five</h2>
+      <p class="lede up" style="--d:160ms">
         The design goal was deliberately unfashionable: rather than adding five single-purpose bots to
         the server, put everything the group actually uses into one, and keep every command shaped the
         same way.
       </p>
     </div>
 
-    <ul class="clean reveal">
+    <ul class="clean up">
       <li><strong>Text to speech</strong> — anyone without a mic, or who would rather not talk, types and the bot says it in the channel. This is the feature the group leans on most</li>
       <li><strong>Voice channel announcements</strong> — the bot speaks who joined and who left, so nobody has to alt-tab to find out</li>
       <li><strong>Custom names</strong> — per-person names the bot uses when it speaks, set per server, because Discord display names are not what friends actually call each other</li>
@@ -195,7 +207,7 @@
       <li><strong>Utility commands</strong> — the small stuff that keeps a server tidy</li>
     </ul>
 
-    <div class="callout callout--plain reveal" style="margin-top:22px">
+    <div class="callout callout--plain up" style="margin-top:22px">
       <p>
         There are also small games — a fishing game you can idle in, a farming game — but they live in
         the older build and have not been moved onto the version running in the cloud yet, so there
@@ -203,20 +215,20 @@
       </p>
     </div>
 
-    <div class="figure-grid reveal" style="margin-top:26px">
-      <figure class="figure">
+    <div class="figure-grid" style="margin-top:26px">
+      <figure class="figure wipe">
         <img src="assets/img/megubot/02-commands.webp" width="586" height="427" loading="lazy"
              alt="Discord's slash command list for the bot: autorole disable, set and status, honeypot disable, set and status, and join">
         <figcaption>Every feature is a slash command with the same shape: <code>disable</code>,
           <code>set</code>, <code>status</code>. That consistency was a design rule, not an accident</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure wipe" style="--d:90ms">
         <img src="assets/img/megubot/03-tts.webp" width="627" height="123" loading="lazy"
              alt="The bot confirming it added a message to the text-to-speech queue, showing the language and the voice engine used">
         <figcaption>Text to speech, queued. The reply says which voice engine spoke it — the person
           typing gets told what everyone else just heard</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure wipe" style="--d:180ms">
         <img src="assets/img/megubot/04-voice.webp" width="278" height="252" loading="lazy"
              alt="A Discord voice channel member list with the bot sitting in it alongside several people, whose names are pixelated">
         <figcaption>The bot sitting in the channel with everyone else · the other members' names are
@@ -229,13 +241,13 @@
 <!-- ── decisions ───────────────────────────────────────────────────────── -->
 <section id="decisions">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">04 — Decisions I drove</p>
-      <h2>The two that changed what the bot is</h2>
+    <div class="section-head draw">
+      <p class="eyebrow up">04 — Decisions I drove</p>
+      <h2 class="lm up" style="--d:80ms">The two that changed what the bot is</h2>
     </div>
 
-    <div class="flow reveal">
-      <div class="flow__step">
+    <div class="flow">
+      <div class="flow__step up">
         <span class="flow__dot">01</span>
         <div>
           <h3>Stop hosting it on somebody's computer</h3>
@@ -247,7 +259,7 @@
           </p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:60ms">
         <span class="flow__dot">02</span>
         <div>
           <h3>Admit that the bot is built for us, not for everyone</h3>
@@ -266,15 +278,15 @@
 <!-- ── next ────────────────────────────────────────────────────────────── -->
 <section id="next">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">05 — What is next</p>
-      <h2>A web panel, so each server can make it theirs</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">05 — What is next</p>
+      <h2 class="lm up" style="--d:80ms">A web panel, so each server can make it theirs</h2>
+      <p class="lede up" style="--d:160ms">
         Planned, not built. I am writing it here as a plan rather than an achievement.
       </p>
     </div>
 
-    <dl class="kv reveal">
+    <dl class="kv up">
       <div>
         <dt>The idea</dt>
         <dd>A website where a server owner signs in with Discord and configures the bot for
@@ -299,11 +311,11 @@
 <!-- ── honest notes ────────────────────────────────────────────────────── -->
 <section id="notes">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">06 — Straight talk</p>
-      <h2>Things worth saying plainly</h2>
+    <div class="section-head draw">
+      <p class="eyebrow up">06 — Straight talk</p>
+      <h2 class="lm up" style="--d:80ms">Things worth saying plainly</h2>
     </div>
-    <ul class="clean reveal">
+    <ul class="clean up">
       <li><strong>I did not write this code</strong> — my friend did, and the repository is his. What is mine is the system design, the feature set and the reasoning behind both</li>
       <li><strong>It is a side project for our own server</strong> — no client, no brief, no deadline. The requirements came from watching how we actually use Discord</li>
       <li><strong>It is still changing</strong> — the copy on my own machine is already behind what is running, which is why there are no line counts or command counts on this page, and why the games are described but not shown</li>
@@ -316,22 +328,22 @@
 <section class="pagenav">
   <div class="wrap">
     <div class="pagenav__grid">
-      <a class="pagenav__card" href="fms-election.html">
+      <a class="pagenav__card up" href="fms-election.html">
         <span>Next project</span>
         <b>FMS Online Voting System</b>
         <em>An election system in real use, with 3,119 eligible voters</em>
       </a>
-      <a class="pagenav__card" href="credit-tracker.html">
+      <a class="pagenav__card up" style="--d:70ms" href="credit-tracker.html">
         <span>Next project</span>
         <b>FMS Credit Tracker</b>
         <em>Reads a PDF transcript and checks it against the curriculum automatically</em>
       </a>
-      <a class="pagenav__card" href="psu-chatbot.html">
+      <a class="pagenav__card up" style="--d:140ms" href="psu-chatbot.html">
         <span>Next project</span>
         <b>PSU Chatbot</b>
         <em>A student-question chatbot on Azure Bot Service</em>
       </a>
-      <a class="pagenav__card" href="index.html">
+      <a class="pagenav__card up" style="--d:210ms" href="index.html">
         <span>Back</span>
         <b>Portfolio home</b>
         <em>All four projects and my background in one place</em>
@@ -374,6 +386,8 @@
   </div>
 </footer>
 
+<script src="assets/reveal.js"></script>
 <script src="assets/motion.js"></script>
+<script src="assets/nav.js"></script>
 </body>
 </html>

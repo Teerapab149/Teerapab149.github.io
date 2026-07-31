@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FMS Credit Tracker — Teerapab Boonsri</title>
 <meta name="description" content="A credit tracker for students of the Faculty of Management Sciences, PSU — upload a transcript as a PDF and the system reads it out and checks it against the curriculum structure automatically.">
-<meta name="theme-color" content="#D8E4E7">
+<meta name="theme-color" content="#DFE3DA">
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="FMS Credit Tracker — case study">
@@ -20,6 +20,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <script>document.documentElement.classList.add('js-anim');</script>
+<!-- The arriving half of the page wipe. It has to run before first paint,
+     which is why it is here and not in nav.js. See assets/nav.js. -->
+<script>try{if(sessionStorage.getItem('nav'))document.documentElement.classList.add('nav-in');}catch(e){}</script>
 </head>
 <body>
 
@@ -48,15 +51,23 @@
 <!-- ── hero ────────────────────────────────────────────────────────────── -->
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow">Case study · Course 477-303 BISA&amp;D · Semester 2, 2025</p>
-    <h1>A system that <em>reads your transcript</em><br>and tells you what you still owe</h1>
-    <p class="hero__sub">
+    <!-- Mini title card. Four beats inside ~400ms, the short version of the
+         cover sequence on index.html: the label is stamped on, the headline
+         arrives a line at a time, the copy and chips rise, and the screenshot
+         is uncovered last — the picture is the payoff, so it lands after the
+         words rather than with them.
+         .stamp here and .up on every other eyebrow on the page is deliberate:
+         only the title card gets the loud entrance (plan law L1, one hero move
+         per scene). -->
+    <p class="eyebrow stamp">Case study · Course 477-303 BISA&amp;D · Semester 2, 2025</p>
+    <h1 class="lm up" style="--d:100ms">A system that <em>reads your transcript</em><br>and tells you what you still owe</h1>
+    <p class="hero__sub up" style="--d:240ms">
       FMS Credit Tracker — students upload their grade report and their registration slip as PDF
       files, the system pulls the text out into individual courses, then matches them against the
       faculty's curriculum structure by itself: which categories are complete, which are still
       short and by how many credits, instead of ticking boxes by hand in the curriculum table.
     </p>
-    <div class="hero__meta">
+    <div class="hero__meta up" style="--d:320ms">
       <span class="chip">Next.js 16</span>
       <span class="chip">React 19 · TypeScript</span>
       <span class="chip">PostgreSQL · Prisma 7</span>
@@ -67,7 +78,7 @@
       <span class="chip">Recharts</span>
     </div>
 
-    <figure class="hero__shot" style="margin-top: clamp(36px, 6vw, 64px)">
+    <figure class="hero__shot wipe" style="margin-top: clamp(36px, 6vw, 64px); --d:400ms">
       <img src="assets/img/credit/01-landing.webp" width="1600" height="796" fetchpriority="high"
            alt="The Credit Tracker landing page: Track Your Path to Graduation, with an upload button and a three-step explanation">
     </figure>
@@ -77,7 +88,7 @@
 <!-- ── stats ───────────────────────────────────────────────────────────── -->
 <section id="stats">
   <div class="wrap">
-    <div class="stats reveal">
+    <div class="stats up">
       <div class="stat"><b>30</b><span>API routes<br>Next.js App Router</span></div>
       <div class="stat"><b>13</b><span>database tables<br>all designed by me</span></div>
       <div class="stat"><b>15</b><span>screens<br>student side + admin side</span></div>
@@ -90,10 +101,10 @@
 <!-- ── problem ─────────────────────────────────────────────────────────── -->
 <section id="problem">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">01 — The problem</p>
-      <h2>The registrar tells you what grades you got, not whether you can graduate</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">01 — The problem</p>
+      <h2 class="lm up" style="--d:80ms">The registrar tells you what grades you got, not whether you can graduate</h2>
+      <p class="lede up" style="--d:160ms">
         This was a project for the Business Information Systems Analysis &amp; Design course, done as
         a group — but the analysis, the design and the development were all mine. It started from a
         problem my friends and I ran into every single term.
@@ -101,29 +112,29 @@
     </div>
 
     <div class="grid grid--2">
-      <div class="card reveal">
-        <span class="card__num">01</span>
+      <div class="card up">
+        <span class="card__num stamp">01</span>
         <h3>The data and the rules live in different places</h3>
         <p>The registrar shows the courses you took and the grades you got, but the curriculum structure sits in a separate document. Students have to open both and compare them by hand.</p>
       </div>
-      <div class="card reveal" style="--d:60ms">
-        <span class="card__num">02</span>
+      <div class="card up" style="--d:60ms">
+        <span class="card__num stamp">02</span>
         <h3>General education is genuinely complicated</h3>
         <p>GENED has sub-categories, each with its own minimum credit requirement. Counting one category wrong makes the whole result wrong.</p>
       </div>
-      <div class="card reveal" style="--d:120ms">
-        <span class="card__num">03</span>
+      <div class="card up" style="--d:120ms">
+        <span class="card__num stamp">03</span>
         <h3>Course codes change between curriculum years</h3>
         <p>The same course can carry a different code in the old curriculum and the new one. A system that matches codes literally sees two unrelated courses.</p>
       </div>
-      <div class="card reveal" style="--d:180ms">
-        <span class="card__num">04</span>
+      <div class="card up" style="--d:180ms">
+        <span class="card__num stamp">04</span>
         <h3>Finding out near graduation is too late</h3>
         <p>If you only discover a missing category in the last term of your fourth year, there may be no term left to take it in. Seeing the whole picture early is worth more than checking at the end.</p>
       </div>
     </div>
 
-    <div class="callout reveal" style="margin-top:26px">
+    <div class="callout up" style="margin-top:26px">
       <p>
         <strong>What the requirements gathering concluded</strong> — students do not need “somewhere
         to keep grades”, because the registrar already is that. What is missing is the
@@ -138,40 +149,40 @@
 <!-- ── system design ───────────────────────────────────────────────────── -->
 <section id="design">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">02 — System design</p>
-      <h2>Draw it to the end, then write the code</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">02 — System design</p>
+      <h2 class="lm up" style="--d:80ms">Draw it to the end, then write the code</h2>
+      <p class="lede up" style="--d:160ms">
         I started with the use cases and the context diagram so we could agree on who is allowed to
         do what, and where the boundary of the system sits, before going near the database detail.
       </p>
     </div>
 
     <div class="grid grid--2">
-      <div class="card reveal">
+      <div class="card up">
         <h3>Student</h3>
         <p>Upload PDF files · review what the system extracted · read the progress dashboard · simulate a study plan ahead of time</p>
       </div>
-      <div class="card reveal" style="--d:60ms">
+      <div class="card up" style="--d:60ms">
         <h3>Admin</h3>
         <p>Manage curricula and credit categories · maintain the central course catalogue · map equivalent courses · bulk-import with CSV</p>
       </div>
     </div>
 
-    <div class="figure-grid reveal" style="margin-top:24px">
-      <figure class="figure">
+    <div class="figure-grid" style="margin-top:24px">
+      <figure class="figure wipe">
         <img src="assets/img/credit/10-usecase.webp" width="744" height="1009" loading="lazy"
              alt="Use case diagram showing what a Student can do and what an Admin can do, and where the two overlap">
         <figcaption>Use case diagram — who is allowed to do what, agreed before any code existed</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure wipe" style="--d:90ms">
         <img src="assets/img/credit/11-context.webp" width="712" height="821" loading="lazy"
              alt="Context diagram showing the system in the middle with the student and the curriculum admin as external entities">
         <figcaption>Context diagram — the boundary of the system, and what sits outside it</figcaption>
       </figure>
     </div>
 
-    <div class="callout callout--plain reveal" style="margin-top:24px">
+    <div class="callout callout--plain up" style="margin-top:24px">
       <p>
         A boundary decided at the very start — the system
         <strong>does not talk to the registrar's API directly</strong>, because that is university
@@ -186,18 +197,18 @@
 <!-- ── database ────────────────────────────────────────────────────────── -->
 <section id="database">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">03 — Database design</p>
-      <h2>Three decisions that mean a new curriculum needs no code change</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">03 — Database design</p>
+      <h2 class="lm up" style="--d:80ms">Three decisions that mean a new curriculum needs no code change</h2>
+      <p class="lede up" style="--d:160ms">
         The curriculum structure changes every few years. Bake the rules into the code and the system
         dies with that edition of the curriculum. All three decisions below exist to keep the rules
         as <strong>data</strong>, not <strong>code</strong>.
       </p>
     </div>
 
-    <div class="flow reveal">
-      <div class="flow__step">
+    <div class="flow">
+      <div class="flow__step up">
         <span class="flow__dot">01</span>
         <div>
           <h3>Categories are a tree, not a flat list</h3>
@@ -209,7 +220,7 @@
           </p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:60ms">
         <span class="flow__dot">02</span>
         <div>
           <h3>A central course catalogue, cloned into each curriculum</h3>
@@ -221,7 +232,7 @@
           </p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:120ms">
         <span class="flow__dot">03</span>
         <div>
           <h3>A separate table for equivalent courses</h3>
@@ -234,7 +245,7 @@
       </div>
     </div>
 
-    <figure class="figure reveal" style="margin-top:24px">
+    <figure class="figure wipe" style="margin-top:24px">
       <img src="assets/img/credit/12-er.webp" width="1310" height="965" loading="lazy"
            alt="ER diagram of the 13 tables, including CurriculumCategory referencing itself through parentId and the SubjectEquivalency pairing table">
       <figcaption>The 13 tables. The self-reference on <code>CurriculumCategory</code> and the separate
@@ -246,24 +257,24 @@
 <!-- ── student flow ────────────────────────────────────────────────────── -->
 <section id="student">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">04 — The student side</p>
-      <h2>Upload → review → see the result</h2>
-      <p class="lede">
+    <div class="section-head draw">
+      <p class="eyebrow up">04 — The student side</p>
+      <h2 class="lm up" style="--d:80ms">Upload → review → see the result</h2>
+      <p class="lede up" style="--d:160ms">
         Pulling text out of a PDF is never 100% accurate every time, so the system does not pretend
         it is. It <strong>says how confident it is</strong> and always has a person confirm first.
       </p>
     </div>
 
-    <div class="flow reveal">
-      <div class="flow__step">
+    <div class="flow">
+      <div class="flow__step up">
         <span class="flow__dot">01</span>
         <div>
           <h3>Upload</h3>
           <p>The student uploads the grade report and the registration slip as PDFs — both of which they can download from the registrar themselves.</p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:60ms">
         <span class="flow__dot">02</span>
         <div>
           <h3>The system extracts the text</h3>
@@ -275,7 +286,7 @@
           </p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:120ms">
         <span class="flow__dot">03</span>
         <div>
           <h3>Review before confirming</h3>
@@ -285,7 +296,7 @@
           </p>
         </div>
       </div>
-      <div class="flow__step">
+      <div class="flow__step up" style="--d:180ms">
         <span class="flow__dot">04</span>
         <div>
           <h3>Dashboard and plan simulation</h3>
@@ -298,19 +309,19 @@
       </div>
     </div>
 
-    <div class="figure-grid reveal" style="margin-top:26px">
-      <figure class="figure">
+    <div class="figure-grid" style="margin-top:26px">
+      <figure class="figure wipe">
         <img src="assets/img/credit/02-upload.webp" width="1600" height="800" loading="lazy"
              alt="Upload screen with drop zones for the grade report and the registration slip">
         <figcaption>Step 1 — the two PDFs the registrar already gives you</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure wipe" style="--d:90ms">
         <img src="assets/img/credit/03-verify.webp" width="1600" height="801" loading="lazy"
              alt="Review screen showing the details read out of the PDF and a parsing confidence of 100 percent">
         <figcaption>Step 2 — what the parser read back, with its confidence stated. The student ID is
           masked here; it is visible to the student in the real system</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure wipe" style="--d:180ms">
         <img src="assets/img/credit/05-results.webp" width="1600" height="797" loading="lazy"
              alt="Results grouped by curriculum category, each with a progress bar and a pass or short marker">
         <figcaption>Step 3 — every category, how many credits it needs, and how far along it is</figcaption>
@@ -322,12 +333,12 @@
 <!-- ── admin flow ──────────────────────────────────────────────────────── -->
 <section id="admin">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">05 — The admin side</p>
-      <h2>Whoever owns the curriculum has to be able to change it without calling a programmer</h2>
+    <div class="section-head draw">
+      <p class="eyebrow up">05 — The admin side</p>
+      <h2 class="lm up" style="--d:80ms">Whoever owns the curriculum has to be able to change it without calling a programmer</h2>
     </div>
 
-    <ul class="clean reveal">
+    <ul class="clean up">
       <li><strong>Manage curricula</strong> — create, edit, and clone last year's curriculum as a starting point instead of retyping the whole thing every year</li>
       <li><strong>Central course catalogue</strong> — add courses one at a time, or bulk-import from a CSV file when setting the system up for the first time</li>
       <li><strong>Map equivalent courses</strong> — declare that a new code and an old code are the same course, so credit counting stays correct across curriculum editions</li>
@@ -335,23 +346,23 @@
       <li><strong>Set credit thresholds per category</strong> — the minimum credits for every category and sub-category are editable from the screen</li>
     </ul>
 
-    <div class="figure-grid reveal" style="margin-top:26px">
-      <figure class="figure">
+    <div class="figure-grid" style="margin-top:26px">
+      <figure class="figure wipe">
         <img src="assets/img/credit/22-admin-subjects.webp" width="1600" height="789" loading="lazy"
              alt="The central course catalogue listing 561 subjects with their codes, groups and credits">
         <figcaption>The central catalogue — 561 courses, the single place a course name is edited</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure wipe" style="--d:90ms">
         <img src="assets/img/credit/23-admin-match.webp" width="1600" height="789" loading="lazy"
              alt="The subject matching screen, pairing course codes that are equivalent across curriculum editions">
         <figcaption>Matching equivalent codes — the system proposes, the admin confirms</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure wipe" style="--d:180ms">
         <img src="assets/img/credit/20-admin-dashboard.webp" width="1600" height="786" loading="lazy"
              alt="Admin dashboard: 12 curriculum versions, 126 category nodes, 561 subjects, and system health checks">
         <figcaption>The admin's first screen — 12 curriculum versions and 126 category nodes in the system</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure wipe" style="--d:270ms">
         <img src="assets/img/credit/21-admin-curriculum.webp" width="1600" height="788" loading="lazy"
              alt="Faculty curriculum management screen listing curriculum versions by year">
         <figcaption>Curricula by year — a new one is cloned from last year's, not retyped</figcaption>
@@ -363,12 +374,12 @@
 <!-- ── stack ───────────────────────────────────────────────────────────── -->
 <section id="stack">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">06 — The stack</p>
-      <h2>What I chose, and why</h2>
+    <div class="section-head draw">
+      <p class="eyebrow up">06 — The stack</p>
+      <h2 class="lm up" style="--d:80ms">What I chose, and why</h2>
     </div>
 
-    <dl class="kv reveal">
+    <dl class="kv up">
       <div>
         <dt>Framework</dt>
         <dd><strong>Next.js 16 (App Router) · React 19 · TypeScript</strong><br>
@@ -413,11 +424,11 @@
 <!-- ── honest notes ────────────────────────────────────────────────────── -->
 <section id="notes">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">07 — Straight talk</p>
-      <h2>Things worth saying plainly</h2>
+    <div class="section-head draw">
+      <p class="eyebrow up">07 — Straight talk</p>
+      <h2 class="lm up" style="--d:80ms">Things worth saying plainly</h2>
     </div>
-    <ul class="clean reveal">
+    <ul class="clean up">
       <li><strong>Status</strong> — a course project, developed until both flows work end to end, but not yet rolled out to the whole faculty</li>
       <li><strong>It was a group of 10</strong> — the analysis, the system design, the database design and all of the development were my work; the rest of the team handled documentation and the presentation</li>
       <li><strong>Text extraction is still tied to the document format</strong> — if the university changes the look of the PDF, the regexes have to follow. That limit was known when I chose this path, and it is exactly why the review screen exists</li>
@@ -430,17 +441,17 @@
 <section class="pagenav">
   <div class="wrap">
     <div class="pagenav__grid">
-      <a class="pagenav__card" href="fms-election.html">
+      <a class="pagenav__card up" href="fms-election.html">
         <span>Next project</span>
         <b>FMS Online Voting System</b>
         <em>An election system in real use, with 3,119 eligible voters</em>
       </a>
-      <a class="pagenav__card" href="psu-chatbot.html">
+      <a class="pagenav__card up" style="--d:70ms" href="psu-chatbot.html">
         <span>Next project</span>
         <b>PSU Chatbot</b>
         <em>A student-question chatbot on Azure Bot Service</em>
       </a>
-      <a class="pagenav__card" href="megubot.html">
+      <a class="pagenav__card up" style="--d:140ms" href="megubot.html">
 
         <span>Next project</span>
 
@@ -449,7 +460,7 @@
         <em>A Discord bot I designed and a friend built — analysis without the code</em>
 
       </a>
-      <a class="pagenav__card" href="index.html">
+      <a class="pagenav__card up" style="--d:210ms" href="index.html">
         <span>Back</span>
         <b>Portfolio home</b>
         <em>All four projects and my background in one place</em>
@@ -492,6 +503,8 @@
   </div>
 </footer>
 
+<script src="assets/reveal.js"></script>
 <script src="assets/motion.js"></script>
+<script src="assets/nav.js"></script>
 </body>
 </html>

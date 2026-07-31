@@ -2,7 +2,13 @@
    Rule inherited from the project itself: never hide content behind JS.
    Everything here ADDS (galleries, lightbox); nothing is invisible until a
    script runs, except the two galleries which are explicitly script-built
-   and would otherwise be 100+ <img> tags of hand-written markup. */
+   and would otherwise be 100+ <img> tags of hand-written markup.
+
+   SCROLL REVEALS ARE NOT HERE. assets/reveal.js owns .is-in for every entrance
+   class on every page and is loaded before this file; the only observer left
+   below is the nav scroll-spy, which watches sections, not revealables. Do not
+   add a second reveal observer here — one element observed twice means two
+   observers racing for one class. */
 
 (function () {
   'use strict';
