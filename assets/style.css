@@ -30,17 +30,17 @@
        --surface-2 = --paper-3    --dim   = --deep-4   --brand-ink= --deep
      Moved off the Verdure cream/moss/honey in 2026-07: too close to the
      template it was borrowed from. Every ratio below is measured. */
-  --bg:        #F0F5F6;   /* cool off-white — identical to verdure.css --paper */
-  --surface:   #FFFFFF;
-  --surface-2: #DCE8EA;
-  --line:      #C9DADD;
-  --line-soft: #DCE7E9;
+  --bg:        #E7EFF0;   /* cool paper — identical to verdure.css --paper */
+  --surface:   #F5F9FA;   /* deliberately not pure white */
+  --surface-2: #D9E5E8;
+  --line:      #BFD3D7;
+  --line-soft: #D3E1E4;
 
-  --text:      #0D2B3E;   /* deep navy · 13.3:1 on --bg */
-  --muted:     #2C5F76;   /* deep-3    ·  6.4:1 on --bg */
-  --dim:       #3A6B80;   /* deep-4    ·  5.3:1 on --bg · 4.7:1 on --surface-2 — smallest legible */
+  --text:      #0D2B3E;   /* deep navy · 12.6:1 on --bg */
+  --muted:     #2C5F76;   /* deep-3    ·  6.0:1 on --bg */
+  --dim:       #3A6B80;   /* deep-4    ·  5.0:1 on --bg · 4.5:1 on --surface-2 — smallest legible */
 
-  --brand:     #0C6F66;   /* sea-ink · 5.5:1 on --bg — the only accent that may carry body text */
+  --brand:     #0C6F66;   /* sea-ink · 5.2:1 on --bg — the only accent that may carry body text */
   --brand-2:   #62D0C4;   /* sea · 1.7:1 — decorative only: rules, washes, hover fills */
   --brand-ink: #0D2B3E;   /* solid fills (buttons, active chips) are the navy, as on the landing page */
   --accent:    #14664A;   /* "verified / pass" semantics only; 6.2:1 on --bg — deliberately a
