@@ -211,8 +211,9 @@
     bar.innerHTML =
       '<button type="button" class="deck__nav" data-d="-1" aria-label="Previous theme">&#8249;</button>' +
       '<div class="deck__meta">' +
-      '<p class="deck__idx"><b>01</b> / ' + THEMES.length + '</p>' +
-      '<h3 class="deck__name"></h3><p class="deck__desc"></p></div>' +
+      '<p class="deck__idx"><b class="deck__swap"><span>01</span></b> / ' + THEMES.length + '</p>' +
+      '<h3 class="deck__name deck__swap"><span></span></h3>' +
+      '<p class="deck__desc deck__swap"><span></span></p></div>' +
       '<button type="button" class="deck__nav" data-d="1" aria-label="Next theme">&#8250;</button>';
 
     var rail = el('ol', 'deck__rail');
@@ -229,13 +230,26 @@
 
     var items = $$('.deck__item', track);
     var railBtns = $$('button', rail);
-    var idxEl = $('.deck__idx b', bar);
-    var nameEl = $('.deck__name', bar);
-    var descEl = $('.deck__desc', bar);
+    var swaps = $$('.deck__swap', bar);
+    var idxEl = $('.deck__idx b span', bar);
+    var nameEl = $('.deck__name span', bar);
+    var descEl = $('.deck__desc span', bar);
     var navs = $$('.deck__nav', bar);
     var at = -1;
 
+    // re-run the mask animation from the top. Removing the class and reading a
+    // layout property in between is what forces the restart; without the read
+    // the browser coalesces both changes and nothing plays.
+    function replay() {
+      swaps.forEach(function (s) {
+        s.classList.remove('is-swap');
+        void s.offsetWidth;
+        s.classList.add('is-swap');
+      });
+    }
+
     var N = DECK.length;
+    var first = true;      // the opening render should not play the swap
 
     /* The deck WRAPS. Not for the sake of infinite scrolling — it is so there
        is always a card peeking on both sides, which is what makes it read as a
@@ -254,12 +268,13 @@
         li.classList.toggle('is-on', o === 0);
         // past three deep a card is invisible anyway; keep it out of the
         // compositor rather than stacking 23 transformed layers
-        li.classList.toggle('is-far', Math.abs(o) > 3);
+        li.classList.toggle('is-far', Math.abs(o) > 2);
       });
       railBtns.forEach(function (b, k) { b.setAttribute('aria-current', k === i ? 'true' : 'false'); });
       idxEl.textContent = String(i + 1).padStart(2, '0');
       nameEl.textContent = DECK[i][0];
       descEl.textContent = DECK[i][3];
+      if (first) first = false; else replay();
     }
 
     navs.forEach(function (b) {
@@ -283,16 +298,38 @@
       if (e.key === 'ArrowRight') { go(at + 1); e.preventDefault(); }
     });
 
-    // drag / swipe — pointer events cover mouse, touch and pen in one path
+    /* Drag. The deck follows the pointer live rather than waiting to find out
+       whether the gesture passed a threshold — a carousel that does nothing
+       until you let go feels broken on a touchscreen. .6 of the travel, so the
+       deck reads as heavy; release always snaps, either to the next card or
+       back to this one. */
     var x0 = null;
-    stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
-    stage.addEventListener('pointerup', function (e) {
+    var setDrag = function (px) { track.style.setProperty('--drag', px + 'px'); };
+
+    stage.addEventListener('pointerdown', function (e) {
+      if (e.button) return;
+      x0 = e.clientX;
+      track.classList.add('is-drag');
+    });
+    stage.addEventListener('pointermove', function (e) {
+      if (x0 === null) return;
+      setDrag((e.clientX - x0) * .6);
+    });
+
+    var endDrag = function (e) {
       if (x0 === null) return;
       var dx = e.clientX - x0;
       x0 = null;
+      track.classList.remove('is-drag');
+      setDrag(0);
       if (Math.abs(dx) > 44) go(at - Math.sign(dx));
+    };
+    // on window, not the stage: a drag that ends past the edge still counts
+    addEventListener('pointerup', endDrag);
+    addEventListener('pointercancel', function () {
+      if (x0 === null) return;
+      x0 = null; track.classList.remove('is-drag'); setDrag(0);
     });
-    stage.addEventListener('pointercancel', function () { x0 = null; });
 
     go(0);
   }

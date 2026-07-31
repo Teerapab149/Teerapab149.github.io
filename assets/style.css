@@ -429,34 +429,44 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
    fallback path. app.js writes --o and the is-on / is-far classes; nothing else.
    ══════════════════════════════════════════════════════════════════════════ */
 
+/* The stage's aspect ratio is derived, not chosen: a card is 1600×1100 and sits
+   at 82% of the stage width, so 1.4545 / .82 = 1.774. Sizing the CARD by height
+   and letting its own aspect-ratio produce the width means max-height can cap
+   the stage on a short screen and the card simply gets smaller — it never gets
+   cropped, which for a gallery of screenshots is the whole point. */
 .deck__stage {
-  position: relative; height: clamp(220px, 33vw, 440px);
-  perspective: 1600px; overflow: hidden; touch-action: pan-y;
-  border-radius: 14px;
-  /* the cards behind should trail off, not hit a wall at the stage edge */
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
-          mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  position: relative; aspect-ratio: 1.774; max-height: 66svh;
+  overflow: hidden; touch-action: pan-y; border-radius: 14px;
+  /* the cards either side should trail off, not hit a wall at the stage edge */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 .deck__stage:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
-.deck__track { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+
+/* the track is what the finger drags; --drag is written live by app.js and
+   springs back to 0 on release, so the deck follows the hand rather than
+   waiting to find out whether the gesture counted as a swipe */
+.deck__track {
+  list-style: none; margin: 0; padding: 0; position: absolute; inset: 0;
+  transform: translateX(var(--drag, 0px));
+  transition: transform var(--t3) var(--ease);
+}
+.deck__track.is-drag { transition: none; }
 
 .deck__item {
   --o: 0;
   --a: max(var(--o), calc(var(--o) * -1));
   position: absolute; top: 0; left: 50%; height: 100%;
-  width: min(64%, 640px);
-  transform:
-    translateX(-50%)
-    translateX(calc(var(--o) * 62%))
-    translateZ(calc(var(--a) * -240px))
-    rotateY(calc(var(--o) * -15deg))
-    scale(calc(1 - var(--a) * .05));
-  opacity: max(0, calc(1 - var(--a) * .46));
+  aspect-ratio: 1600 / 1100;
+  transform: translateX(-50%) translateX(calc(var(--o) * 102%));
+  opacity: max(0, calc(1 - var(--a) * .55));
   z-index: calc(10 - var(--a));
-  transition: transform .55s cubic-bezier(.22, .7, .24, 1), opacity .45s ease;
+  transition: transform var(--t3) var(--ease), opacity var(--t3) ease;
 }
 .deck__item.is-far { visibility: hidden; }
-@media (prefers-reduced-motion: reduce) { .deck__item { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .deck__item, .deck__track, .deck__card img { transition: none; }
+}
 
 .deck__card {
   display: block; width: 100%; height: 100%; padding: 0; position: relative;
@@ -464,12 +474,20 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
   background: var(--surface-2); cursor: pointer; font: inherit; color: inherit;
   box-shadow: 0 30px 60px -34px rgba(13, 43, 62, .6);
 }
-.deck__item:not(.is-on) .deck__card { filter: saturate(.6); }
+.deck__item:not(.is-on) .deck__card { filter: saturate(.55); }
 .deck__item.is-on .deck__card {
   cursor: zoom-in; border-color: var(--brand-2);
   box-shadow: 0 40px 70px -34px rgba(13, 43, 62, .7);
 }
-.deck__card img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+/* The image is oversized and slides the OTHER way inside its frame, so it
+   travels a little less than the card carrying it. That difference is the
+   whole effect — without it a slide is just a row of pictures moving. */
+.deck__card img {
+  position: absolute; top: 0; bottom: 0; left: -6%; width: 112%;
+  object-fit: cover; object-position: top center; display: block;
+  transform: translateX(calc(var(--o, 0) * -6%));
+  transition: transform var(--t3) var(--ease);
+}
 .deck__tag {
   position: absolute; left: 12px; bottom: 12px;
   display: flex; align-items: center; gap: 8px;
@@ -487,6 +505,17 @@ ul.clean li strong { color: var(--text); font-weight: 600; }
 .deck__idx b { color: var(--brand); font-size: .9375rem; }
 .deck__name { margin: 3px 0 4px; font-size: clamp(1.1rem, 2.3vw, 1.6rem); }
 .deck__desc { font-size: .875rem; color: var(--muted); }
+
+/* The label under the deck belongs to the card, so it changes the same way the
+   card does: the old line leaves through the top of its own mask and the new
+   one arrives from below. Cross-fading it would read as a caption updating;
+   this reads as the same object turning over. */
+.deck__swap { display: block; overflow: hidden; padding-block: .18em; margin-block: -.18em; }
+.deck__idx .deck__swap { display: inline-block; vertical-align: bottom; }
+.deck__swap > span { display: block; }
+.deck__swap.is-swap > span { animation: deck-swap var(--t3) var(--ease-wipe); }
+@keyframes deck-swap { from { transform: translateY(calc(100% + .2em)); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .deck__swap.is-swap > span { animation: none; } }
 .deck__nav {
   flex: none; width: 44px; height: 44px; border-radius: 50%;
   border: 1px solid var(--line); background: var(--surface); color: var(--text);
