@@ -1265,6 +1265,44 @@ a { color: inherit; }
    ROLES · SKILLS · CV
    ══════════════════════════════════════════════════════════════════════════ */
 
+/* ══════════════════════════════════════════════════════════════════════════
+   ACT THREE — the page goes dark again for the last stretch.
+
+   The cover is dark, the work is light, and the closing sections are dark: three
+   acts, so the page has a shape instead of just a length. #roles, #cv and
+   #contact are contiguous, so the switch happens once and stays.
+
+   It is done by REDEFINING TOKENS on the section, not by restyling components.
+   Every rule in this sheet already reads --paper / --deep / --rule, so swapping
+   the six values inverts the whole subtree at once — chips, buttons, rules,
+   accents — and a component added later inverts with it for free. Restyling
+   .role, .block, .btn one at a time would have been the version that rots.
+
+   Measured on --paper #0D2B3E, which is what the section paints:
+     --deep   #E6EEF0  12.5:1    --deep-3 #AFC7CD  8.3:1
+     --deep-4 #9DBAC2   7.2:1 (5.0:1 on the --paper-2 card fill)
+     --sea-ink #62D0C4  7.9:1 — on dark the bright mint is the READABLE accent,
+                        which is the exact inverse of its role on paper
+   Static CSS, not a JS toggle: with the script gone the act is still dark and
+   still correct. */
+.act-dark {
+  --paper:    #0D2B3E;
+  --paper-2:  #16455C;
+  --paper-3:  #1D5065;
+  --deep:     #E6EEF0;
+  --deep-2:   #C6D8DC;
+  --deep-3:   #AFC7CD;
+  --deep-4:   #9DBAC2;
+  --rule:     #2C5F76;
+  --sea-ink:  #62D0C4;
+  --sea-deep: #62D0C4;
+  background: var(--paper); color: var(--deep);
+}
+/* only shows on overscroll, but a cream rubber-band under a dark ending is a
+   tell that the act was faked */
+body { transition: background-color var(--t3) ease; }
+.act-on body, body.act-on { background: #0D2B3E; }
+
 .roles { display: grid; gap: 0; margin-top: clamp(26px, 4vw, 44px); }
 .role {
   display: grid; gap: 8px clamp(20px, 4vw, 54px);
@@ -1338,6 +1376,47 @@ a { color: inherit; }
 .end .foot { border-top-color: color-mix(in srgb, var(--paper) 20%, transparent); }
 .end .foot small { color: color-mix(in srgb, var(--paper) 64%, transparent); }
 .end .foot a { border-bottom-color: color-mix(in srgb, var(--paper) 26%, transparent); }
+
+/* ── end credits ──────────────────────────────────────────────────────────
+   A slow ticker under the contact block. It is the one piece of motion on the
+   page with no informational job at all — it is there so the page ends on
+   something moving rather than on a full stop, the way credits do.
+   26s for a full pass: slow enough to read, slow enough to ignore. */
+.ticker {
+  overflow: hidden; margin-top: clamp(26px, 4vw, 40px);
+  border-top: 1px solid color-mix(in srgb, var(--paper) 18%, transparent);
+  padding-top: clamp(16px, 2.4vw, 22px);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.ticker__row {
+  display: flex; align-items: center; gap: clamp(14px, 2vw, 26px);
+  width: max-content;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(1.1rem, 3vw, 2rem); letter-spacing: -.04em;
+  /* 30% looked right and measured 2.30:1 — under the 3:1 floor for large text.
+     It is aria-hidden and decorative, but it still spells out a real person's
+     name and job titles, so it gets held to the same bar as everything else.
+     44% measures 3.35:1 and is still plainly recessive next to the heading
+     above it at 12.5:1. */
+  color: color-mix(in srgb, var(--paper) 44%, transparent);
+  white-space: nowrap;
+}
+.ticker__row em { font-style: normal; color: var(--sea); }
+@media (prefers-reduced-motion: no-preference) {
+  .ticker__row { animation: tick 26s linear infinite; }
+}
+@keyframes tick { to { transform: translateX(-50%); } }
+
+/* the last line on the page */
+.sign {
+  margin: clamp(20px, 3vw, 30px) 0 0;
+  font-family: var(--font-display); font-weight: 600; font-size: .6875rem;
+  letter-spacing: .22em; text-transform: uppercase;
+  /* 62% cream on --deep measures 5.6:1 — it is small type, so it clears AA
+     rather than sitting at whatever looked suitably quiet */
+  color: color-mix(in srgb, var(--paper) 62%, transparent);
+}
 
 .foot {
   margin-top: clamp(40px, 7vw, 80px); padding-top: 24px;

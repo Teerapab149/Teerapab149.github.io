@@ -219,6 +219,16 @@
   const hero = document.getElementById('top');
   const portrait = document.querySelector('.cover__portrait');
   const bar = document.querySelector('.bar');
+  /* The bar used to watch the cover alone, because the cover was the only dark
+     thing on the page. Now there is a whole dark third act, so it watches every
+     dark section instead: four rects per frame, which is cheaper than asking
+     the document what is under the bar. */
+  const darkSections = Array.from(document.querySelectorAll('.cover, .act-dark, .end'));
+  const BAR_H = 58;
+  const overDark = () => darkSections.some(s => {
+    const r = s.getBoundingClientRect();
+    return r.top <= BAR_H + 1 && r.bottom > BAR_H + 1;
+  });
   const PARALLAX = 34;   // px of travel across one full screen of scrolling
 
   /* ── entry: start the camera as soon as the shot is worth looking at ──────
@@ -319,10 +329,13 @@
         cover.style.setProperty('--cp', p.toFixed(4));
         if (portrait) portrait.style.setProperty('--py', (-PARALLAX * p).toFixed(2) + 'px');
       }
-      // the bar is 58px tall; go back to cream the moment the cream hero reaches
-      // it, not when the cover has fully left
-      if (bar) bar.classList.toggle('bar--dark', top > 58);
     }
+
+    if (bar) bar.classList.toggle('bar--dark', overDark());
+    // only visible on overscroll, but a cream rubber-band under a dark ending
+    // gives the game away
+    document.body.classList.toggle('act-on', scrollY > 0 &&
+      innerHeight + scrollY >= root.scrollHeight - 4);
 
     if (count) {
       const max = document.documentElement.scrollHeight - innerHeight;
