@@ -311,6 +311,20 @@
 
             <footer class="fms__foot">© FMS@PSU 2027. ALL RIGHTS RESERVED.</footer>
           </div>
+
+          <!-- The window annotates its own reflow: as it passes each of the
+               system's breakpoints, a note names what just changed. Driven
+               entirely by container queries — exactly one label is visible at
+               any width, so it reads as a live caption rather than a pile-up.
+               Hidden below a 520px screen, which is most of the phone stage,
+               because a note over a 390px-wide UI is just something in the way. -->
+          <div class="anno" aria-hidden="true">
+            <span class="anno__t" data-a="1">hamburger menu · one column</span>
+            <span class="anno__t" data-a="2">past 640 · the sign-in button stopped filling the width</span>
+            <span class="anno__t" data-a="3">past 768 · logo and poster stepped up</span>
+            <span class="anno__t" data-a="4">past 1024 · nav links appeared · one column became two</span>
+            <span class="anno__t" data-a="5">past 1280 · the whole type scale stepped up</span>
+          </div>
         </div>
 
       </div>
@@ -321,6 +335,28 @@
         <p class="grow__note">Not a screenshot — the interface rebuilt in plain HTML, breaking at the system's own widths</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ══ 3b · the tally — a beat between the window and the case study ═══════
+     Deliberately not numbered: the eyebrow run 01–06 belongs to the sections
+     that carry content, and this one is a breath. Every figure here is already
+     cited in §5 of docs/HANDOFF.md and repeated in the facts table below —
+     nothing new is claimed, it is the same four numbers given room. -->
+<section class="stage tally" aria-label="The voting system in four numbers">
+  <div class="inner">
+    <p class="tag up">The window you just resized</p>
+
+    <ol class="tally__grid">
+      <li class="tally__i draw"><b data-count>3,119</b><span>eligible voters, imported through the university API</span></li>
+      <li class="tally__i draw" style="--d:90ms"><b data-count>~1,600</b><span>ballots actually cast</span></li>
+      <li class="tally__i draw" style="--d:180ms"><b data-count>587</b><span>commits over seven months</span></li>
+      <li class="tally__i draw" style="--d:270ms"><b data-count>23</b><span>themes, switchable from admin</span></li>
+    </ol>
+
+    <p class="big big--m lm up" style="--d:340ms">
+      One person did the analysis,<br>the design and the code.
+    </p>
   </div>
 </section>
 
@@ -567,7 +603,7 @@
 <!-- ══ 7 · roles ═══════════════════════════════════════════════════════════ -->
 <section class="stage act-dark" id="roles">
   <div class="inner">
-    <p class="tag up">02 — What I am looking for</p>
+    <p class="tag up">03 — What I am looking for</p>
     <h2 class="big big--l up" style="--d:60ms;margin-top:14px">
       I want to sit between<br>the people and <span class="mark-wrap">the system<svg class="scrawl" viewBox="0 0 300 32" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 22C64 8 152 4 240 11c30 3 48 7 54 11"/><path pathLength="1" d="M18 29C78 17 168 14 246 20" style="opacity:.55"/></svg></span>
     </h2>
@@ -609,7 +645,7 @@
 <!-- ══ 8 · skills + cv ═════════════════════════════════════════════════════ -->
 <section class="stage stage--auto act-dark" id="cv">
   <div class="inner">
-    <p class="tag up">03 — Skills</p>
+    <p class="tag up">04 — Skills</p>
     <h2 class="big big--m up" style="--d:60ms;margin:14px 0 clamp(26px,4vw,44px)">What I actually used in the projects above</h2>
 
     <div class="grid2">
@@ -638,7 +674,7 @@
       </div>
     </div>
 
-    <p class="tag up" style="margin-top:clamp(46px,7vw,84px)">04 — Background</p>
+    <p class="tag up" style="margin-top:clamp(46px,7vw,84px)">05 — Background</p>
     <div class="cv" style="margin-top:18px">
       <div class="cv__row up">
         <p class="cv__when">2023 – present</p>
@@ -699,7 +735,7 @@
 <!-- ══ 9 · contact ═════════════════════════════════════════════════════════ -->
 <section class="stage end" id="contact">
   <div class="inner">
-    <p class="tag up">05 — Contact</p>
+    <p class="tag up">06 — Contact</p>
     <h2 class="big big--l up" style="--d:60ms;margin:16px 0 26px">
       I speak developer<br>and <span class="mark-wrap">business<svg class="scrawl" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M50 78C16 66 18 30 62 19 114 6 216 6 262 19c28 8 32 38-2 52-48 18-164 20-214 7"/></svg></span>
     </h2>
