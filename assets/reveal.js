@@ -189,7 +189,11 @@
      would fight the first for the same .is-in class and, worse, an element
      dropped from BOTH lists would stay at opacity:0 forever. */
 
-  const risers = document.querySelectorAll('.reveal, .up, .scrawl, .lm, .draw, .stamp, .wipe, .deal');
+  /* .scene has no visual rules of its own. It marks a SECTION whose internal
+     entrance timeline should start when the section arrives, rather than on
+     load — the cover uses it now that it is the second screen, because an
+     entrance nobody is present for is a wasted one. */
+  const risers = document.querySelectorAll('.reveal, .up, .scrawl, .lm, .draw, .stamp, .wipe, .deal, .scene');
 
   if (reduced || !('IntersectionObserver' in window)) {
     risers.forEach(el => el.classList.add('is-in'));

@@ -76,6 +76,19 @@
     '.stats-inline > div:nth-child(2) span': 'ผู้ใช้สิทธิ์จริง',
     '.stats-inline > div:nth-child(3) span': 'ระบบที่ทำเองครบวงจร',
 
+    /* ── boot · the first screen ─────────────────────────────────────────────
+       The node NAMES stay in English on purpose — Ballot and ChainHead are the
+       actual table names in the system, and translating an identifier makes it
+       stop being the thing it is naming. Only the captions turn. */
+    '.boot .tag': 'ระบบเลือกตั้ง FMS · เส้นทางของบัตรหนึ่งใบ',
+    '.flow li:nth-of-type(1) span': 'เกือบทั้งหมดโหวตจากมือถือ',
+    '.flow li:nth-of-type(2) span': 'NextAuth · เข้าสู่ระบบด้วย OIDC',
+    '.flow li:nth-of-type(3) span': 'ciphertext + prevHash + rowHash',
+    '.flow li:nth-of-type(4) span': 'ล็อกแถวไว้ระหว่างลงคะแนน',
+    '.flow li:nth-of-type(5) span': 'ตรวจสอบได้ แต่สืบกลับไม่ได้',
+    '.flow__note': 'ตัวตนไม่เคยเดินทางไปพร้อมกับคะแนน — การแยกสองอย่างนี้คือหัวใจของการออกแบบ',
+    '.boot__line': 'ผมเขียนแบบระบบ<br>ก่อนลงมือสร้าง',
+
     /* ── the tally ───────────────────────────────────────────────────────── */
     '.tally .tag': 'หน้าเว็บที่คุณเพิ่งย่อขยาย',
     '.tally__i:nth-child(1) span': 'ผู้มีสิทธิ์ ดึงเข้าระบบผ่าน API ของมหาวิทยาลัย',

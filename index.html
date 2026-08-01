@@ -48,10 +48,61 @@
 
 <main>
 
-<!-- ══ 1 · cover — who this is, before anything else ═══════════════════════
-     The one dark panel above the fold. See the COVER block in verdure.css for
-     why it is staged this way rather than as a centred card. -->
-<section class="stage cover" id="intro">
+<!-- ══ 0 · boot — the system draws itself ═════════════════════════════════
+     The owner's read, and it reframed this whole screen: anyone arriving here
+     followed a link from his CV, so they already know whose portfolio it is.
+     Spending the most valuable screen on the page introducing him was spending
+     it on something the visitor already knew — which is why it read as bland.
+
+     So the first screen is the WORK's thesis instead: the ballot path from the
+     election system, drawing itself node by node. Every node and every caption
+     below is lifted from the architecture section of fms-election.html — this
+     is the real shape of the real system, not an illustration of one.
+
+     The diagram then recedes to wallpaper and one line resolves over it, with
+     the name in the corner the way a drawing carries a title block. The About
+     panel with the portrait is still here; it is simply the second screen now.
+
+     No JS → every node and caption is plain markup, already in reading order,
+     and the section is a legible diagram that happens not to animate. -->
+<section class="stage boot" id="boot" aria-label="How a ballot moves through the voting system">
+  <div class="inner">
+
+    <p class="tag rise" style="--d:120ms">FMS Online Voting System · the path of one ballot</p>
+
+    <ol class="flow" aria-label="Five stages">
+      <li class="node stamp" style="--d:220ms"><b>Student</b><span>almost all of them on a phone</span></li>
+      <i class="wire draw" style="--d:320ms" aria-hidden="true"></i>
+      <li class="node stamp" style="--d:420ms"><b>PSU Passport</b><span>NextAuth · OIDC sign-in</span></li>
+      <i class="wire draw" style="--d:520ms" aria-hidden="true"></i>
+      <li class="node stamp node--key" style="--d:620ms"><b>Ballot</b><span>ciphertext + prevHash + rowHash</span></li>
+      <i class="wire draw" style="--d:720ms" aria-hidden="true"></i>
+      <li class="node stamp node--key" style="--d:820ms"><b>ChainHead</b><span>row lock while voting</span></li>
+      <i class="wire draw" style="--d:920ms" aria-hidden="true"></i>
+      <li class="node stamp" style="--d:1020ms"><b>Result</b><span>checkable, untraceable</span></li>
+    </ol>
+
+    <p class="flow__note rise" style="--d:1180ms">
+      The identity never travels with the vote — that separation is the whole design.
+    </p>
+
+    <p class="big big--m boot__line lm up" style="--d:1500ms">I draw the system<br>before I build it.</p>
+
+    <div class="block-title rise" style="--d:1760ms">
+      <span>Teerapab Boonsri</span>
+      <span>System / Business Analyst</span>
+      <span>Portfolio 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 1 · cover — who this is, now the SECOND screen ══════════════════════
+     Was the opening. Demoted, not cut: the introduction still matters, it just
+     no longer occupies the frame that has to earn the visitor's attention.
+     Its entrance moved from the load timeline to the scroll observer with it —
+     an animation nobody is present for is a wasted one. See .cover in
+     verdure.css. -->
+<section class="stage cover scene" id="intro">
  <div class="cover__stack">
   <div class="inner cover__grid">
 
