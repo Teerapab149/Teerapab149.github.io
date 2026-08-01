@@ -1944,3 +1944,68 @@ button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::a
   .js-anim .wire::after { transform: none; }
   .js-anim .wire::before { opacity: 1; transition: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DARK SKIN — what makes the three dark screens feel expensive rather than
+   just unlit. Applied to every dark surface at once so they read as one
+   material: the boot screen, the cover, and the whole third act.
+
+   Two things, both cheap and both fixing a real defect of flat dark UI:
+
+   1. GRAIN. A large flat field of near-black on an 8-bit display bands into
+      visible steps, and the eye reads banding as "cheap". A very low-amplitude
+      noise layer dithers it away. It is an inline SVG filter — no image
+      request, no dependency — tiled at 180px so the pattern never becomes a
+      texture you can see.
+
+   2. VIGNETTE. A radial fall-off toward the corners. Screens are lit from the
+      middle in every medium that ever felt cinematic, and a dark panel with
+      perfectly even luminance across 1440px reads as a filled rectangle
+      instead of a lit space.
+
+   Both sit UNDER the content (z-index 0 against .inner's z-index 1) and both
+   are pointer-events: none, so nothing here can intercept a click.
+
+   On the contrast ratios recorded against these tokens: the vignette only ever
+   composites BLACK over the panel, never white, so on a dark act carrying light
+   text it can move a pair in one direction only — up. The grain is symmetric
+   noise under soft-light and averages out across any run of type. Neither can
+   push a pair below the figure written on its token, which is the property that
+   matters; the numbers themselves were not re-measured through the blend and
+   this comment is not claiming they were.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.boot::after, .cover::after, .act-dark::after, .end::after {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(120% 80% at 50% 40%, transparent 42%, rgba(0, 0, 0, .30) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E");
+  background-size: cover, 180px 180px;
+  mix-blend-mode: soft-light;
+  opacity: .5;
+}
+/* .act-dark and .end are plain sections; the pseudo-element needs a frame */
+.act-dark, .end { position: relative; }
+/* and their content has to sit above it */
+.act-dark > .inner, .end > .inner { position: relative; z-index: 1; }
+
+/* ── air ───────────────────────────────────────────────────────────────────
+   The light act is dense on purpose — it is carrying the work. The dark act is
+   carrying three short statements, and giving them the same density made them
+   look like more of the same. Space is the cheapest thing that reads as
+   expensive, and it is the one thing the third act was short of. */
+.act-dark, .end { padding-block: clamp(90px, 13vw, 190px); }
+.act-dark .big, .end .big { margin-bottom: clamp(10px, 1.6vw, 18px); }
+.roles { margin-top: clamp(40px, 6vw, 72px); }
+.role { padding-block: clamp(26px, 3.4vw, 42px); }
+
+/* hairlines on dark want to be quieter than hairlines on paper — the same
+   value that reads as a fine rule on sage reads as a drawn line on navy */
+.act-dark .role, .act-dark .facts > div, .act-dark .work__head::after {
+  border-color: color-mix(in srgb, var(--rule) 55%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* nothing here animates, but the grain is a texture some people find noisy */
+  .boot::after, .cover::after, .act-dark::after, .end::after { background-image: none; }
+}

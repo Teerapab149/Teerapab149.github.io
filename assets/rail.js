@@ -1,4 +1,4 @@
-/* cinema.js — drives the horizontal rail on index-cinema.html only.
+/* rail.js — drives the horizontal Work rail on index.html.
    Loaded after reveal.js / verdure.js / feel.js, which it does not touch.
 
    The rail is an ordinary horizontally-scrollable filmstrip until this file

@@ -21,6 +21,7 @@
      from the Thai version of this page so the type scale stays identical. -->
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700;800&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/verdure.css">
+<link rel="stylesheet" href="assets/rail.css">
 <!-- Gates every faded start-state in the stylesheet. If this line never runs,
      the class is absent and the page renders fully visible. -->
 <script>document.documentElement.classList.add('js-anim');</script>
@@ -190,19 +191,19 @@
         <span class="pick__role">System Analyst · Developer · UI/UX</span>
         <span class="pick__live">Live system</span>
       </a>
-      <a class="pick__card deal" style="--d:70ms" href="#p02">
+      <a class="pick__card deal" style="--d:70ms" href="#work-rail" data-rail-to="1">
         <span class="pick__n">02</span>
         <span class="pick__t">FMS Credit<br>Tracker</span>
         <span class="pick__d">Reads your transcript out of a PDF and works out what you still owe</span>
         <span class="pick__role">System Analyst · Full-stack · UI/UX</span>
       </a>
-      <a class="pick__card deal" style="--d:140ms" href="#p03">
+      <a class="pick__card deal" style="--d:140ms" href="#work-rail" data-rail-to="2">
         <span class="pick__n">03</span>
         <span class="pick__t">PSU<br>Chatbot</span>
         <span class="pick__d">A student-question bot on Azure, deployed and running around the clock</span>
         <span class="pick__role">System Analyst · Cloud · Front-end</span>
       </a>
-      <a class="pick__card deal" style="--d:210ms" href="#p04">
+      <a class="pick__card deal" style="--d:210ms" href="#work-rail" data-rail-to="3">
         <span class="pick__n">04</span>
         <span class="pick__t">Megu<br>Bot</span>
         <span class="pick__d">A Discord bot my friends use daily — I designed it, someone else wrote it</span>
@@ -414,243 +415,111 @@
   </div>
 </section>
 
-<!-- ══ 4 · project 01 detail ═══════════════════════════════════════════════ -->
-<section class="stage stage--auto" id="p01">
-  <div class="inner">
-    <!-- three beats, not one block fading in: the rule draws itself, the index
-         stamps down, the date label rises. See Scene 5 in docs/PLAN-AWWWARDS.md. -->
-    <div class="work__head draw">
-      <p class="work__idx stamp">01</p>
-      <p class="tag up" style="--d:140ms">In real use · Dec 2025 – present</p>
+<!-- ══ 5 · the work, as one rail ═══════════════════════════════════════
+     Four stacked full-height sections became one rail that scroll drags
+     sideways. The owner picked this out of a side-by-side prototype: it was the
+     one part of it he wanted. It brings the two things the rest of the page
+     lacks — scroll DRIVING motion continuously rather than triggering it once,
+     and the horizontal axis nothing else here uses.
+
+     The markup is a plain horizontally-scrollable list, and that is the BASE
+     state: it works with no JS, on a phone, and under reduced motion. rail.js
+     layers the pin on top only when pinning is a good idea. The failure mode is
+     a filmstrip you swipe, never three projects you cannot reach.
+
+     Copy and figures are lifted from the four sections this replaces, word for
+     word. The chips and the second screenshot row from each section did not
+     come with them — they live on the case study pages, which is where someone
+     who wants that level of detail is going anyway. -->
+<section class="rail" id="work-rail" aria-label="The four projects">
+  <div class="rail__pin">
+
+    <div class="rail__head">
+      <p class="tag">03 — The work</p>
+      <p class="rail__count"><b>01</b> / 04</p>
     </div>
 
-    <div class="cols">
-      <div>
-        <figure class="shot wipe">
-          <img src="assets/img/desktop/01-original/4-vote-multi.webp" width="1600" height="1100" loading="lazy"
-               alt="Ballot screen showing the party options and the confirm button">
+    <ol class="rail__track">
+      <li class="panel">
+        <figure class="panel__media">
+          <img src="assets/img/desktop/01-original/4-vote-multi.webp" width="1600" height="1100" loading="lazy" alt="Ballot screen showing the party options and the confirm button">
         </figure>
-        <h2 class="big big--l shot__title lm up" style="--d:150ms">FMS Online<br>Voting System</h2>
-      </div>
-
-      <div class="up" style="--d:90ms">
-        <p class="tag tag--honey">System Analyst · Core Developer · UI/UX</p>
-        <p class="small" style="margin:14px 0 22px">
-          The student council election system for the Faculty of Management Sciences, PSU,
-          which I built alone. The hard part was never making a web page accept a vote — it was
-          making the result <strong>provably untampered</strong> while making sure
-          <strong>nobody can trace who voted for whom</strong>. Those two goals fight each other
-          by nature, and almost every design decision in the system comes out of that conflict.
-        </p>
-
-        <div class="facts">
-          <div><b data-count>3,119</b><span>eligible voters, imported through the university API</span></div>
-          <div><b data-count>~1,600</b><span>ballots actually cast</span></div>
-          <div><b data-count>587</b><span>commits over 7 months</span></div>
-          <div><b data-count>23</b><span>themes, switchable from admin</span></div>
+        <div class="panel__body">
+          <p class="panel__idx">01</p>
+          <p class="tag">In real use · Dec 2025 – present</p>
+          <h2 class="big big--m panel__t">FMS Online<br>Voting System</h2>
+          <p class="tag tag--honey">System Analyst · Core Developer · UI/UX</p>
+          <p class="small">The student council election system for the Faculty of Management Sciences, PSU, which I built alone. The hard part was never making a web page accept a vote — it was making the result <strong>provably untampered</strong> while making sure <strong>nobody can trace who voted for whom</strong>.</p>
+          <div class="facts">
+            <div><b data-count>3,119</b><span>eligible voters</span></div>
+            <div><b data-count>~1,600</b><span>ballots actually cast</span></div>
+            <div><b data-count>587</b><span>commits over 7 months</span></div>
+            <div><b data-count>23</b><span>themes, switchable from admin</span></div>
+          </div>
+          <a class="btn" href="fms-election.html">Read the full case study <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
-
-        <div class="chips">
-          <span>Next.js 14</span><span>PostgreSQL</span><span>Prisma</span>
-          <span>NextAuth · PSU SSO</span><span>Playwright</span><span>Docker</span>
-        </div>
-
-        <div class="btns">
-          <a class="btn" href="fms-election.html">Read the full case study
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a class="btn btn--ghost" href="https://cvs.fms.psu.ac.th/fms-ovs" target="_blank" rel="noopener noreferrer">Open the live system
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
-          </a>
-        </div>
-
-        <div class="shot-row" style="margin-top:22px">
-          <img src="assets/img/desktop/01-original/7-results-revealed.webp" width="1600" height="1100" loading="lazy"
-               alt="Results screen after the count was revealed">
-          <img src="assets/img/desktop/01-original/2-candidates.webp" width="1600" height="1100" loading="lazy"
-               alt="Candidate list screen">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 5 · project 02 ══════════════════════════════════════════════════════ -->
-<section class="stage stage--auto" id="p02">
-  <div class="inner">
-    <!-- three beats, not one block fading in: the rule draws itself, the index
-         stamps down, the date label rises. See Scene 5 in docs/PLAN-AWWWARDS.md. -->
-    <div class="work__head draw">
-      <p class="work__idx stamp">02</p>
-      <p class="tag up" style="--d:140ms">Course 477-303 BISA&amp;D · Semester 2, 2025</p>
-    </div>
-
-    <div class="cols">
-      <div>
-        <figure class="shot wipe">
-          <img src="assets/img/credit/01-landing.webp" width="1600" height="796" loading="lazy"
-               alt="The Credit Tracker landing page: Track Your Path to Graduation">
+      </li>
+      <li class="panel">
+        <figure class="panel__media">
+          <img src="assets/img/credit/05-results.webp" width="1600" height="797" loading="lazy" alt="Results by curriculum category">
         </figure>
-        <h2 class="big big--l shot__title lm up" style="--d:150ms">FMS Credit<br>Tracker</h2>
-      </div>
-
-      <div class="up" style="--d:90ms">
-        <p class="tag tag--honey">System Analyst · Full-stack Developer · UI/UX</p>
-        <p class="small" style="margin:14px 0 22px">
-          A credit tracker for students of the Faculty of Management Sciences. Students upload
-          their grade report and registration slip as PDFs and the system
-          <strong>reads the text out and checks it against the curriculum structure itself</strong>,
-          showing which categories are complete and which are still short — instead of ticking
-          boxes by hand in a table most people get wrong.
-        </p>
-
-        <div class="facts">
-          <div><b data-count>30</b><span>API routes</span></div>
-          <div><b data-count>13</b><span>database tables</span></div>
-          <div><b data-count>15</b><span>student + admin screens</span></div>
-          <div><b data-count>~12,000</b><span>lines of TypeScript</span></div>
+        <div class="panel__body">
+          <p class="panel__idx">02</p>
+          <p class="tag">Course 477-303 BISA&amp;D · Semester 2, 2025</p>
+          <h2 class="big big--m panel__t">FMS Credit<br>Tracker</h2>
+          <p class="tag tag--honey">System Analyst · Full-stack Developer · UI/UX</p>
+          <p class="small">Students upload their grade report and registration slip as PDFs and the system <strong>reads the text out and checks it against the curriculum structure itself</strong>, showing which categories are complete and which are still short.</p>
+          <div class="facts">
+            <div><b data-count>30</b><span>API routes</span></div>
+            <div><b data-count>13</b><span>database tables</span></div>
+            <div><b data-count>15</b><span>student + admin screens</span></div>
+            <div><b data-count>~12,000</b><span>lines of TypeScript</span></div>
+          </div>
+          <a class="btn" href="credit-tracker.html">Read the full case study <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
-
-        <div class="chips">
-          <span>Next.js 16</span><span>React 19</span><span>TypeScript</span>
-          <span>Prisma 7</span><span>NextAuth 5</span><span>pdf-parse</span>
-        </div>
-
-        <a class="btn" href="credit-tracker.html">Read the full case study
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <div class="shot-row" style="margin-top:22px">
-          <img src="assets/img/credit/02-upload.webp" width="1600" height="800" loading="lazy"
-               alt="PDF upload screen">
-          <img src="assets/img/credit/05-results.webp" width="1600" height="797" loading="lazy"
-               alt="Results by curriculum category">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 6 · project 03 ══════════════════════════════════════════════════════ -->
-<section class="stage stage--auto" id="p03">
-  <div class="inner">
-    <!-- three beats, not one block fading in: the rule draws itself, the index
-         stamps down, the date label rises. See Scene 5 in docs/PLAN-AWWWARDS.md. -->
-    <div class="work__head draw">
-      <p class="work__idx stamp">03</p>
-      <p class="tag up" style="--d:140ms">Course 477-302 Cloud Computing Platform · Oct 2025</p>
-    </div>
-
-    <div class="cols">
-      <div>
-        <figure class="shot wipe">
-          <img src="assets/img/chatbot/01-hero.webp" width="1600" height="777" loading="lazy"
-               alt="The PSU Chatbot page with the bot answering a student question">
+      </li>
+      <li class="panel">
+        <figure class="panel__media">
+          <img src="assets/img/chatbot/01-hero.webp" width="1600" height="777" loading="lazy" alt="The PSU Chatbot page with the bot answering a student question">
         </figure>
-        <h2 class="big big--l shot__title lm up" style="--d:150ms">PSU<br>Chatbot</h2>
-      </div>
-
-      <div class="up" style="--d:90ms">
-        <p class="tag tag--honey">System Analyst · Cloud Developer · Front-end</p>
-        <p class="small" style="margin:14px 0 22px">
-          A chatbot that answers student questions, built on Azure Bot Service, wired to Language
-          Studio, then embedded in a web page through the Direct Line API with a Node.js layer in
-          between that trades the secret key for a token
-          <strong>so the key never reaches the frontend</strong> · the whole thing runs around the
-          clock on an Azure VM.
-        </p>
-
-        <div class="facts">
-          <div><b>Azure</b><span>Bot Service + Language Studio</span></div>
-          <div><b>24/7</b><span>running on an Azure VM (Ubuntu)</span></div>
-          <div><b>HTTPS</b><span>Nginx + Certbot + pm2</span></div>
-          <div><b>3</b><span>people on the team, the system was mine</span></div>
+        <div class="panel__body">
+          <p class="panel__idx">03</p>
+          <p class="tag">Course 477-302 Cloud Computing Platform · Oct 2025</p>
+          <h2 class="big big--m panel__t">PSU<br>Chatbot</h2>
+          <p class="tag tag--honey">System Analyst · Cloud Developer · Front-end</p>
+          <p class="small">A chatbot that answers student questions, built on Azure Bot Service, wired to Language Studio, then embedded in a web page through the Direct Line API with a Node.js layer in between that trades the secret key for a token <strong>so the key never reaches the frontend</strong>.</p>
+          <div class="facts">
+            <div><b>Azure</b><span>Bot Service + Language Studio</span></div>
+            <div><b>24/7</b><span>running on an Azure VM (Ubuntu)</span></div>
+            <div><b>HTTPS</b><span>Nginx + Certbot + pm2</span></div>
+            <div><b>3</b><span>people on the team, the system was mine</span></div>
+          </div>
+          <a class="btn" href="psu-chatbot.html">Read the full case study <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
-
-        <div class="chips">
-          <span>Azure Bot Service</span><span>Language Studio</span><span>Direct Line API</span>
-          <span>Node.js</span><span>Nginx</span><span>pm2</span>
-        </div>
-
-        <a class="btn" href="psu-chatbot.html">Read the full case study
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <div class="shot-row" style="margin-top:22px">
-          <img src="assets/img/chatbot/04-language-studio.webp" width="1600" height="1018" loading="lazy"
-               alt="Language Studio with the trained question-and-answer pairs">
-          <img src="assets/img/chatbot/03-workflow.webp" width="1600" height="224" loading="lazy"
-               alt="System workflow diagram">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 6b · project 04 — the one where I did not write the code ════════════ -->
-<section class="stage stage--auto" id="p04">
-  <div class="inner">
-    <!-- three beats, not one block fading in: the rule draws itself, the index
-         stamps down, the date label rises. See Scene 5 in docs/PLAN-AWWWARDS.md. -->
-    <div class="work__head draw">
-      <p class="work__idx stamp">04</p>
-      <p class="tag up" style="--d:140ms">Side project with a friend · ongoing</p>
-    </div>
-
-    <div class="cols">
-      <div>
-        <figure class="shot wipe">
-          <img src="assets/img/megubot/01-profile.webp" width="602" height="665" loading="lazy"
-               alt="MeguBot Reborn's Discord profile card with its bio and roles">
+      </li>
+      <li class="panel panel--tall">
+        <figure class="panel__media">
+          <img src="assets/img/megubot/01-profile.webp" width="602" height="665" loading="lazy" alt="MeguBot Reborn's Discord profile card with its bio and roles">
         </figure>
-        <h2 class="big big--l shot__title lm up" style="--d:150ms">Megu<br>Bot</h2>
-      </div>
-
-      <div class="up" style="--d:90ms">
-        <p class="tag tag--honey">System Analyst · Feature owner · not the developer</p>
-        <p class="small" style="margin:14px 0 22px">
-          An all-round quality-of-life bot our Discord server uses every day: it speaks who joins and
-          leaves a voice channel, reads out messages for people without a microphone, keeps per-person
-          names, plays audio, and hides a few small games for the wait between matches.
-          <strong>I designed the system and the features; my friend wrote the code.</strong> It is the
-          project that looks most like the job I am applying for.
-        </p>
-
-        <div class="facts">
-          <div><b>Design</b><span>system and features, mine</span></div>
-          <div><b>Code</b><span>my friend's, not mine</span></div>
-          <div><b>24/7</b><span>moved from a laptop to the cloud</span></div>
-          <div><b>Daily</b><span>real use, not a demo</span></div>
+        <div class="panel__body">
+          <p class="panel__idx">04</p>
+          <p class="tag">Side project with a friend · ongoing</p>
+          <h2 class="big big--m panel__t">Megu<br>Bot</h2>
+          <p class="tag tag--honey">System Analyst · Feature owner · not the developer</p>
+          <p class="small">An all-round quality-of-life bot our Discord server uses every day. <strong>I designed the system and the features; my friend wrote the code.</strong> It is the project that looks most like the job I am applying for.</p>
+          <div class="facts">
+            <div><b>Design</b><span>system and features, mine</span></div>
+            <div><b>Code</b><span>my friend's, not mine</span></div>
+            <div><b>24/7</b><span>moved from a laptop to the cloud</span></div>
+            <div><b>Daily</b><span>real use, not a demo</span></div>
+          </div>
+          <a class="btn" href="megubot.html">Read the full case study <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
+      </li>
+    </ol>
 
-        <div class="chips">
-          <span>Discord.js 14</span><span>Node.js</span><span>@discordjs/voice</span>
-          <span>Edge / Google TTS</span><span>Slash commands</span><span>Cloud-hosted</span>
-        </div>
-
-        <div class="btns">
-          <a class="btn" href="megubot.html">Read the full case study
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a class="btn btn--ghost" href="https://github.com/OtsutsukiMiho/MeguBot-Reborn" target="_blank" rel="noopener noreferrer">Repository
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
-          </a>
-        </div>
-
-        <div class="shot-row" style="margin-top:22px">
-          <img src="assets/img/megubot/02-commands.webp" width="586" height="427" loading="lazy"
-               alt="The bot's slash command list in Discord">
-          <img src="assets/img/megubot/04-voice.webp" width="278" height="252" loading="lazy"
-               alt="The bot sitting in a voice channel, other members' names pixelated">
-        </div>
-      </div>
-    </div>
+    <div class="rail__bar" aria-hidden="true"><i></i></div>
+    <p class="rail__hint">Swipe or scroll the row sideways</p>
   </div>
 </section>
 
@@ -838,6 +707,7 @@
 <script src="assets/verdure.js"></script>
 <script src="assets/i18n.js"></script>
 <script src="assets/feel.js"></script>
+<script src="assets/rail.js"></script>
 <script src="assets/nav.js"></script>
 </body>
 </html>

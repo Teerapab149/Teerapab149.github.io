@@ -1,10 +1,10 @@
-/* cinema.css — ONLY for index-cinema.html, the horizontal-rail prototype.
+/* rail.css — the horizontal Work rail on index.html.
    Loaded AFTER verdure.css, which it extends rather than replaces: every
    colour, type step and motion token below comes from that file.
 
-   index.html does not load this and is not affected by anything in here.
-   CLAUDE.md: a new design goes in a new file, it does not overwrite one the
-   owner already approved.
+   Started life as index-cinema.html, a throwaway prototype built alongside the
+   stacked layout so the two could be compared. The owner kept this half and
+   rejected the rest, so the prototype page is gone and the rail moved in.
 
    ── the idea ──────────────────────────────────────────────────────────────
    The four projects stop being four stacked sections and become one rail that
@@ -15,7 +15,7 @@
    ── the fallback is the base state, not an afterthought ───────────────────
    Written the other way up from most pinned rails: the DEFAULT is an ordinary
    horizontally-scrollable filmstrip that works with no JS, on a phone, and
-   under reduced motion. The pin is layered on top only when cinema.js adds
+   under reduced motion. The pin is layered on top only when rail.js adds
    html.can-pin, which it does only when pinning is actually a good idea. So
    the failure mode is "a filmstrip you swipe", never "three projects you
    cannot reach". */
@@ -79,7 +79,7 @@
 .panel__body .facts { margin-bottom: 18px; }
 
 /* ── layered on: the pin ───────────────────────────────────────────────────
-   --rx is written by cinema.js in px. With no JS it is 0 and none of this
+   --rx is written by rail.js in px. With no JS it is 0 and none of this
    applies anyway, because .can-pin is never added. */
 
 .js-anim.can-pin .rail { height: var(--rail-h, 400vh); }

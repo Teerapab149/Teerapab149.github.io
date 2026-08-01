@@ -100,58 +100,54 @@
     /* ── project 01 ──────────────────────────────────────────────────────── */
     '.grow__over .tag': 'ระบบใช้งานจริง · โปรเจค 01',
     '.grow__note': 'ไม่ใช่ภาพหน้าจอ — หน้านี้ถูกสร้างใหม่ด้วย HTML ล้วน และหักที่ breakpoint จริงของระบบ',
-    '#p01 .work__head .tag': 'ใช้งานจริง · ธ.ค. 2025 – ปัจจุบัน',
-    '#p01 .tag--honey': 'System Analyst · Core Developer · UI/UX',
-    '#p01 .cols p.small': 'ระบบเลือกตั้งสโมสรนักศึกษา คณะวิทยาการจัดการ ม.อ. ที่ผมทำคนเดียวทั้งระบบ ' +
+    '.rail__track > li:nth-of-type(1) > .panel__body > .tag': 'ใช้งานจริง · ธ.ค. 2025 – ปัจจุบัน',
+    '.rail__track > li:nth-of-type(1) .tag--honey': 'System Analyst · Core Developer · UI/UX',
+    '.rail__track > li:nth-of-type(1) .small': 'ระบบเลือกตั้งสโมสรนักศึกษา คณะวิทยาการจัดการ ม.อ. ที่ผมทำคนเดียวทั้งระบบ ' +
       'โจทย์ที่ยากไม่ใช่การทำให้เว็บกดโหวตได้ แต่คือทำให้ผลคะแนน<strong>พิสูจน์ได้ว่าไม่ถูกแก้</strong> ' +
-      'ขณะที่<strong>ไม่มีใครสืบได้ว่าใครเลือกพรรคไหน</strong> — สองข้อนี้ขัดกันเองโดยธรรมชาติ ' +
-      'และเป็นที่มาของการออกแบบเกือบทั้งหมดในระบบ',
-    '#p01 .facts > div:nth-child(1) span': 'ผู้มีสิทธิ์ นำเข้าผ่าน API ของมหาวิทยาลัย',
-    '#p01 .facts > div:nth-child(2) span': 'ผู้ใช้สิทธิ์จริง',
-    '#p01 .facts > div:nth-child(3) span': 'commits ใน 7 เดือน',
-    '#p01 .facts > div:nth-child(4) span': 'ธีม สลับได้จากหน้า admin',
+      'ขณะที่<strong>ไม่มีใครสืบได้ว่าใครเลือกพรรคไหน</strong>',
+    '.rail__track > li:nth-of-type(1) .facts > div:nth-child(1) span': 'ผู้มีสิทธิ์ นำเข้าผ่าน API ของมหาวิทยาลัย',
+    '.rail__track > li:nth-of-type(1) .facts > div:nth-child(2) span': 'ผู้ใช้สิทธิ์จริง',
+    '.rail__track > li:nth-of-type(1) .facts > div:nth-child(3) span': 'commits ใน 7 เดือน',
+    '.rail__track > li:nth-of-type(1) .facts > div:nth-child(4) span': 'ธีม สลับได้จากหน้า admin',
 
     /* ── project 02 ──────────────────────────────────────────────────────── */
-    '#p02 .work__head .tag': 'รายวิชา 477-303 BISA&amp;D · ภาคเรียน 2/2568',
-    '#p02 .tag--honey': 'System Analyst · Full-stack Developer · UI/UX',
-    '#p02 .cols p.small': 'ระบบติดตามหน่วยกิตของนักศึกษาคณะวิทยาการจัดการ นักศึกษาอัปโหลดใบเกรดกับใบลงทะเบียนเป็น PDF ' +
+    '.rail__track > li:nth-of-type(2) > .panel__body > .tag': 'รายวิชา 477-303 BISA&amp;D · ภาคเรียน 2/2568',
+    '.rail__track > li:nth-of-type(2) .tag--honey': 'System Analyst · Full-stack Developer · UI/UX',
+    '.rail__track > li:nth-of-type(2) .small': 'นักศึกษาอัปโหลดใบเกรดกับใบลงทะเบียนเป็น PDF ' +
       'แล้วระบบ<strong>อ่านข้อความออกมาเทียบกับโครงสร้างหลักสูตรให้เอง</strong> ' +
-      'ว่าหมวดไหนครบแล้ว หมวดไหนยังขาด แทนการนั่งไล่กาเองในตารางที่คนส่วนใหญ่ทำผิด',
-    '#p02 .facts > div:nth-child(1) span': 'API routes',
-    '#p02 .facts > div:nth-child(2) span': 'ตารางฐานข้อมูล',
-    '#p02 .facts > div:nth-child(3) span': 'หน้าจอฝั่งนักศึกษา + admin',
-    '#p02 .facts > div:nth-child(4) span': 'บรรทัด TypeScript',
+      'ว่าหมวดไหนครบแล้ว หมวดไหนยังขาด',
+    '.rail__track > li:nth-of-type(2) .facts > div:nth-child(1) span': 'API routes',
+    '.rail__track > li:nth-of-type(2) .facts > div:nth-child(2) span': 'ตารางฐานข้อมูล',
+    '.rail__track > li:nth-of-type(2) .facts > div:nth-child(3) span': 'หน้าจอฝั่งนักศึกษา + admin',
+    '.rail__track > li:nth-of-type(2) .facts > div:nth-child(4) span': 'บรรทัด TypeScript',
 
     /* ── project 03 ──────────────────────────────────────────────────────── */
-    '#p03 .work__head .tag': 'รายวิชา 477-302 Cloud Computing Platform · ต.ค. 2025',
-    '#p03 .tag--honey': 'System Analyst · Cloud Developer · Front-end',
-    '#p03 .cols p.small': 'แชตบอตตอบคำถามนักศึกษา สร้างบน Azure Bot Service ต่อกับ Language Studio ' +
+    '.rail__track > li:nth-of-type(3) > .panel__body > .tag': 'รายวิชา 477-302 Cloud Computing Platform · ต.ค. 2025',
+    '.rail__track > li:nth-of-type(3) .tag--honey': 'System Analyst · Cloud Developer · Front-end',
+    '.rail__track > li:nth-of-type(3) .small': 'แชตบอตตอบคำถามนักศึกษา สร้างบน Azure Bot Service ต่อกับ Language Studio ' +
       'แล้วฝังลงหน้าเว็บผ่าน Direct Line API โดยมี Node.js คั่นกลางแลก secret key เป็น token ' +
-      '<strong>เพื่อไม่ให้ key หลุดไปอยู่ฝั่ง frontend</strong> · ทั้งระบบรัน 24 ชั่วโมงบน Azure VM',
-    '#p03 .facts > div:nth-child(1) span': 'Bot Service + Language Studio',
-    '#p03 .facts > div:nth-child(2) span': 'รันบน Azure VM (Ubuntu)',
-    '#p03 .facts > div:nth-child(3) span': 'Nginx + Certbot + pm2',
-    '#p03 .facts > div:nth-child(4) span': 'คนในทีม ส่วนระบบผมทำเอง',
+      '<strong>เพื่อไม่ให้ key หลุดไปอยู่ฝั่ง frontend</strong>',
+    '.rail__track > li:nth-of-type(3) .facts > div:nth-child(1) span': 'Bot Service + Language Studio',
+    '.rail__track > li:nth-of-type(3) .facts > div:nth-child(2) span': 'รันบน Azure VM (Ubuntu)',
+    '.rail__track > li:nth-of-type(3) .facts > div:nth-child(3) span': 'Nginx + Certbot + pm2',
+    '.rail__track > li:nth-of-type(3) .facts > div:nth-child(4) span': 'คนในทีม ส่วนระบบผมทำเอง',
 
     /* ── project 04 ──────────────────────────────────────────────────────── */
-    '#p04 .work__head .tag': 'โปรเจคส่วนตัวกับเพื่อน · ยังทำอยู่',
-    '#p04 .tag--honey': 'System Analyst · เจ้าของฟีเจอร์ · ไม่ได้เป็นคนเขียนโค้ด',
-    '#p04 .cols p.small': 'บอตสารพัดประโยชน์ที่เซิร์ฟเวอร์ Discord ของพวกเราใช้กันทุกวัน ' +
-      'ทั้งพูดบอกว่าใครเข้าใครออกห้อง voice อ่านข้อความให้คนที่ไม่มีไมค์ จำชื่อเล่นรายคน เปิดเสียงเพลง ' +
-      'และมีเกมเล็ก ๆ ไว้เล่นแก้เบื่อ · <strong>ผมออกแบบระบบและฟีเจอร์ เพื่อนเป็นคนเขียนโค้ด</strong> ' +
+    '.rail__track > li:nth-of-type(4) > .panel__body > .tag': 'โปรเจคส่วนตัวกับเพื่อน · ยังทำอยู่',
+    '.rail__track > li:nth-of-type(4) .tag--honey': 'System Analyst · เจ้าของฟีเจอร์ · ไม่ได้เป็นคนเขียนโค้ด',
+    '.rail__track > li:nth-of-type(4) .small': 'บอตสารพัดประโยชน์ที่เซิร์ฟเวอร์ Discord ของพวกเราใช้กันทุกวัน ' +
+      '<strong>ผมออกแบบระบบและฟีเจอร์ เพื่อนเป็นคนเขียนโค้ด</strong> ' +
       'เป็นโปรเจคที่ใกล้เคียงกับงานที่ผมสมัครมากที่สุด',
-    '#p04 .facts > div:nth-child(1) span': 'ระบบและฟีเจอร์ ผมออกแบบเอง',
-    '#p04 .facts > div:nth-child(2) span': 'เพื่อนเขียน ไม่ใช่ผม',
-    '#p04 .facts > div:nth-child(3) span': 'ย้ายจากโน้ตบุ๊กขึ้นคลาวด์',
-    '#p04 .facts > div:nth-child(4) span': 'ใช้จริงทุกวัน ไม่ใช่เดโม',
+    '.rail__track > li:nth-of-type(4) .facts > div:nth-child(1) span': 'ระบบและฟีเจอร์ ผมออกแบบเอง',
+    '.rail__track > li:nth-of-type(4) .facts > div:nth-child(2) span': 'เพื่อนเขียน ไม่ใช่ผม',
+    '.rail__track > li:nth-of-type(4) .facts > div:nth-child(3) span': 'ย้ายจากโน้ตบุ๊กขึ้นคลาวด์',
+    '.rail__track > li:nth-of-type(4) .facts > div:nth-child(4) span': 'ใช้จริงทุกวัน ไม่ใช่เดโม',
 
     /* ── buttons that repeat ─────────────────────────────────────────────── */
     '.btn[href="fms-election.html"]': 'อ่านรายละเอียดโปรเจค',
     '.btn[href="credit-tracker.html"]': 'อ่านรายละเอียดโปรเจค',
     '.btn[href="psu-chatbot.html"]': 'อ่านรายละเอียดโปรเจค',
     '.btn[href="megubot.html"]': 'อ่านรายละเอียดโปรเจค',
-    '.btn[href*="cvs.fms.psu.ac.th"]': 'เปิดระบบจริง',
-    '.btn[href*="github.com/OtsutsukiMiho"]': 'ดู repository',
 
     /* ── roles ───────────────────────────────────────────────────────────── */
     '#roles > .inner > .tag': '03 — งานที่ผมมองหา',
