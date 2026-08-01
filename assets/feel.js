@@ -9,8 +9,8 @@
 
    Two mechanisms, both additive:
 
-     1. CURSOR — a dot that tracks exactly and a ring that lags behind it, plus
-        a magnetic pull on the things you can actually click.
+     1. CURSOR — a dot that tracks exactly and a ring that lags behind it, and
+        opens up over anything clickable.
      2. DRIFT  — every framed image travels at a slightly different rate from
         the page, continuously, for as long as it is on screen.
 
@@ -81,36 +81,21 @@
         document.documentElement.classList.remove('cur-hot');
     }, { passive: true });
 
-    /* ── magnetic pull ─────────────────────────────────────────────────────
-       Small controls lean toward the pointer as it approaches. Kept to buttons
-       and nav arrows: a magnetic paragraph is a party trick, a magnetic button
-       genuinely helps you land on it. Uses `translate`, not `transform`, so the
-       hover lifts already on these elements keep working. */
-    const magnets = Array.from(document.querySelectorAll('.btn, .deck__nav, .lang__btn, .cover__cue'));
-    if (magnets.length) {
-      let ticking = false;
-      addEventListener('pointermove', () => {
-        if (ticking) return;
-        ticking = true;
-        raf(() => {
-          magnets.forEach(el => {
-            const r = el.getBoundingClientRect();
-            if (r.bottom < -200 || r.top > innerHeight + 200) return;   // off screen, skip the maths
-            const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-            const dx = mx - cx, dy = my - cy;
-            const reach = Math.max(r.width, r.height) * .9 + 40;
-            const d = Math.hypot(dx, dy);
-            if (d < reach) {
-              const pull = (1 - d / reach) * .32;
-              el.style.translate = `${(dx * pull).toFixed(1)}px ${(dy * pull).toFixed(1)}px`;
-            } else if (el.style.translate) {
-              el.style.translate = '';
-            }
-          });
-          ticking = false;
-        });
-      }, { passive: true });
-    }
+    /* ── magnetic pull: REMOVED, deliberately ──────────────────────────────
+       This used to make .btn, .deck__nav, .lang__btn and .cover__cue lean
+       toward the pointer. The owner's verdict, and it is the right one:
+
+         "ทุกปุ่มเลย ... ขยับตามเมาส์ตลอด" — every button was being needy.
+
+       The mistake was applying it to a CLASS of element rather than to one
+       thing. Magnetism is emphasis, and emphasis on everything is emphasis on
+       nothing: with every button reaching for the cursor, the contact CTA at
+       the bottom of the page — the only one that actually matters — read
+       exactly like the language toggle in the corner.
+
+       If it ever comes back it goes on ONE element, chosen on purpose, not on
+       a selector that happens to match nine. The ring already opens over
+       anything clickable, which is the feedback this was duplicating anyway. */
   }
 
   /* ── 2 · drift ───────────────────────────────────────────────────────────
