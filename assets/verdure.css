@@ -446,6 +446,30 @@ a { color: inherit; }
   will-change: transform, opacity;
 }
 
+/* SCENE 0.5 — the title sequence comes apart on the way out.
+   The two name lines shear in opposite directions and the dimension line
+   retracts the way it was drawn, so the opening does not merely fade: it
+   un-draws itself back into the rules it was built from, and then the light
+   half of the page arrives. Both are driven by the same --cp the parallax
+   uses, so there is no second scroll listener and no JS at all beyond the one
+   variable already being written.
+
+   2vw, not more: the lines must part visibly without either one reaching the
+   panel edge at 360px, where the surname already fills the width. */
+.cover__name .line:nth-child(1) { transform: translateX(calc(var(--cp, 0) * -2vw)); }
+.cover__name .line:nth-child(2) { transform: translateX(calc(var(--cp, 0) *  2vw)); }
+/* The bar retracts with clip-path, NOT with transform. transform is already
+   spoken for by the load-in scaleX, and that rule carries a 900ms transition —
+   reusing it would put a 900ms lag between the scroll and the line, which on a
+   scroll-driven value reads as a bug. clip-path has no transition declared, so
+   it tracks the wheel exactly. */
+.cover .measure__bar { clip-path: inset(0 calc(var(--cp, 0) * 100%) 0 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cover__name .line { transform: none; }
+  .cover .measure__bar { clip-path: none; }
+}
+
 /* Short desktop screens — 1366×768 and 1280×720 laptops — are where most people
    will open this, and the cover should still be one screenful there rather than
    something you have to scroll to finish reading. The air comes out of the
@@ -1646,4 +1670,91 @@ html.nav-in.nav-out .nav-label { opacity: 0; transition: opacity 260ms ease; }
 
 @media (prefers-reduced-motion: reduce) {
   .nav-panel, html.nav-in::before, .nav-label { display: none; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   P7 · MICRO-INTERACTIONS — the landing page half.
+   The same three moves as assets/style.css, under this sheet's tokens:
+   CHANGE ONE, CHANGE THE OTHER. Hover is the one motion a visitor triggers
+   themselves, so it is the one place the site can answer back.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── label swap ───────────────────────────────────────────────────────────
+   Ported verbatim from style.css. data-label needs no second copy in the
+   markup and keeps the duplicate out of the accessibility tree. */
+.swap {
+  position: relative; display: inline-block; overflow: hidden;
+  vertical-align: bottom; padding-block: .14em; margin-block: -.14em;
+}
+.swap > span { display: block; transition: transform var(--t1) var(--ease); }
+/* the incoming copy waits one full box below, outside the mask */
+.swap > span + span,
+.swap[data-label]::after {
+  position: absolute; left: 0; top: .14em; width: 100%; display: block;
+  transform: translateY(calc(100% + .14em));
+  transition: transform var(--t1) var(--ease);
+}
+.swap[data-label]::after { content: attr(data-label); }
+
+/* Hover is read off the interactive ANCESTOR, not off .swap itself: the label
+   sits inside a button's padding, and a visitor over the padding is hovering
+   the button. .swap:hover would leave a dead ring around the text.
+   :first-child, so the parked copy is not dragged up along with it. */
+a:hover .swap > span:first-child, a:focus-visible .swap > span:first-child,
+button:hover .swap > span:first-child, button:focus-visible .swap > span:first-child {
+  transform: translateY(calc(-100% - .14em));
+}
+a:hover .swap > span + span, a:focus-visible .swap > span + span,
+button:hover .swap > span + span, button:focus-visible .swap > span + span,
+a:hover .swap[data-label]::after, a:focus-visible .swap[data-label]::after,
+button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::after {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* no swap at all rather than an instant jump: teleporting a word is a glitch,
+     not a reduced version of a slide. Both copies stay exactly where they are. */
+  .swap > span, .swap > span + span, .swap[data-label]::after { transition: none; }
+  a:hover .swap > span:first-child, a:focus-visible .swap > span:first-child,
+  button:hover .swap > span:first-child, button:focus-visible .swap > span:first-child {
+    transform: none;
+  }
+  a:hover .swap > span + span, a:focus-visible .swap > span + span,
+  button:hover .swap > span + span, button:focus-visible .swap > span + span,
+  a:hover .swap[data-label]::after, a:focus-visible .swap[data-label]::after,
+  button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::after {
+    transform: translateY(calc(100% + .14em));
+  }
+}
+
+/* ── underlines that draw themselves ──────────────────────────────────────
+   A link that simply turns a colour on hover is the default everything has.
+   Drawing the rule left to right is the same grammar as every other line on
+   this site (law L3) — structure gets drawn, it does not appear. */
+.bar a, .foot a, .pick__skip a, .cover__cue {
+  position: relative; text-decoration: none;
+}
+.bar a::after, .foot a::after, .pick__skip a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t1) var(--ease);
+}
+.bar a:hover::after, .bar a:focus-visible::after,
+.foot a:hover::after, .foot a:focus-visible::after,
+.pick__skip a:hover::after, .pick__skip a:focus-visible::after { transform: scaleX(1); }
+/* the footer links already carry a permanent rule; that one is the track the
+   drawn one runs over, so it stays and only loses its hover recolour */
+.foot a { border-bottom-color: transparent; }
+
+/* ── images lean in ───────────────────────────────────────────────────────
+   Both frames already clip, so the scale happens inside the border radius. */
+.shot, .capsule { overflow: hidden; }
+.shot img, .capsule img { transition: transform var(--t3) var(--ease); }
+.shot:hover img, .capsule:hover img { transform: scale(1.03); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bar a::after, .foot a::after, .pick__skip a::after,
+  .shot img, .capsule img { transition: none; }
+  .shot:hover img, .capsule:hover img { transform: none; }
 }
