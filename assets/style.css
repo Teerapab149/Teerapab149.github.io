@@ -1093,3 +1093,47 @@ html.nav-in.nav-out .nav-label { opacity: 0; transition: opacity 260ms ease; }
 @media (prefers-reduced-motion: reduce) {
   .nav-panel, html.nav-in::before, .nav-label { display: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CURSOR — built by assets/feel.js. Identical block in verdure.css and
+   style.css: CHANGE ONE, CHANGE THE OTHER.
+
+   mix-blend-mode: difference is doing the real work. This site runs a light
+   paper AND a dark act, and a cursor coloured for one is invisible on the
+   other. Differencing white against whatever is underneath inverts it every
+   time, so one rule covers both without JS ever having to know which act it
+   is in.
+
+   The native cursor is hidden only under .has-cur, which feel.js sets after
+   the FIRST pointermove — so it is hidden only once there is provably a live
+   script drawing a replacement. If the script dies, the class never lands and
+   the system cursor is simply still there.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.cur {
+  position: fixed; left: 0; top: 0; z-index: 300;
+  pointer-events: none; opacity: 0;
+  mix-blend-mode: difference;
+  transition: opacity .25s ease, width .22s var(--ease), height .22s var(--ease);
+}
+.has-cur .cur { opacity: 1; }
+.has-cur, .has-cur a, .has-cur button, .has-cur .pick__card, .has-cur .shot { cursor: none; }
+
+.cur--dot  { width: 6px;  height: 6px;  border-radius: 50%; background: #fff; }
+.cur--ring { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #fff; }
+
+/* over something clickable the ring opens up and the dot gets out of the way */
+.cur-hot .cur--ring { width: 56px; height: 56px; }
+.cur-hot .cur--dot  { width: 3px;  height: 3px; }
+
+/* a coarse pointer never gets here (feel.js checks pointer: fine), but if the
+   device switches — a tablet with a trackpad attached — this is the backstop */
+@media (pointer: coarse) {
+  .cur { display: none; }
+  .has-cur, .has-cur a, .has-cur button { cursor: auto; }
+}
+@media (prefers-reduced-motion: reduce) { .cur { display: none; } }
+
+/* drift writes `translate` on these; declaring will-change here rather than in
+   JS keeps the hint on the small, known set instead of on everything */
+.shot, .capsule, .hero__shot, figure.figure { will-change: translate; }
