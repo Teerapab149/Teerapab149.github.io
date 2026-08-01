@@ -1,0 +1,146 @@
+/* cinema.css — ONLY for index-cinema.html, the horizontal-rail prototype.
+   Loaded AFTER verdure.css, which it extends rather than replaces: every
+   colour, type step and motion token below comes from that file.
+
+   index.html does not load this and is not affected by anything in here.
+   CLAUDE.md: a new design goes in a new file, it does not overwrite one the
+   owner already approved.
+
+   ── the idea ──────────────────────────────────────────────────────────────
+   The four projects stop being four stacked sections and become one rail that
+   scroll drags sideways. Two things the rest of the site never does: motion
+   the scroll DRIVES continuously rather than triggers once, and the horizontal
+   axis, which the whole page currently ignores.
+
+   ── the fallback is the base state, not an afterthought ───────────────────
+   Written the other way up from most pinned rails: the DEFAULT is an ordinary
+   horizontally-scrollable filmstrip that works with no JS, on a phone, and
+   under reduced motion. The pin is layered on top only when cinema.js adds
+   html.can-pin, which it does only when pinning is actually a good idea. So
+   the failure mode is "a filmstrip you swipe", never "three projects you
+   cannot reach". */
+
+/* ── base: a filmstrip ─────────────────────────────────────────────────── */
+
+.rail { position: relative; background: var(--paper); }
+.rail__pin { padding-block: clamp(40px, 7vw, 90px); }
+
+.rail__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 20px;
+  width: 100%; max-width: var(--maxw); margin: 0 auto clamp(18px, 3vw, 30px);
+  padding-inline: clamp(18px, 4vw, 54px);
+}
+.rail__count {
+  font-family: var(--font-display); font-weight: 600; font-size: .6875rem;
+  letter-spacing: .2em; color: var(--deep-4); font-variant-numeric: tabular-nums; margin: 0;
+}
+.rail__count b { color: var(--sea-ink); font-size: .9375rem; }
+
+.rail__track {
+  display: flex; gap: clamp(16px, 2.4vw, 30px);
+  list-style: none; margin: 0; padding-inline: clamp(18px, 4vw, 54px);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scrollbar-width: thin;
+}
+.panel {
+  flex: 0 0 min(88vw, 1060px); min-width: 0;
+  scroll-snap-align: center;
+  display: grid; gap: clamp(20px, 3vw, 44px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: center;
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-radius: clamp(18px, 2.4vw, 30px);
+  padding: clamp(20px, 2.6vw, 38px);
+}
+@media (max-width: 860px) { .panel { grid-template-columns: 1fr; } }
+
+/* the media half */
+.panel__media {
+  position: relative; overflow: hidden;
+  border-radius: clamp(12px, 1.6vw, 20px); background: var(--paper-3);
+  aspect-ratio: 16 / 11;
+  box-shadow: 0 30px 60px -40px rgba(13, 43, 62, .5);
+}
+.panel__media img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;
+}
+/* MeguBot's profile card is a tall portrait, not a wide screenshot — contain it
+   rather than cropping a person's avatar out of frame */
+.panel--tall .panel__media img { object-fit: contain; background: var(--paper-3); padding: 6%; }
+
+/* the text half */
+.panel__idx {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem); line-height: .8;
+  letter-spacing: -.06em; color: var(--sea-deep); margin: 0 0 10px;
+}
+.panel__t { margin: 10px 0 12px; }
+.panel__body .small { margin: 12px 0 18px; }
+.panel__body .facts { margin-bottom: 18px; }
+
+/* ── layered on: the pin ───────────────────────────────────────────────────
+   --rx is written by cinema.js in px. With no JS it is 0 and none of this
+   applies anyway, because .can-pin is never added. */
+
+.js-anim.can-pin .rail { height: var(--rail-h, 400vh); }
+.js-anim.can-pin .rail__pin {
+  position: sticky; top: 0; height: 100svh;
+  /* clears the fixed top bar — without this the rail's own header sits under
+     it and the "01 / 04" counter, which is the only thing telling you where
+     you are in the rail, is invisible for the whole section */
+  padding: calc(var(--bar) + 10px) 0 clamp(14px, 2vw, 22px);
+  display: flex; flex-direction: column; justify-content: center;
+  overflow: hidden;                       /* this is what keeps the body from scrolling sideways */
+}
+/* the panel has to fit what is left after the header and the measure, or the
+   two of them get pushed out of the pin by a tall card */
+.js-anim.can-pin .panel { max-height: calc(100svh - var(--bar) - 130px); overflow: hidden; }
+.js-anim.can-pin .panel__media { max-height: 100%; }
+.js-anim.can-pin .rail__track {
+  overflow: visible; scroll-snap-type: none;
+  transform: translate3d(var(--rx, 0px), 0, 0);
+  will-change: transform;
+}
+.js-anim.can-pin .panel {
+  /* the one you are on is lifted out of the row; its neighbours sit back */
+  opacity: calc(.42 + .58 * var(--near, 0));
+  scale: calc(.955 + .045 * var(--near, 0));
+  transition: opacity var(--t2) ease, scale var(--t2) var(--ease);
+}
+/* the image lags the panel that carries it — the same trick as the theme deck,
+   and the reason a slide reads as depth rather than as a row of pictures */
+.js-anim.can-pin .panel__media img {
+  translate: calc(var(--lag, 0) * -3%) 0;
+}
+
+/* ── the measure under the rail ────────────────────────────────────────────
+   Not a decorative progress bar: it is the same drafting language as the
+   dimension line on the cover, so the rail belongs to the same site. */
+.rail__bar {
+  position: relative; height: 1px; margin: clamp(20px, 3vw, 34px) auto 0;
+  width: min(calc(100% - 2 * clamp(18px, 4vw, 54px)), var(--maxw));
+  background: var(--rule);
+}
+.rail__bar i {
+  position: absolute; left: 0; top: -1px; height: 3px;
+  width: calc(var(--rp, 0) * 100%); background: var(--sea-ink);
+  transition: width 80ms linear;
+}
+.js-anim.can-pin .rail__bar { margin-bottom: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-anim.can-pin .panel { opacity: 1; scale: 1; transition: none; }
+  .js-anim.can-pin .panel__media img { translate: none; }
+  .rail__bar i { transition: none; }
+}
+
+/* ── a hint, on the filmstrip only ─────────────────────────────────────────
+   When it is a swipeable strip there is nothing telling you it moves. When it
+   is pinned, scrolling does it for you and a hint would be noise. */
+.rail__hint {
+  display: block; width: 100%; max-width: var(--maxw); margin: 14px auto 0;
+  padding-inline: clamp(18px, 4vw, 54px);
+  font-family: var(--font-display); font-weight: 600; font-size: .625rem;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--deep-4);
+}
+.js-anim.can-pin .rail__hint { display: none; }
