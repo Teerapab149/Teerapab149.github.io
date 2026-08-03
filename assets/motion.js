@@ -42,7 +42,7 @@
      lists sits at opacity:0 for good. One owner, one list. */
 
   /* ── number count-up ─────────────────────────────────────────────────────
-     The markup already holds the final string ("3,119", "~1,600", "23").
+     The markup already holds the final string ("3,119", "1,643", "23").
      We read it, animate up to it, then write the ORIGINAL string back so no
      rounding or formatting difference can survive the animation. */
 

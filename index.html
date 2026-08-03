@@ -6,8 +6,14 @@
 <title>Teerapab Boonsri — System / Business Analyst</title>
 <meta name="description" content="Portfolio of Teerapab Boonsri, a Business Information Systems student at Prince of Songkla University — an online voting system in real use, a credit tracker that reads transcripts, and a chatbot on Azure.">
 <meta name="theme-color" content="#DFE3DA">
+<!-- Root, with no filename: index.html and / are the same document, and this is
+     the one the four case studies link back to. Same value as og:url below. -->
+<link rel="canonical" href="https://teerapab149.github.io/">
 
+<!-- website, not article — this is the site itself, not one of its pages. The
+     four case studies say article. -->
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Teerapab Boonsri">
 <meta property="og:title" content="Teerapab Boonsri — System / Business Analyst">
 <meta property="og:description" content="Three systems I designed and built end to end, from requirements to deploy.">
 <meta property="og:url" content="https://teerapab149.github.io/">
@@ -28,8 +34,24 @@
 <!-- The arriving half of the page wipe. It has to run before first paint,
      which is why it is here and not in nav.js. See assets/nav.js. -->
 <script>try{if(sessionStorage.getItem('nav'))document.documentElement.classList.add('nav-in');}catch(e){}</script>
+<!-- Last-resort gate for the cover. .cover no longer carries .scene, so the
+     scroll observer will not reveal it — curtain.js does. If that file fails to
+     load or throws before it gets there, this puts the cover on screen anyway.
+     A no-op on every normal load. -->
+<script>setTimeout(function(){var c=document.querySelector('.cover');if(c)c.classList.add('is-in');},4000);</script>
+<!-- The rail panel → hero image morph. Blocking, in <head>, on purpose:
+     pagereveal fires at the arriving page's FIRST RENDER, and defer only
+     promises to beat DOMContentLoaded. Miss that event and the panel morphs
+     into an empty box. Two listeners and a class — nothing to defer. -->
+<script src="assets/morph.js"></script>
 </head>
 <body>
+<!-- The curtain. FIRST in <body> and blocking on purpose: the overlay has to
+     exist before the first paint, or the page flashes once before being
+     covered and the entrance reads as a glitch rather than an entrance.
+     With no JS it is never created and the page renders finished. -->
+<script src="assets/curtain.js"></script>
+
 
 <header class="bar">
   <a href="#work">Work</a>
@@ -49,61 +71,13 @@
 
 <main>
 
-<!-- ══ 0 · boot — the system draws itself ═════════════════════════════════
-     The owner's read, and it reframed this whole screen: anyone arriving here
-     followed a link from his CV, so they already know whose portfolio it is.
-     Spending the most valuable screen on the page introducing him was spending
-     it on something the visitor already knew — which is why it read as bland.
-
-     So the first screen is the WORK's thesis instead: the ballot path from the
-     election system, drawing itself node by node. Every node and every caption
-     below is lifted from the architecture section of fms-election.html — this
-     is the real shape of the real system, not an illustration of one.
-
-     The diagram then recedes to wallpaper and one line resolves over it, with
-     the name in the corner the way a drawing carries a title block. The About
-     panel with the portrait is still here; it is simply the second screen now.
-
-     No JS → every node and caption is plain markup, already in reading order,
-     and the section is a legible diagram that happens not to animate. -->
-<section class="stage boot" id="boot" aria-label="How a ballot moves through the voting system">
-  <div class="inner">
-
-    <p class="tag rise" style="--d:120ms">FMS Online Voting System · the path of one ballot</p>
-
-    <ol class="flow" aria-label="Five stages">
-      <li class="node stamp" style="--d:220ms"><b>Student</b><span>almost all of them on a phone</span></li>
-      <i class="wire draw" style="--d:320ms" aria-hidden="true"></i>
-      <li class="node stamp" style="--d:420ms"><b>PSU Passport</b><span>NextAuth · OIDC sign-in</span></li>
-      <i class="wire draw" style="--d:520ms" aria-hidden="true"></i>
-      <li class="node stamp node--key" style="--d:620ms"><b>Ballot</b><span>ciphertext + prevHash + rowHash</span></li>
-      <i class="wire draw" style="--d:720ms" aria-hidden="true"></i>
-      <li class="node stamp node--key" style="--d:820ms"><b>ChainHead</b><span>row lock while voting</span></li>
-      <i class="wire draw" style="--d:920ms" aria-hidden="true"></i>
-      <li class="node stamp" style="--d:1020ms"><b>Result</b><span>checkable, untraceable</span></li>
-    </ol>
-
-    <p class="flow__note rise" style="--d:1180ms">
-      The identity never travels with the vote — that separation is the whole design.
-    </p>
-
-    <p class="big big--m boot__line lm up" style="--d:1500ms">I draw the system<br>before I build it.</p>
-
-    <div class="block-title rise" style="--d:1760ms">
-      <span>Teerapab Boonsri</span>
-      <span>System / Business Analyst</span>
-      <span>Portfolio 2026</span>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 1 · cover — who this is, now the SECOND screen ══════════════════════
+<!-- ══ 0 · cover — the first screen, and what the curtain lifts to show ═══
      Was the opening. Demoted, not cut: the introduction still matters, it just
      no longer occupies the frame that has to earn the visitor's attention.
      Its entrance moved from the load timeline to the scroll observer with it —
      an animation nobody is present for is a wasted one. See .cover in
      verdure.css. -->
-<section class="stage cover scene" id="intro">
+<section class="stage cover" id="intro">
  <div class="cover__stack">
   <div class="inner cover__grid">
 
@@ -128,17 +102,38 @@
 
       <hr class="cover__rule" style="--d:620ms">
 
+      <!-- THE ONE THING A RECRUITER CAME TO FIND, MOVED ABOVE THE FOLD.
+           It used to exist only in the .bio row at the foot of this section,
+           which measured at y=782 on a 1366×768 laptop and y=1106 on a 390×844
+           phone — below the fold on every screen tested. Most visitors saw a
+           name and a face and left without ever learning what the page was
+           asking for.
+
+           It is a deliberate duplicate of that row, not a replacement: the row
+           is the structured answer ("Looking for: …") a reader scanning the
+           facts expects to find there, and this is the same fact where the eye
+           already is. Both have to stand alone, so both say it. -->
+      <p class="cover__seek rise" style="--d:660ms">
+        <b>Co-op internship · 16 Nov 2026 – 7 Mar 2027</b>
+        <span>System Analyst · Business Analyst · Management Trainee</span>
+      </p>
+
+      <!-- Shortened 2026-08-03. It used to open "I sit on the line between the
+           people who use a system and the system itself" and close with
+           "building the thing and putting it live myself" — the first is the
+           #roles heading almost word for word, the second is the same
+           analyst-then-developer point #method and #roles both make. Saying
+           either here spent the most valuable paragraph on the page repeating
+           what is coming, and pushed the facts row further under the fold. -->
       <p class="small cover__lede rise" style="--d:700ms">
         <strong>Business Information Systems student</strong> at the Faculty of Management Sciences,
-        Prince of Songkla University. I sit on the line between the people who use a system and the
-        system itself — gathering requirements, drawing the flows and the data model, then building
-        the thing and putting it live myself.
+        Prince of Songkla University. What follows is four systems and what I did on each.
       </p>
     </div>
 
     <figure class="portrait cover__portrait" style="--d:560ms">
       <div class="portrait__frame">
-        <img src="assets/img/me/portrait.webp" width="1200" height="1600"
+        <img src="assets/img/me/portrait.webp" width="900" height="1200"
              fetchpriority="high" alt="Teerapab Boonsri">
       </div>
     </figure>
@@ -173,18 +168,69 @@
  </div>
 </section>
 
+<!-- ══ 0b · method — the same drawing language, about the right subject ════
+     The screen this replaces showed a ballot moving through the election
+     system: a real diagram, but an argument for ONE project sitting where the
+     argument for the person belongs. This is the same four-stage vocabulary
+     (.flow / .node / .wire) pointed at the thing every project here has in
+     common — the order he does the work in.
+
+     Nothing invented. The stages are the ones already described in his own
+     words further down this page ("collecting requirements, designing the ER
+     diagram and the business flows, then writing the code, building the UI and
+     deploying it"), and the MeguBot note is the same split stated on that
+     project's card and its case study.
+
+     The two analyst stages carry .node--key because they are the half of the
+     job he is applying for. No JS → a legible four-stage diagram that simply
+     does not animate. -->
+<section class="stage stage--auto method" id="method" aria-label="How I work">
+  <div class="inner">
+
+    <p class="tag rise" style="--d:120ms">02 — How I work</p>
+
+    <ol class="flow" aria-label="Four stages">
+      <li class="node stamp node--key" style="--d:220ms"><b>Listen</b><span>sitting with the people who will use it, before anything is drawn</span></li>
+      <i class="wire draw" style="--d:320ms" aria-hidden="true"></i>
+      <li class="node stamp node--key" style="--d:420ms"><b>Draw</b><span>use cases, business rules, the ER diagram</span></li>
+      <i class="wire draw" style="--d:520ms" aria-hidden="true"></i>
+      <li class="node stamp" style="--d:620ms"><b>Build</b><span>the code and the interface, mobile-first</span></li>
+      <i class="wire draw" style="--d:720ms" aria-hidden="true"></i>
+      <li class="node stamp" style="--d:820ms"><b>Ship</b><span>deployed, then used by real people</span></li>
+    </ol>
+
+    <p class="flow__note rise" style="--d:980ms">
+      On three of the four projects here I did all four stages myself. On MeguBot I stopped after
+      the second and handed the drawing to a developer — which is exactly the job I am applying for.
+    </p>
+
+    <p class="big big--m method__line lm up" style="--d:1100ms">I draw the system<br>before I build it.</p>
+
+  </div>
+</section>
+
 <!-- ══ 1b · chooser — a way in, for people who want one ═══════════════════
      Deliberately skippable: nothing here is a gate. Ignore it and the next
      scroll is the same page it always was. -->
 <section class="stage stage--auto pick" id="pick">
   <div class="inner">
-    <p class="tag up">02 — Where would you like to start?</p>
+    <p class="tag up">03 — Where would you like to start?</p>
     <h2 class="big big--m lm up" style="--d:60ms;margin:14px 0 clamp(22px,3vw,36px)">
       Pick the one you care about<br>— or just keep scrolling
     </h2>
 
     <div class="pick__grid">
-      <a class="pick__card deal" href="#work">
+      <!-- data-rail-to="0", added 2026-08-03. Cards 02–04 have always carried
+           one and this card never did, so project 01 was the only panel in the
+           rail no link on the page could reach: this card pointed at #work, the
+           growing window, and left the reader to find the panel by swiping back
+           from 02. rail.js indexes panels from 0 (goTo(i) → panels[i], and
+           `rail.offsetTop + per * i`, so 0 is the rail's own top), which is
+           exactly where panel 01 sits.
+           href follows it to #work-rail for the same reason: with JS off the
+           href is the only thing that runs, and it should land in the same
+           place the handler would have taken it. -->
+      <a class="pick__card deal" href="#work-rail" data-rail-to="0">
         <span class="pick__n">01</span>
         <span class="pick__t">FMS Online<br>Voting System</span>
         <span class="pick__d">An election system the faculty actually runs, with 3,119 eligible voters</span>
@@ -194,13 +240,20 @@
       <a class="pick__card deal" style="--d:70ms" href="#work-rail" data-rail-to="1">
         <span class="pick__n">02</span>
         <span class="pick__t">FMS Credit<br>Tracker</span>
-        <span class="pick__d">Reads your transcript out of a PDF and works out what you still owe</span>
+        <!-- "still need", not "still owe": the same words the credit tracker's
+             own h1 uses, so the card and the page it opens agree. -->
+        <span class="pick__d">Reads your transcript out of a PDF and works out what you still need</span>
         <span class="pick__role">System Analyst · Full-stack · UI/UX</span>
       </a>
       <a class="pick__card deal" style="--d:140ms" href="#work-rail" data-rail-to="2">
         <span class="pick__n">03</span>
         <span class="pick__t">PSU<br>Chatbot</span>
-        <span class="pick__d">A student-question bot on Azure, deployed and running around the clock</span>
+        <!-- PAST TENSE, AND IT HAS TO STAY PAST. The bot is not running: the
+             student Azure subscription paying for the VM expired and took the
+             URL with it. psu-chatbot.html says so in as many words, and a
+             landing page still claiming it is up is a contradiction that gets
+             found in an interview room. -->
+        <span class="pick__d">A student-question bot on Azure, deployed and kept up around the clock for the whole of the course</span>
         <span class="pick__role">System Analyst · Cloud · Front-end</span>
       </a>
       <a class="pick__card deal" style="--d:210ms" href="#work-rail" data-rail-to="3">
@@ -237,16 +290,27 @@
          read as a mistake. It is also the more honest picture: nearly every real
          vote was cast on a phone. -->
     <figure class="capsule up" style="--d:120ms">
-      <img src="assets/img/mobile/01-original/1-home.webp" width="1170" height="3738" fetchpriority="high"
+      <img src="assets/img/mobile/01-original/1-home.webp" width="780" height="2492" fetchpriority="high"
            alt="The FMS voting system on a phone: the SAMO home screen with the countdown and the sign-in button">
     </figure>
 
     <div class="hero__side up" style="--d:200ms">
       <p class="tag">Four projects · one thread</p>
+      <!-- The closing sentence — "On the fourth I did only the design half —
+           and handed it to a developer" — was cut on 2026-08-03. That point was
+           being made FOUR times inside five screens: here, in .flow__note under
+           the method diagram, in #roles, and in the cover lede. Two are enough,
+           and the two kept are the ones that do work this one did not: the
+           method note lands it on the diagram it belongs to, and #roles is
+           where a recruiter is actually reading.
+           WHAT IS LEFT IS NOT SPARE. The first sentence is the source the four
+           stages in #method were drawn from — see CLAUDE.md rule 8, which cites
+           this line by name as the proof those stages were not invented. Do not
+           delete it with the next round of trimming. -->
       <p class="small">
         On the first three I owned the whole cycle: sitting with users to collect requirements,
         designing the ER diagram and the business flows, then writing the code, building the UI and
-        deploying it. On the fourth I did only the design half — and handed it to a developer.
+        deploying it.
       </p>
       <p class="small">
         Writing code is the tool that makes my system design sharper.
@@ -255,7 +319,7 @@
 
       <div class="stats-inline">
         <div><b data-count>3,119</b><span>eligible voters in a system in real use</span></div>
-        <div><b data-count>~1,600</b><span>ballots actually cast</span></div>
+        <div><b data-count>1,643</b><span>ballots actually cast</span></div>
         <div><b data-count>3</b><span>systems built end to end</span></div>
       </div>
     </div>
@@ -309,12 +373,33 @@
 
             <main class="fms__main">
               <div class="fms__left">
+                <!-- CLOSES IN, not STARTS IN: the stats panel to the right says 1,643
+                     ballots are cast and the bar reads 52.7%, so this election is open.
+                     In OriginalCountdownTimer.js that is phase RUNNING, whose label is
+                     CLOSES IN and whose palette is red — see .fms__count in verdure.css
+                     for the two contrast deviations that came with it.
+
+                     The real component ticks d:h:m:s off a 1s interval. This is a
+                     decorative rebuild with no timer behind it, so the minutes and the
+                     seconds are gone: a figure in days and hours is one nobody expects
+                     to move while they look at it, whereas a frozen seconds column
+                     reads as a broken clock. No JS was added — that would put an
+                     interval behind an ornament. -->
                 <div class="fms__count">
-                  <span class="fms__cbadge">STARTS IN</span>
-                  <span class="fms__time"><b>02</b>d<i>:</i><b>14</b>h<i>:</i><b>30</b>m<i>:</i><b>55</b>s</span>
+                  <span class="fms__cbadge">CLOSES IN</span>
+                  <span class="fms__time"><b>02</b>d<i>:</i><b>14</b>h</span>
                 </div>
 
-                <h1 class="fms__h1"><span>SAMO</span><span class="fms__num">50<i></i></span></h1>
+                <!-- div, not h1: this is a rebuilt fragment of ANOTHER product's UI
+                     sitting inside the page, and an h1 here competes with the page's
+                     real one (the name in the cover). Every class is unchanged —
+                     verdure.css styles .fms__h1 by class only, never by tag.
+
+                     49, not 50: GLOBAL_CONFIG_DEFAULTS.electionNumber is 49, and the
+                     comment above the fallback in OriginalHome.js says in as many
+                     words that the old 50 / 2570 / 2027 literals were wrong. The
+                     poster in this very mock is samo49_1.png. -->
+                <div class="fms__h1"><span>SAMO</span><span class="fms__num">49<i></i></span></div>
                 <p class="fms__h2">โครงการเลือกตั้ง<em>คณะกรรมการบริหาร</em></p>
                 <p class="fms__h3">สโมสรนักศึกษาคณะวิทยาการจัดการ</p>
                 <span class="fms__chip">ประจำปีการศึกษา 2569</span>
@@ -341,15 +426,15 @@
                 </div>
 
                 <!-- Figures are the real ones this portfolio already cites:
-                     3,119 eligible, ~1,600 cast → 51.3%. Nothing invented. -->
+                     3,119 eligible, 1,643 cast → 52.7%. Nothing invented. -->
                 <div class="fms__bento">
                   <div class="fms__hero">
                     <span class="fms__heroTag">ใช้สิทธิแล้ว (VOTED)</span>
-                    <span class="fms__heroNum">1,600<i>คน</i></span>
+                    <span class="fms__heroNum">1,643<i>คน</i></span>
                   </div>
                   <div class="fms__sub">
                     <span class="fms__subTag">ความคืบหน้า</span>
-                    <b class="fms__pct">51.3<i>%</i></b>
+                    <b class="fms__pct">52.7<i>%</i></b>
                     <span class="fms__bar"><i></i></span>
                   </div>
                   <div class="fms__sub">
@@ -364,7 +449,11 @@
               </div>
             </main>
 
-            <footer class="fms__foot">© FMS@PSU 2027. ALL RIGHTS RESERVED.</footer>
+            <!-- 2026, not 2027: GLOBAL_CONFIG_DEFAULTS.copyrightYear in
+                 src/utils/globalConfigDefaults.js is 2026, and OriginalHome.js reads
+                 it through that same default. 2569 BE = 2026 CE, so the chip, the
+                 meet-candidates tag and this line now all say one year. -->
+            <footer class="fms__foot">© FMS@PSU 2026. ALL RIGHTS RESERVED.</footer>
           </div>
 
           <!-- The window annotates its own reflow: as it passes each of the
@@ -394,19 +483,33 @@
 </section>
 
 <!-- ══ 3b · the tally — a beat between the window and the case study ═══════
-     Deliberately not numbered: the eyebrow run 01–06 belongs to the sections
-     that carry content, and this one is a breath. Every figure here is already
-     cited in §5 of docs/HANDOFF.md and repeated in the facts table below —
-     nothing new is claimed, it is the same four numbers given room. -->
-<section class="stage tally" aria-label="The voting system in four numbers">
+     Deliberately not numbered: the eyebrow run 01–08 belongs to the sections
+     that carry content, and this one is a breath.
+
+     TWO figures, not four, since 2026-08-03. The original four were an
+     intentional echo of the facts table on the project 01 card — that comment
+     was written when this section and that table were the only two places the
+     numbers appeared. They are not any more. By the time a reader arrives here
+     3,119 and 1,643 have been on screen three times: the chooser card for
+     project 01, the hero's .stats-inline, and inside the .fms window they were
+     just dragging (1,643 คน / 52.7% / 3,119 คน). A fourth sighting a screen
+     before the card repeats them yet again changes nobody's mind.
+
+     587 and 23 make their FIRST appearance here, and they are the two that
+     belong to this beat: the reader has just resized the thing themselves, so
+     the question in front of them is how much work it took — which is the
+     claim the line underneath makes. The people-scale numbers stay where they
+     argue for something: the hero, where "in real use" is the whole thesis.
+
+     Both figures are still sourced in §5 of docs/HANDOFF.md. Nothing here is
+     new; two things were removed and none added. -->
+<section class="stage tally" aria-label="The voting system in two numbers">
   <div class="inner">
     <p class="tag up">The window you just resized</p>
 
     <ol class="tally__grid">
-      <li class="tally__i draw"><b data-count>3,119</b><span>eligible voters, imported through the university API</span></li>
-      <li class="tally__i draw" style="--d:90ms"><b data-count>~1,600</b><span>ballots actually cast</span></li>
-      <li class="tally__i draw" style="--d:180ms"><b data-count>587</b><span>commits over seven months</span></li>
-      <li class="tally__i draw" style="--d:270ms"><b data-count>23</b><span>themes, switchable from admin</span></li>
+      <li class="tally__i draw"><b data-count>587</b><span>commits over seven months</span></li>
+      <li class="tally__i draw" style="--d:90ms"><b data-count>23</b><span>themes, switchable from admin</span></li>
     </ol>
 
     <p class="big big--m lm up" style="--d:340ms">
@@ -435,13 +538,13 @@
   <div class="rail__pin">
 
     <div class="rail__head">
-      <p class="tag">03 — The work</p>
+      <p class="tag">04 — The work</p>
       <p class="rail__count"><b>01</b> / 04</p>
     </div>
 
     <ol class="rail__track">
       <li class="panel">
-        <figure class="panel__media">
+        <figure class="panel__media unveil">
           <img src="assets/img/desktop/01-original/4-vote-multi.webp" width="1600" height="1100" loading="lazy" alt="Ballot screen showing the party options and the confirm button">
         </figure>
         <div class="panel__body">
@@ -449,10 +552,10 @@
           <p class="tag">In real use · Dec 2025 – present</p>
           <h2 class="big big--m panel__t">FMS Online<br>Voting System</h2>
           <p class="tag tag--honey">System Analyst · Core Developer · UI/UX</p>
-          <p class="small">The student council election system for the Faculty of Management Sciences, PSU, which I built alone. The hard part was never making a web page accept a vote — it was making the result <strong>provably untampered</strong> while making sure <strong>nobody can trace who voted for whom</strong>.</p>
+          <p class="small">The student council election system for the Faculty of Management Sciences, PSU, which I built alone. The hard part was never making a web page accept a vote — it was making the result <strong>provably unaltered</strong> while making sure <strong>nobody can trace who voted for whom</strong>. It closed with <strong>zero double-voting cases</strong>.</p>
           <div class="facts">
             <div><b data-count>3,119</b><span>eligible voters</span></div>
-            <div><b data-count>~1,600</b><span>ballots actually cast</span></div>
+            <div><b data-count>1,643</b><span>ballots actually cast</span></div>
             <div><b data-count>587</b><span>commits over 7 months</span></div>
             <div><b data-count>23</b><span>themes, switchable from admin</span></div>
           </div>
@@ -460,7 +563,7 @@
         </div>
       </li>
       <li class="panel">
-        <figure class="panel__media">
+        <figure class="panel__media unveil">
           <img src="assets/img/credit/05-results.webp" width="1600" height="797" loading="lazy" alt="Results by curriculum category">
         </figure>
         <div class="panel__body">
@@ -479,7 +582,7 @@
         </div>
       </li>
       <li class="panel">
-        <figure class="panel__media">
+        <figure class="panel__media unveil">
           <img src="assets/img/chatbot/01-hero.webp" width="1600" height="777" loading="lazy" alt="The PSU Chatbot page with the bot answering a student question">
         </figure>
         <div class="panel__body">
@@ -490,7 +593,7 @@
           <p class="small">A chatbot that answers student questions, built on Azure Bot Service, wired to Language Studio, then embedded in a web page through the Direct Line API with a Node.js layer in between that trades the secret key for a token <strong>so the key never reaches the frontend</strong>.</p>
           <div class="facts">
             <div><b>Azure</b><span>Bot Service + Language Studio</span></div>
-            <div><b>24/7</b><span>running on an Azure VM (Ubuntu)</span></div>
+            <div><b>24/7</b><span>stayed up on an Azure VM (Ubuntu)</span></div>
             <div><b>HTTPS</b><span>Nginx + Certbot + pm2</span></div>
             <div><b>3</b><span>people on the team, the system was mine</span></div>
           </div>
@@ -498,7 +601,7 @@
         </div>
       </li>
       <li class="panel panel--tall">
-        <figure class="panel__media">
+        <figure class="panel__media unveil">
           <img src="assets/img/megubot/01-profile.webp" width="602" height="665" loading="lazy" alt="MeguBot Reborn's Discord profile card with its bio and roles">
         </figure>
         <div class="panel__body">
@@ -526,25 +629,42 @@
 <!-- ══ 7 · roles ═══════════════════════════════════════════════════════════ -->
 <section class="stage act-dark" id="roles">
   <div class="inner">
-    <p class="tag up">03 — What I am looking for</p>
+    <p class="tag up">05 — What I am looking for</p>
     <h2 class="big big--l lm up" style="--d:60ms;margin-top:14px">
       I want to sit between<br>the people and <span class="mark-wrap">the system<svg class="scrawl" viewBox="0 0 300 32" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 22C64 8 152 4 240 11c30 3 48 7 54 11"/><path pathLength="1" d="M18 29C78 17 168 14 246 20" style="opacity:.55"/></svg></span>
     </h2>
 
+    <!-- THE LABELS CHANGED ON 2026-08-03; THE ORDER DID NOT, AND MUST NOT.
+         CLAUDE.md fixes the order — analyst roles first, Management Trainee
+         second, development third — because that is the owner's actual
+         preference. What changed is what the third label admits to.
+         "Also open to" told the one group of recruiters with the most open
+         co-op seats in this market (front-end and full-stack, for a BIS
+         student) that they were the third choice, in the first three words of
+         the block written for them. Ranking the reader is not the same as
+         ranking the work.
+
+         Each block also carries ONE inline link to the project that proves it.
+         Before this, #roles and #cv together were nine screens with no anchor
+         in them at all: a reader convinced by this section had nowhere to go
+         but back. The links are not decoration — MeguBot is the project where
+         he was the analyst and not the developer, and the voting system is the
+         UI the third block is about. -->
     <div class="roles">
       <div class="role role--lead up">
-        <p class="role__n">First choice</p>
+        <p class="role__n">Where I fit best</p>
         <h3 class="role__t">System Analyst<br>Business Analyst</h3>
         <p class="small">
           The closest match to what I have actually done — in every project here I started by
           collecting requirements, writing use cases, designing the ER diagram and setting the
-          business rules before touching the first line of code. On MeguBot I did exactly this and
-          then handed it to a developer. My advantage is that I can talk to developers on their own
-          terms, because I have written it myself.
+          business rules before touching the first line of code. On
+          <a href="megubot.html">MeguBot</a> I did exactly this and then handed it to a developer.
+          My advantage is that I can talk to developers on their own terms, because I have written
+          it myself.
         </p>
       </div>
       <div class="role up">
-        <p class="role__n">Second choice</p>
+        <p class="role__n">Also a strong fit</p>
         <h3 class="role__t">Management Trainee</h3>
         <p class="small">
           I study business administration, not engineering, so my view always starts from the
@@ -553,12 +673,19 @@
         </p>
       </div>
       <div class="role up">
-        <p class="role__n">Also open to</p>
+        <p class="role__n">Can start on day one</p>
         <h3 class="role__t">Front-end · Full-stack<br>Web Developer</h3>
+        <!-- The last sentence used to read "I can do it today; my long-term
+             goal is simply systems analysis", which told a development team
+             they were a stopover. The fact it was reaching for — that he
+             analyses before he builds — is an argument FOR hiring him to build,
+             so it is now stated that way round. Nothing was promised that the
+             rest of the page does not already show. -->
         <p class="small">
-          The UI of the voting system is the part I am proudest of — a 23-theme system switchable
-          site-wide from the admin page, and every screen designed mobile-first. If the role is
-          development, I can do it today; my long-term goal is simply systems analysis.
+          The UI of <a href="fms-election.html">the voting system</a> is the part I am proudest of —
+          a 23-theme system switchable site-wide from the admin page, and every screen designed
+          mobile-first. If the role is development I can start on day one, and the drawing I do
+          first is what keeps the code standing up later.
         </p>
       </div>
     </div>
@@ -568,7 +695,7 @@
 <!-- ══ 8 · skills + cv ═════════════════════════════════════════════════════ -->
 <section class="stage stage--auto act-dark" id="cv">
   <div class="inner">
-    <p class="tag up">04 — Skills</p>
+    <p class="tag up">06 — Skills</p>
     <h2 class="big big--m lm up" style="--d:60ms;margin:14px 0 clamp(26px,4vw,44px)">What I actually used in the projects above</h2>
 
     <div class="grid2">
@@ -597,7 +724,53 @@
       </div>
     </div>
 
-    <p class="tag up" style="margin-top:clamp(46px,7vw,84px)">05 — Background</p>
+    <!-- TWO CARDS ON THEIR OWN ROW, NOT A FIFTH AND SIXTH COLUMN.
+         .grid2 is repeat(auto-fit, minmax(230px, 1fr)), which resolves to four
+         columns at desktop width — a fifth card would sit alone on a second row
+         and a sixth would leave two empty columns beside it. .pair is a fixed
+         two-column row, so these two land side by side at every width that has
+         room for them and stack below 700px.
+
+         They are also not the same KIND of thing as the four above: those are
+         lists of tools, these are two facts about how he works that a recruiter
+         screens on. Giving them their own row says so without a heading. -->
+    <div class="pair">
+      <!-- MOVED HERE FROM THE FOOT OF #cv ON 2026-08-03, AND REWRITTEN.
+           It used to be a .note box after the CV rows, opening "Something I
+           always say plainly" — a phrase that announces a confession before
+           making one, and plants the question "so which part IS his?" in a
+           reader who had not asked it. Worse, it sat directly under four CV
+           entries claiming solo work, so it read as the exception at the bottom
+           of a contract.
+           It is not cut, because the thing it describes is real and is the CV's
+           own words: "AI-Assisted Development · Prompt Engineering" is a line
+           under Tools & Productivity in both PDFs linked from #contact. Stated
+           as a skill, in the skills section, it is the same information without
+           the flinch. No figures: the decision log's length is not counted
+           here, so it is not claimed here. -->
+      <div class="block up">
+        <h3>AI-assisted development</h3>
+        <p class="tag">How I work with it</p>
+        <p class="small">
+          I use AI as a thinking partner on every project, and I am precise about where the line
+          falls: <strong>the architecture, the security model and the data model are decisions I
+          make and can defend</strong>. Each project carries a written decision log, and I am happy
+          to walk through it.
+        </p>
+      </div>
+      <!-- Straight off the Business Analyst CV, at the levels that CV states —
+           Native, Working Proficiency, Conversational. Do not promote any of
+           them. It is on the page because it was previously reachable only by
+           downloading a PDF, and a language requirement is a first-round filter
+           in this market, not a footnote. -->
+      <div class="block up" style="--d:60ms">
+        <h3>Languages</h3>
+        <p class="tag">What I can work in</p>
+        <ul><li>Thai — Native</li><li>English — Working Proficiency</li><li>Japanese — Conversational</li></ul>
+      </div>
+    </div>
+
+    <p class="tag up" style="margin-top:clamp(46px,7vw,84px)">07 — Background</p>
     <div class="cv" style="margin-top:18px">
       <div class="cv__row up">
         <p class="cv__when">2023 – present</p>
@@ -644,23 +817,18 @@
         </div>
       </div>
     </div>
-
-    <div class="note up">
-      <p class="small">
-        <strong>Something I always say plainly</strong> — I use AI as a thinking partner on every
-        project, but the architecture, the security and the system design decisions are mine, and I
-        keep a written record of the lessons I hit so I do not repeat them.
-      </p>
-    </div>
+    <!-- The .note box that used to close this section moved up into #skills as
+         the "AI-assisted development" card — see the comment there. Nothing
+         replaced it: the CV rows are a better last thing to read than a caveat. -->
   </div>
 </section>
 
 <!-- ══ 9 · contact ═════════════════════════════════════════════════════════ -->
 <section class="stage end" id="contact">
   <div class="inner">
-    <p class="tag up">06 — Contact</p>
+    <p class="tag up">08 — Contact</p>
     <h2 class="big big--l lm up" style="--d:60ms;margin:16px 0 26px">
-      I speak developer<br>and <span class="mark-wrap">business<svg class="scrawl" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M50 78C16 66 18 30 62 19 114 6 216 6 262 19c28 8 32 38-2 52-48 18-164 20-214 7"/></svg></span>
+      Let's start with<br>the <span class="mark-wrap">problem<svg class="scrawl" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M50 78C16 66 18 30 62 19 114 6 216 6 262 19c28 8 32 38-2 52-48 18-164 20-214 7"/></svg></span>
     </h2>
 
     <p class="small up" style="--d:110ms;max-width:52ch">
@@ -671,17 +839,50 @@
     </p>
 
     <div class="btns up" style="--d:160ms;margin-top:30px">
-      <a class="btn" href="mailto:teerapab.bs@gmail.com"><span class="swap" data-label="Say hello">teerapab.bs@gmail.com</span></a>
-      <a class="btn btn--ghost" href="tel:+66620986667"><span class="swap" data-label="Call me">(+66) 62-098-6667</span></a>
+      <a class="btn" href="mailto:teerapab.bs@gmail.com"><span class="swap" data-label="Say hello"><span>teerapab.bs@gmail.com</span></span></a>
+      <a class="btn btn--ghost" href="tel:+66620986667"><span class="swap" data-label="Call me"><span>(+66) 62-098-6667</span></span></a>
     </div>
 
-    <!-- End credits. Decorative and aria-hidden: the name is already the page's
-         h1. The row is written twice so the loop can hand off at -50% without a
-         seam, and it holds still for anyone who asked for less motion. -->
+    <!-- TWO CVs, AND THE POINT IS THAT YOU CAN TELL THEM APART WITHOUT
+         DOWNLOADING BOTH. They are genuinely different documents, not one file
+         with two titles: the System Analyst version weights implementation
+         (Next.js, React, Prisma, PostgreSQL, Docker) and the Business Analyst
+         version weights elicitation and cost-benefit — and only that one
+         carries the language section. So each link says what is inside it.
+
+         Format and weight are IN THE LINK TEXT, not in a title attribute: a
+         screen reader reads the link, and "PDF, 125 KB" is the part that
+         decides whether someone on a phone taps it. download= keeps them out of
+         the browser's PDF viewer, and the paths are bare filenames because both
+         files sit at the repo root next to this page. -->
+    <ul class="dl up" style="--d:210ms">
+      <li>
+        <a class="btn btn--ghost" href="Teerapab-Boonsri-CV-System-Analyst.pdf" download>
+          CV — System Analyst (PDF) <i>125 KB</i>
+        </a>
+        <p class="small">Weighted towards building: Next.js, React, Prisma, PostgreSQL, Docker and Azure, with the systems I deployed.</p>
+      </li>
+      <li>
+        <a class="btn btn--ghost" href="Teerapab-Boonsri-CV-Business-Analyst.pdf" download>
+          CV — Business Analyst (PDF) <i>125 KB</i>
+        </a>
+        <p class="small">Weighted towards analysis: requirements elicitation, stakeholder work, cost-benefit — and the only one with the language section.</p>
+      </li>
+    </ul>
+
+    <!-- The availability strip. Decorative and aria-hidden — every fact in it is
+         stated in plain text directly above, so a screen reader loses nothing.
+         It replaced a loop of his own name and job titles, which the page had
+         just finished saying twice and which therefore read as filler.
+         Written FOUR times, not two: one repeat measured narrower than the
+         container, and at -50% the tail cleared the right edge and left a gap.
+         The rule is that half the row must be at least as wide as the box. -->
     <div class="ticker" aria-hidden="true">
       <div class="ticker__row">
-        <span>Teerapab Boonsri</span><em>·</em><span>System Analyst</span><em>·</em><span>Business Analyst</span><em>·</em><span>Co-op 2026–27</span><em>·</em>
-        <span>Teerapab Boonsri</span><em>·</em><span>System Analyst</span><em>·</em><span>Business Analyst</span><em>·</em><span>Co-op 2026–27</span><em>·</em>
+        <span class="ticker__on">Available</span><em>◆</em><span>Co-op · 16 Nov 2026 — 7 Mar 2027</span><em>◆</em><span>System Analyst</span><em>◆</em><span>Business Analyst</span><em>◆</em><span>Management Trainee</span><em>◆</em>
+        <span class="ticker__on">Available</span><em>◆</em><span>Co-op · 16 Nov 2026 — 7 Mar 2027</span><em>◆</em><span>System Analyst</span><em>◆</em><span>Business Analyst</span><em>◆</em><span>Management Trainee</span><em>◆</em>
+        <span class="ticker__on">Available</span><em>◆</em><span>Co-op · 16 Nov 2026 — 7 Mar 2027</span><em>◆</em><span>System Analyst</span><em>◆</em><span>Business Analyst</span><em>◆</em><span>Management Trainee</span><em>◆</em>
+        <span class="ticker__on">Available</span><em>◆</em><span>Co-op · 16 Nov 2026 — 7 Mar 2027</span><em>◆</em><span>System Analyst</span><em>◆</em><span>Business Analyst</span><em>◆</em><span>Management Trainee</span><em>◆</em>
       </div>
     </div>
 
@@ -707,6 +908,7 @@
 <script src="assets/verdure.js"></script>
 <script src="assets/i18n.js"></script>
 <script src="assets/feel.js"></script>
+<script src="assets/inner.js"></script>
 <script src="assets/rail.js"></script>
 <script src="assets/nav.js"></script>
 </body>

@@ -4,6 +4,16 @@
 # and the PSU Passport username that the published webp versions paint out.
 _source-images/
 
+# Motion prototypes. They stay on disk so the owner can open them side by side
+# with the real page, but they must never be committed: every .html at the root
+# is served by GitHub Pages, so a committed prototype is a half-finished page
+# that anyone who guesses the URL can read. The owner's ruling on 2026-08-02 was
+# "ผมพอใจอยู่ โดยรวม แต่ยังไม่ให้เอาไปเป็นตัวจริงนะ" — see docs/PLAN-MOTION.md.
+# Delete these lines only when a prototype is promoted to the real index.html.
+index-motion.html
+index-motion_2.html
+index-niika.html
+
 # nothing is built here — these are just editor / OS noise
 .DS_Store
 Thumbs.db

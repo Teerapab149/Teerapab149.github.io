@@ -191,9 +191,16 @@
 
   /* .scene has no visual rules of its own. It marks a SECTION whose internal
      entrance timeline should start when the section arrives, rather than on
-     load — the cover uses it now that it is the second screen, because an
-     entrance nobody is present for is a wasted one. */
-  const risers = document.querySelectorAll('.reveal, .up, .scrawl, .lm, .draw, .stamp, .wipe, .deal, .scene');
+     load, because an entrance nobody is present for is a wasted one.
+
+     NOTHING CARRIES IT RIGHT NOW (checked 2026-08-03, all five pages). The
+     cover used to, back when it was the second screen; once the curtain went
+     in front of it the cover stopped being something you scroll TO, so
+     curtain.js hands it .is-in directly and .scene came off. The name stays in
+     this list because it costs one selector and it is the vocabulary for
+     "start this section's timeline on arrival" — the next section that needs
+     that should reach for it rather than invent a second mechanism. */
+  const risers = document.querySelectorAll('.reveal, .up, .scrawl, .lm, .draw, .stamp, .wipe, .deal, .scene, .unveil');
 
   if (reduced || !('IntersectionObserver' in window)) {
     risers.forEach(el => el.classList.add('is-in'));

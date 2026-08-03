@@ -4,12 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PSU Chatbot — Teerapab Boonsri</title>
-<meta name="description" content="A chatbot answering student questions, built on Azure Bot Service, wired to Language Studio and embedded in a web page through the Direct Line API, running on an Azure VM around the clock.">
+<meta name="description" content="A chatbot answering student questions, built on Azure Bot Service, wired to Language Studio and embedded in a web page through the Direct Line API. It ran on an Azure VM around the clock for the length of the course, until the student Azure subscription behind it expired.">
 <meta name="theme-color" content="#DFE3DA">
+<link rel="canonical" href="https://teerapab149.github.io/psu-chatbot.html">
 
 <meta property="og:type" content="article">
+<meta property="og:site_name" content="Teerapab Boonsri">
 <meta property="og:title" content="PSU Chatbot — case study">
-<meta property="og:description" content="A chatbot on Azure, deployed for real use with HTTPS on an Azure VM.">
+<meta property="og:description" content="A chatbot on Azure, deployed for real use with HTTPS on an Azure VM and kept up for the whole of the course.">
 <meta property="og:url" content="https://teerapab149.github.io/psu-chatbot.html">
 <meta property="og:image" content="https://teerapab149.github.io/assets/img/chatbot/01-hero.webp">
 <meta name="twitter:card" content="summary_large_image">
@@ -23,6 +25,11 @@
 <!-- The arriving half of the page wipe. It has to run before first paint,
      which is why it is here and not in nav.js. See assets/nav.js. -->
 <script>try{if(sessionStorage.getItem('nav'))document.documentElement.classList.add('nav-in');}catch(e){}</script>
+<!-- The rail panel → hero image morph. Blocking, in <head>, on purpose:
+     pagereveal fires at the arriving page's FIRST RENDER, and defer only
+     promises to beat DOMContentLoaded. Miss that event and the panel morphs
+     into an empty box. Two listeners and a class — nothing to defer. -->
+<script src="assets/morph.js"></script>
 </head>
 <body>
 
@@ -65,7 +72,9 @@
       PSU Chatbot — a bot that answers the questions students ask most, built on Azure Bot Service,
       wired to Language Studio, then embedded in a page written in plain HTML/CSS/JavaScript through
       the Direct Line API, with Node.js in the middle exchanging the secret key for a short-lived
-      token. The whole thing runs on an Azure VM around the clock, with HTTPS.
+      token. The whole thing ran on an Azure VM around the clock, with HTTPS, for the length of the
+      course — until the student Azure subscription paying for that VM expired and took the URL
+      with it.
     </p>
     <div class="hero__meta up" style="--d:320ms">
       <span class="chip">Azure Bot Service</span>
@@ -76,6 +85,25 @@
       <span class="chip">Azure VM (Ubuntu)</span>
       <span class="chip">Nginx · Certbot</span>
       <span class="chip">pm2</span>
+    </div>
+
+    <!-- This page used to carry a live claim with nothing to click. There is no
+         live URL to give any more — the VM went with the student subscription —
+         so the repository takes that slot, and the chip beside it states the
+         status in words rather than leaving the reader to wonder why a project
+         that "went live" has no address. Ghost button, same shape as the
+         repository link on megubot.html. The link leaves the site, so it
+         carries the arrow glyph plus an aria-label/title saying so. -->
+    <div class="btn-row up" style="--d:360ms">
+      <a class="btn btn--ghost" href="https://github.com/Teerapab149/Chatbot-Project"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="See the code on GitHub — opens in a new tab"
+         title="Opens github.com/Teerapab149/Chatbot-Project in a new tab">See the code on GitHub
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+      </a>
+      <span class="chip">github.com/Teerapab149/Chatbot-Project</span>
+      <span class="chip">The live URL retired with the student Azure subscription</span>
     </div>
 
     <figure class="hero__shot wipe" style="margin-top: clamp(36px, 6vw, 64px); --d:400ms">
@@ -89,7 +117,10 @@
 <section id="stats">
   <div class="wrap">
     <div class="stats up">
-      <div class="stat"><b>24/7</b><span>continuously available<br>on an Azure VM (Ubuntu)</span></div>
+      <!-- 24/7 stays as the number, because it is the claim that is actually
+           true and hard to earn — the caption is what carries the tense. The
+           bot no longer runs; it did run, unattended, for the whole course. -->
+      <div class="stat"><b>24/7</b><span>stayed up on an Azure VM (Ubuntu)<br>for the whole of the course</span></div>
       <div class="stat"><b>HTTPS</b><span>certificate from Certbot<br>behind an Nginx reverse proxy</span></div>
       <div class="stat"><b>5</b><span>main steps<br>from knowledge base to deploy</span></div>
       <div class="stat"><b>2</b><span>page themes<br>light and dark</span></div>
@@ -120,7 +151,7 @@
       <div class="card up" style="--d:60ms">
         <span class="card__num stamp">02</span>
         <h3>A hard budget ceiling</h3>
-        <p>It is a student account, so I had to pick the cheapest service tier that still stays up all the time.</p>
+        <p>It was a student account, so I had to pick the cheapest service tier that would still stay up all the time — the same account whose credits later ran out and took the deployment with them.</p>
       </div>
       <div class="card up" style="--d:120ms">
         <span class="card__num stamp">03</span>
@@ -228,7 +259,7 @@
           <p>
             Create the VM (Ubuntu) and set its DNS name · upload the files and run Node.js ·
             put Nginx in front on ports 80/443 as a reverse proxy · get an SSL certificate with
-            Certbot · let pm2 keep the process from staying dead.
+            Certbot · let pm2 restart the process if it dies.
           </p>
         </div>
       </div>
@@ -314,14 +345,18 @@ app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class=
       <h2 class="lm up" style="--d:80ms">From my own machine to a URL that opens on a phone</h2>
     </div>
 
+    <!-- Past tense throughout, on purpose: this whole section is about a machine
+         that no longer exists. The reason the HTTPS entry keeps the present
+         tense ("browsers block") is that it is a fact about browsers, not a
+         claim about this deployment. -->
     <dl class="kv up">
       <div>
         <dt>The machine</dt>
-        <dd>An Azure Virtual Machine running <strong>Ubuntu</strong>, with an Azure DNS name so it is reachable by name rather than by IP address</dd>
+        <dd>An Azure Virtual Machine running <strong>Ubuntu</strong>, with an Azure DNS name so it was reachable by name rather than by IP address</dd>
       </div>
       <div>
         <dt>Reverse proxy</dt>
-        <dd><strong>Nginx</strong> takes requests on ports 80 and 443 and forwards them to the Node.js process inside, so users never have to type a port number after the URL</dd>
+        <dd><strong>Nginx</strong> took requests on ports 80 and 443 and forwarded them to the Node.js process inside, so users never had to type a port number after the URL</dd>
       </div>
       <div>
         <dt>HTTPS</dt>
@@ -329,7 +364,13 @@ app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class=
       </div>
       <div>
         <dt>Staying up</dt>
-        <dd><strong>pm2</strong> supervises the Node.js process so it restarts itself on a crash and comes back on its own after the VM reboots</dd>
+        <dd><strong>pm2</strong> supervised the Node.js process so it restarted itself on a crash and came back on its own after the VM rebooted</dd>
+      </div>
+      <div>
+        <dt>Where it stands now</dt>
+        <dd>The VM was paid for by a <strong>student Azure subscription</strong>, and it went when the
+          credits did, so the URL no longer resolves. It was up and in use for the whole of the
+          course, which is the part that was hard to get right — <a class="link" href="https://github.com/Teerapab149/Chatbot-Project" target="_blank" rel="noopener noreferrer" aria-label="The code and the deployment configuration on GitHub — opens in a new tab" title="Opens github.com/Teerapab149/Chatbot-Project in a new tab">the code and the deployment configuration are on GitHub</a></dd>
       </div>
     </dl>
   </div>
@@ -346,7 +387,7 @@ app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class=
     <div class="grid grid--3">
       <div class="card up">
         <h3>The service sleeps when nobody uses it</h3>
-        <p>Cheap service tiers go idle without traffic, so the first message after a quiet stretch is unusually slow. That is the trade-off you bought with the price, not a bug.</p>
+        <p>Cheap service tiers go idle without traffic, so the first message after a quiet stretch was unusually slow. That is the trade-off you buy with the price, not a bug.</p>
       </div>
       <div class="card up" style="--d:60ms">
         <h3>WebChat can only be styled so far</h3>
@@ -387,9 +428,13 @@ app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class=
       <h2 class="lm up" style="--d:80ms">Things worth saying plainly</h2>
     </div>
     <ul class="clean up">
+      <!-- First bullet on purpose. Everything above this point talks about a
+           system that was live; a reader who finds that out in an interview
+           instead of here loses more trust than the offline status costs. -->
+      <li><strong>It is not running today</strong> — it was live for the whole of the course, on an Azure VM with its own HTTPS address, answering questions from a phone. The VM ran on student Azure credits and went offline when they expired with the account, so there is no URL left to hand you. What was built is still on GitHub</li>
       <li><strong>Built in the first term of my third year</strong> — the web work here is basic HTML/CSS/JS, nowhere near as involved as the two projects that followed. Its value is in the flow design and in wiring cloud services together until the thing genuinely works</li>
       <li><strong>It was a group of 3</strong> — the system design, the Azure service configuration and the web development were my work</li>
-      <li><strong>The answer store is still QnA-style</strong> — it only answers what it was trained on; it is not a model that can look things up on its own · the next step I have planned is connecting it to university data and using a RAG approach so it can answer from real documents</li>
+      <li><strong>The answer store was QnA-style</strong> — it only answered what it had been trained on; it was not a model that could look things up on its own · if I pick it up again, the step I have in mind is connecting it to university data and using a RAG approach so it can answer from real documents</li>
     </ul>
   </div>
 </section>
@@ -449,6 +494,24 @@ app.<span class="f">get</span>(<span class="s">'/api/token'</span>, <span class=
           <a class="link" href="https://www.linkedin.com/in/teerapab-boonsri-bb2404394/" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.64h.05A4.17 4.17 0 0 1 17.6 8.7c4 0 4.4 2.53 4.4 5.82V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21h-4V9Z"/></svg>
             LinkedIn
+          </a>
+        </li>
+        <!-- Two CVs, not one, because they are genuinely different documents:
+             the System Analyst version leads on implementation, the Business
+             Analyst version on requirements and stakeholder work. Plain <a
+             download> to files at the repo root — relative paths, no JS, so
+             they still work if every script on the page fails.
+             This block is identical in all four case-study footers. -->
+        <li>
+          <a class="link" href="Teerapab-Boonsri-CV-System-Analyst.pdf" download>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+            CV — System Analyst (PDF)
+          </a>
+        </li>
+        <li>
+          <a class="link" href="Teerapab-Boonsri-CV-Business-Analyst.pdf" download>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+            CV — Business Analyst (PDF)
           </a>
         </li>
       </ul>

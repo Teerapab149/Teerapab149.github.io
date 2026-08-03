@@ -4,10 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FMS Credit Tracker — Teerapab Boonsri</title>
-<meta name="description" content="A credit tracker for students of the Faculty of Management Sciences, PSU — upload a transcript as a PDF and the system reads it out and checks it against the curriculum structure automatically.">
+<meta name="description" content="A credit tracker for students of the Faculty of Management Sciences, PSU — upload a transcript as a PDF and the system pulls the text out of it and checks it against the curriculum structure automatically.">
 <meta name="theme-color" content="#DFE3DA">
+<link rel="canonical" href="https://teerapab149.github.io/credit-tracker.html">
 
 <meta property="og:type" content="article">
+<meta property="og:site_name" content="Teerapab Boonsri">
 <meta property="og:title" content="FMS Credit Tracker — case study">
 <meta property="og:description" content="Upload your grade report as a PDF and the system works out which credit categories are complete and which are still short.">
 <meta property="og:url" content="https://teerapab149.github.io/credit-tracker.html">
@@ -23,6 +25,11 @@
 <!-- The arriving half of the page wipe. It has to run before first paint,
      which is why it is here and not in nav.js. See assets/nav.js. -->
 <script>try{if(sessionStorage.getItem('nav'))document.documentElement.classList.add('nav-in');}catch(e){}</script>
+<!-- The rail panel → hero image morph. Blocking, in <head>, on purpose:
+     pagereveal fires at the arriving page's FIRST RENDER, and defer only
+     promises to beat DOMContentLoaded. Miss that event and the panel morphs
+     into an empty box. Two listeners and a class — nothing to defer. -->
+<script src="assets/morph.js"></script>
 </head>
 <body>
 
@@ -60,7 +67,12 @@
          only the title card gets the loud entrance (plan law L1, one hero move
          per scene). -->
     <p class="eyebrow stamp">Case study · Course 477-303 BISA&amp;D · Semester 2, 2025</p>
-    <h1 class="lm up" style="--d:100ms">A system that <em>reads your transcript</em><br>and tells you what you still owe</h1>
+    <!-- The verb here was "owe" until 2026-08-03. In English that word is about
+         money, so a native reader parses the line as a debt rather than as
+         missing credits. The page already says "still short" further down;
+         "still need" is the plain version of the same idea and keeps the line
+         break. index.html carries this sentence too — keep the two the same. -->
+    <h1 class="lm up" style="--d:100ms">A system that <em>reads your transcript</em><br>and tells you what you still need</h1>
     <p class="hero__sub up" style="--d:240ms">
       FMS Credit Tracker — students upload their grade report and their registration slip as PDF
       files, the system pulls the text out into individual courses, then matches them against the
@@ -76,6 +88,22 @@
       <span class="chip">pdf-parse</span>
       <span class="chip">Zustand</span>
       <span class="chip">Recharts</span>
+    </div>
+
+    <!-- The site claims "code included" on index.html#contact. Without this
+         row the only route to any code was the GitHub profile in the footer.
+         Ghost button, same shape as the repository link on megubot.html.
+         The link leaves the site, so it carries the arrow glyph plus an
+         aria-label/title that says "opens in a new tab" in words. -->
+    <div class="btn-row up" style="--d:360ms">
+      <a class="btn btn--ghost" href="https://github.com/Teerapab149/psucredit-project"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="See the code on GitHub — opens in a new tab"
+         title="Opens github.com/Teerapab149/psucredit-project in a new tab">See the code on GitHub
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+      </a>
+      <span class="chip">github.com/Teerapab149/psucredit-project</span>
     </div>
 
     <figure class="hero__shot wipe" style="margin-top: clamp(36px, 6vw, 64px); --d:400ms">
@@ -317,7 +345,7 @@
       </figure>
       <figure class="figure wipe" style="--d:90ms">
         <img src="assets/img/credit/03-verify.webp" width="1600" height="801" loading="lazy"
-             alt="Review screen showing the details read out of the PDF and a parsing confidence of 100 percent">
+             alt="Review screen showing the details pulled out of the PDF and a parsing confidence of 100 percent">
         <figcaption>Step 2 — what the parser read back, with its confidence stated. The student ID is
           masked here; it is visible to the student in the real system</figcaption>
       </figure>
@@ -492,6 +520,24 @@
           <a class="link" href="https://www.linkedin.com/in/teerapab-boonsri-bb2404394/" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.64h.05A4.17 4.17 0 0 1 17.6 8.7c4 0 4.4 2.53 4.4 5.82V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.46-2.2 2.96V21h-4V9Z"/></svg>
             LinkedIn
+          </a>
+        </li>
+        <!-- Two CVs, not one, because they are genuinely different documents:
+             the System Analyst version leads on implementation, the Business
+             Analyst version on requirements and stakeholder work. Plain <a
+             download> to files at the repo root — relative paths, no JS, so
+             they still work if every script on the page fails.
+             This block is identical in all four case-study footers. -->
+        <li>
+          <a class="link" href="Teerapab-Boonsri-CV-System-Analyst.pdf" download>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+            CV — System Analyst (PDF)
+          </a>
+        </li>
+        <li>
+          <a class="link" href="Teerapab-Boonsri-CV-Business-Analyst.pdf" download>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+            CV — Business Analyst (PDF)
           </a>
         </li>
       </ul>

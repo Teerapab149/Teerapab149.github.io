@@ -81,6 +81,13 @@
     if (a.pathname === location.pathname) return;          // same page, or a #hash
     if (leaving) return;
 
+    /* Leaving the Work rail is the one journey this wipe does not cover: the
+       panel's picture morphs into the hero image instead, and covering that
+       with a panel would hide the only thing worth watching. assets/morph.js
+       sets .has-morph, and only in browsers that can actually do it — where it
+       cannot, this wipe stays in charge of every link on the page. */
+    if (root.classList.contains('has-morph') && a.closest('#work-rail')) return;
+
     e.preventDefault();
     leaving = true;
     try { sessionStorage.setItem(KEY, '1'); } catch { /* the wipe just does not play on arrival */ }

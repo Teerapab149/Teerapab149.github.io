@@ -15,7 +15,7 @@
 
 | ไฟล์ | คืออะไร | CSS | JS |
 |---|---|---|---|
-| `index.html` | หน้าแรก **Verdure** · จอแรกเป็น cover About me (แผงมอสเต็มจอ ดู HANDOFF §13) แล้วค่อย hero → capsule → 3 โปรเจกต์ | verdure | verdure |
+| `index.html` | หน้าแรก **Verdure** · ม่านโหลด (`curtain.js`) → cover ชื่อ+รูป → `#method` ไดอะแกรมวิธีทำงาน → chooser → hero → grow → ราง Work → องก์มืด | verdure + rail | curtain · reveal · verdure · i18n · inner · feel · rail · morph · nav |
 | `fms-election.html` | case study ระบบเลือกตั้ง | style | app |
 | `megubot.html` | case study บอต Discord — **เจ้าของออกแบบ เพื่อนเขียนโค้ด** ต้องบอกให้ชัดเสมอ | style | motion |
 | `credit-tracker.html` | case study ระบบติดตามหน่วยกิต | style | motion |
@@ -60,7 +60,13 @@
    · Chatbot → ไม่มี repo ในเครื่อง ตัวเลขมาจากสไลด์นำเสนอเท่านั้น
 7. **ห้าม push / deploy แทนเจ้าของ** — การเผยแพร่สู่สาธารณะต้องให้เจ้าของสั่งเอง
    เตรียมคำสั่งให้เขารันได้ แต่อย่ารันเอง
-8. **`.fms` ในหน้าแรกคือหน้า home ของระบบเลือกตั้งที่ *สร้างใหม่* ไม่ใช่ภาพหน้าจอ**
+8. **ไดอะแกรมในหน้าแรกต้องเป็นเรื่อง *เจ้าของ* ไม่ใช่เรื่องโปรเจกต์ใดโปรเจกต์หนึ่ง**
+   เคยมีจอแรก (`.boot`) ที่เป็นเส้นทางบัตรเลือกตั้ง FMS — เจ้าของสั่งย้ายออกเมื่อ 2026-08-02
+   ว่า "มันเป็นของ FMS Election ก็เอาไปใส่ในนั้นสิ" · ตอนนี้ไดอะแกรมนั้นอยู่ที่
+   `fms-election.html` §ballot ในชื่อคลาส `.path` (ชื่อ `.flow` ชนกับ step list เดิมใน style.css)
+   · หน้าแรกใช้ `#method` แทน = สี่ขั้นการทำงานของเจ้าของ (Listen · Draw · Build · Ship)
+   ซึ่งทุกคำมีที่มาจากข้อความที่เจ้าของเขียนเองในหน้าเดียวกัน ห้ามแต่งขั้นตอนใหม่
+9. **`.fms` ในหน้าแรกคือหน้า home ของระบบเลือกตั้งที่ *สร้างใหม่* ไม่ใช่ภาพหน้าจอ**
    (ดู HANDOFF §15) · สีทุกค่าลอกจาก `originalPalettes.js` · layout กับ breakpoint
    ลอกจาก `OriginalHome.js` / `OriginalNavbar.js` · **ห้ามเดา ห้าม sample จากภาพ**
    และ `.grow__note` ที่บอกว่า "ไม่ใช่ภาพหน้าจอ" ห้ามลบ ไม่งั้นกลายเป็นอ้างเกินจริง

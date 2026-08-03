@@ -1,7 +1,38 @@
 name: Deploy to GitHub Pages
 
-# Static site — nothing to build. The whole repo IS the site, so we just upload
-# it as the Pages artifact. Enable in: Settings → Pages → Source = GitHub Actions.
+# Static site — nothing to build. Enable in: Settings → Pages → Source = GitHub Actions.
+#
+# There is still NO BUILD STEP in this repo. The steps below that touch files are
+# transforms of the *artifact*, not a build: they run on the throwaway checkout
+# inside the runner, nothing is committed, nothing is installed, and `git clone`
+# still gives you every file exactly as it is written. See the header of
+# .github/scripts/strip-css-comments.js for the full reasoning.
+#
+# The repo used to be uploaded whole (`path: .`). It is not any more, because
+# upload-pages-artifact only excludes .git, .github and top-level dotfiles — so
+# CLAUDE.md, README.md, serve.js and all of docs/ were being served at
+# teerapab149.github.io/<name>. Those are the internal Thai notes: local disk
+# paths, the open-TODO list with its 🔴 marks, "the owner's taste (has rejected
+# work before)", the record of designs that were built and thrown away. None of
+# it is secret, all of it is for the owner and for Claude, and none of it is for
+# a recruiter who guesses a URL.
+#
+# So the publish set is now an ALLOW-LIST copied into _site. That direction
+# matters: a new .md, a new plan, a new scratch file at the root stays private by
+# default, where a deny-list would have leaked it the moment someone forgot to
+# add a line. The list is by kind, not by filename — assets/ and *.html — so a
+# genuinely new PAGE still gets published without editing this file, while a new
+# note does not. If you ever add a directory the site needs (fonts/, a favicon
+# set), add it to the cp block or it will 404 in production and nowhere else.
+#
+# *.pdf is in the list for the two CVs at the root. Keep their filenames free of
+# spaces and parentheses — the originals were "IT BUSINESS ANALYST  (1).pdf",
+# which a browser has to serve as %20%20%281%29 and which reads as an accident
+# in the download bar of the person you are trying to impress.
+#
+# The gitignored prototypes (index-motion*.html, index-niika.html) are safe here
+# for a second reason on top of .gitignore: actions/checkout only writes tracked
+# files, so `cp *.html` never sees them in the runner.
 
 on:
   push:
@@ -28,9 +59,84 @@ jobs:
 
       - uses: actions/configure-pages@v5
 
+      # Build the publish set. Everything the site actually serves, and nothing
+      # else. `_site` is a fresh directory inside the runner — it is not in the
+      # repo and never will be.
+      - name: Collect the publish set into _site
+        run: |
+          mkdir -p _site
+          cp -r assets _site/
+          cp *.html _site/
+          cp *.pdf _site/
+          cp .nojekyll _site/
+
+          # assets/img/*/README.md rides along inside assets/. Those are notes to
+          # the owner — which files were masked, what must be blurred before the
+          # next Discord screenshot goes up — and they name the things they are
+          # protecting. They are the last place that should be public.
+          find _site -name '*.md' -print -delete
+
+          echo "── publishing ──────────────────────────────────────────"
+          (cd _site && find . -maxdepth 1 -mindepth 1 | sort)
+          echo "── withheld (present in the repo, not published) ───────"
+          find . -maxdepth 1 -mindepth 1 \
+            ! -name _site ! -name .git ! -name .github ! -name assets \
+            ! -name '*.html' ! -name .nojekyll ! -name _source-images | sort
+
+          # A page that exists but was never copied is a 404 nobody notices
+          # until a recruiter clicks it. Count them here instead.
+          want=$(ls -1 *.html | wc -l)
+          got=$(ls -1 _site/*.html | wc -l)
+          echo "html pages: $want in repo, $got in _site"
+          [ "$want" = "$got" ] || { echo "::error::_site is missing a page"; exit 1; }
+
+      # The CSS comments are this project's documentation — measured contrast
+      # ratios, why a token is the value it is, traps that cost a real bug.
+      # They belong in the source and they do not belong on the wire: in
+      # verdure.css they are about two thirds of the gzipped bytes, and a
+      # visitor pays for every one of them without reading any.
+      #
+      # ubuntu-latest ships Node, so this needs no setup-node and no npm.
+      # The self-test runs FIRST and takes the whole deploy down with it if the
+      # parser has stopped being correct — a stylesheet that fails to parse is
+      # a blank page, which is far worse than the bytes we are saving.
+      - name: Test the CSS comment stripper
+        run: node .github/scripts/strip-css-comments.test.js
+
+      # Note the paths: _site/assets, never assets. The stripper now cannot
+      # reach the working copy even by accident — the checkout keeps its
+      # comments, and only the copy that goes on the wire loses them.
+      - name: Strip CSS comments from the artifact copy
+        run: |
+          echo "── before ──────────────────────────────────────────────"
+          for f in _site/assets/*.css; do
+            printf '%-34s raw %8s   gzip %8s\n' "$f" \
+              "$(wc -c < "$f")" "$(gzip -9 -c "$f" | wc -c)"
+          done
+
+          node .github/scripts/strip-css-comments.js _site/assets/*.css
+
+          echo "── after ───────────────────────────────────────────────"
+          for f in _site/assets/*.css; do
+            printf '%-34s raw %8s   gzip %8s\n' "$f" \
+              "$(wc -c < "$f")" "$(gzip -9 -c "$f" | wc -c)"
+          done
+
+          # Belt and braces: re-parse what we are about to publish. The strip
+          # already exits 1 on any structural mismatch; this reads the files
+          # back off disk and checks them cold. (A plain `grep '/\*'` cannot do
+          # it — `content: "/* x */"` is legal CSS.)
+          echo "── verify ─────────────────────────────────────────────"
+          node .github/scripts/strip-css-comments.js --verify _site/assets/*.css
+
+          # The source must be untouched. If this ever fires, the stripper was
+          # pointed at the checkout and the next `git clone` loses the docs.
+          git diff --quiet -- assets || {
+            echo "::error::the stripper modified the checked-out source"; exit 1; }
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - id: deployment
         uses: actions/deploy-pages@v4

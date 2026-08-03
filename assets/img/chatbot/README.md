@@ -1,23 +1,38 @@
 # ภาพของ PSU Chatbot
 
-วางไฟล์ตามชื่อด้านล่างในโฟลเดอร์นี้ แล้วบอก Claude ว่า "ใส่รูป chatbot แล้ว"
-เพื่อให้เปลี่ยน `<figure class="slot">` เป็น `<figure class="figure">` ให้อัตโนมัติ
+> **ภาพครบแล้ว** — เดิมไฟล์นี้เป็นใบสั่งของว่ารอรูปอะไรอยู่บ้าง ตอนนี้รูปมาครบและถูกแปลงเป็น
+> webp แล้ว · เขียนใหม่เมื่อ 2026-08-03 ให้เป็น**บันทึกว่าไฟล์ไหนคืออะไรและถูกใช้ที่ไหน**
+> ไม่ใช่ใบสั่งของอีกต่อไป
 
 ต้นทางของภาพทั้งหมดคือไฟล์ `PSU Chatbot presentation.pdf` (สไลด์นำเสนอ)
+ต้นฉบับก่อนแปลงอยู่ที่ `_source-images/` ซึ่ง **gitignore ไว้ ห้ามย้ายกลับ**
+· pipeline ที่ใช้แปลงอยู่ใน `docs/HANDOFF.md` §14
 
-| ชื่อไฟล์ | ภาพอะไร | ใช้ที่ไหน |
+## ไฟล์ที่มีอยู่จริง
+
+| ชื่อไฟล์ | ภาพอะไร | ถูกใช้ที่ไหน |
 |---|---|---|
-| `01-hero.webp` | หน้าเว็บ PSU Chatbot พร้อมกล่องแชต (ธีมสว่าง) | `index.html` + หัวเรื่อง `psu-chatbot.html` |
-| `02-dark.webp` | หน้าเว็บธีมมืด | `index.html` + §03 |
-| `03-workflow.webp` | แผนภาพ System Workflow | §02 |
-| `04-language-studio.webp` | หน้าจอ Language Studio ตอนสร้างคลังคำตอบ | §03 |
-| `05-webchat-test.webp` | ทดสอบบอตใน Web Chat ของ Azure | `index.html` + §03 |
-| `06-direct-line-key.webp` | หน้า Direct Line secret key ใน Azure Bot Service | §04 |
+| `01-hero.webp` | หน้าเว็บ PSU Chatbot พร้อมกล่องแชต (ธีมสว่าง) | `index.html` การ์ดโปรเจกต์ 03 · `psu-chatbot.html` hero + `og:image` |
+| `02-mobile.webp` | หน้าเว็บบนมือถือ | `psu-chatbot.html` |
+| `03-workflow.webp` | แผนภาพ System Workflow | `psu-chatbot.html` |
+| `04-language-studio.webp` | หน้าจอ Language Studio ตอนสร้างคลังคำตอบ | `psu-chatbot.html` |
+| `06-direct-line-key.webp` | หน้า Direct Line secret key ใน Azure Bot Service | `psu-chatbot.html` |
 
-## ข้อกำหนดของไฟล์
+**เลขข้ามจาก 04 ไป 06 โดยไม่มี 05** — ตั้งใจปล่อยไว้ ไม่ใช่ไฟล์หาย
+แผนเดิมมี `02-dark.webp` (ธีมมืด) กับ `05-webchat-test.webp` (ทดสอบใน Web Chat ของ Azure)
+แต่สุดท้ายไม่ได้ใช้ทั้งคู่ · ช่อง `02` ถูกแทนด้วยภาพมือถือ ส่วน `05` ไม่เคยถูกสร้างเลย
+**ถ้าจะเรียงเลขใหม่ให้ต่อเนื่อง ต้องไล่แก้ `src` ใน `psu-chatbot.html` ตามด้วย** ไม่คุ้ม ปล่อยไว้เถอะ
 
-- **นามสกุล `.webp`** — ถ้ามีแต่ PNG/JPG ให้ส่งมาได้เลย แล้วค่อยแปลง
-- **กว้างไม่เกิน 1600px**
-- **`06-direct-line-key.webp` ต้องปิดบัง key ก่อนเสมอ** — ภาพในสไลด์แสดง Direct Line secret key
-  ซึ่งเป็นกุญแจที่ใช้คุยกับบอตแทนเราได้ · เบลอหรือทับให้มิดก่อนอัปโหลด
-  ถ้า key ตัวจริงเคยหลุดออกไปแล้ว ควรกด regenerate ใหม่ใน Azure Bot Service ด้วย
+## 🔒 ข้อมูลที่ถูกปิดในภาพชุดนี้ — ห้ามเอาต้นฉบับขึ้นเว็บเด็ดขาด
+
+`06-direct-line-key.webp` **ถูกทับ secret key ไปแล้ว** · key ตัวนั้นคือกุญแจที่ใช้คุยกับบอต
+แทนเราได้ ถ้าหลุดคือใครก็ยิงข้อความในนามบอตได้
+· ถ้าสงสัยว่า key ตัวจริงเคยหลุดออกไป ให้กด regenerate ใหม่ใน Azure Bot Service
+
+ทุกอย่างใต้ `assets/img/` ถูก GitHub Pages เสิร์ฟหมด ใครเดา URL ก็โหลดได้
+จึงต้อง**ดูทุกภาพก่อนเพิ่มไฟล์ใหม่ทุกครั้ง**
+
+## ข้อกำหนดถ้าจะเพิ่มภาพใหม่
+
+- นามสกุล `.webp` · กว้างไม่เกิน 1600px
+- เครื่องนี้ไม่มี ffmpeg / ImageMagick / Python — วิธีแปลงที่ใช้ได้จริงอยู่ใน `docs/HANDOFF.md` §14

@@ -68,6 +68,62 @@
    rather than cropping a person's avatar out of frame */
 .panel--tall .panel__media img { object-fit: contain; background: var(--paper-3); padding: 6%; }
 
+/* ── the picture resolving into its frame ──────────────────────────────────
+   inset(100% 0 0 0) collapses the image to its BOTTOM edge and opens upward,
+   which is the opposite direction to .wipe in style.css — that one opens
+   downward from the top. Two directions is a decision, not an oversight: .wipe
+   belongs to the case study pages, where an image arrives under a headline you
+   have already read. Here the panel is the headline, and an edge travelling up
+   into the text above it walks the eye the way the rail wants it to go.
+
+   START STATE IS UNDER .js-anim, like every other reveal here. If that class
+   is never set the images are simply visible. --t5 is the site's slowest move
+   and this is the only thing using it.
+
+   Both ends use `inset(... 0 0 0)` with no negative bleed, unlike the cover's
+   portrait: nothing overhangs a panel frame, and the frame is the rounded
+   clip, so bleeding past it would show square corners for the whole 1.5s. */
+.js-anim .panel__media.unveil img { clip-path: inset(100% 0 0 0); }
+.js-anim .panel__media.unveil.is-in img {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path var(--t5) var(--ease-wipe) var(--d, 0ms);
+}
+
+/* The morph's departure half. .panel__media is the element morph.js names and
+   the browser snapshots on the way out, and this clip is INSIDE it — so a
+   visitor who clicks a panel while it is still resolving would have the
+   snapshot taken through a half-open clip and morph a sliver across the page.
+   Same instant-open trick as .vt-open in style.css, and the same reason.
+   Higher specificity than the .is-in rule, so order here does not matter. */
+.js-anim .panel__media.unveil.vt-open img { clip-path: inset(0 0 0 0); transition: none; }
+
+/* Inner drift. --iy is written by inner.js on the FIGURE and read by the image,
+   so the frame stays put and only the picture moves — same reasoning as the
+   cover portrait. --iy-span is the image's spare height; inner.js travels half
+   of it either way, so no frame edge is ever exposed. The 22 in inner.js is
+   half of this number and the two have to agree.
+
+   Scoped to html:not(.can-pin) because this is the VERTICAL half of the rail's
+   life. Once the pin is on, the page's vertical scroll has been turned into
+   sideways travel and the panels already lag horizontally through --lag; a
+   vertical drift on top of that would have the pictures sliding down while
+   their panels move left. The two rules are mutually exclusive by construction,
+   not by specificity, so neither has to out-weigh the other. */
+html:not(.can-pin) .panel:not(.panel--tall) .panel__media img {
+  --iy-span: 44px;
+  height: calc(100% + var(--iy-span));
+  margin-top: calc(var(--iy-span) / -2);
+  translate: 0 var(--iy, 0px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-anim .panel__media.unveil img,
+  .js-anim .panel__media.unveil.is-in img { clip-path: none; transition: none; }
+  html:not(.can-pin) .panel:not(.panel--tall) .panel__media img {
+    height: 100%; margin-top: 0; translate: none;
+  }
+}
+
 /* the text half */
 .panel__idx {
   font-family: var(--font-display); font-weight: 800;

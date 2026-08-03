@@ -19,6 +19,11 @@ const TYPES = {
   ".ico": "image/x-icon",
   ".json": "application/json; charset=utf-8",
   ".md": "text/plain; charset=utf-8",
+  // The two CVs at the repo root, linked from every footer. Without this the
+  // preview hands them back as application/octet-stream, which is not what
+  // GitHub Pages does — so local checking of those links would be testing
+  // something the real site never serves.
+  ".pdf": "application/pdf",
 };
 
 /* The webp set under assets/img/ was built by a temporary POST /__save endpoint

@@ -101,6 +101,8 @@
   --t2: 300ms;   /* an object arriving */
   --t3: 600ms;   /* a wipe, a line drawing itself */
   --t4: 900ms;   /* atmosphere: the grid coming up */
+  --t5: 1500ms;  /* a picture resolving into an empty frame — the slowest thing
+                    on the site, and the only move allowed to take this long */
   /* Scene 0 plays at half length on a repeat visit within the same session.
      Every cover delay is multiplied by this, so one property retimes the lot. */
   --dscale: 1;
@@ -293,6 +295,33 @@ a { color: inherit; }
 .mark-wrap { position: relative; display: inline-block; }
 .mark-wrap > .scrawl { inset: -18% -7% -18% -7%; width: 114%; height: 136%; z-index: 2; }
 
+/* THE WEIGHT SCALES WITH THE TYPE — fixed 2026-08-03, the same bug already
+   fixed on .cover__name further down, finished here for the rest of the page.
+
+   The base rule above ships stroke-width: 7 next to vector-effect:
+   non-scaling-stroke, so the line is 7 SCREEN pixels at every size while the
+   type it annotates is fluid. Every remaining scrawl on the home page sits in a
+   .big--l heading — clamp(2.4rem, 7.4vw, 6.4rem) — so measured:
+
+     1440px wide → font 102.4px (clamped at the 6.4rem ceiling), 7px = 6.84%
+      390px wide → font  38.4px (clamped at the 2.4rem floor),   7px = 18.23%
+
+   The type loses 62% between those two and the line loses nothing, so on a
+   phone the annotation stops reading as a drawn line and starts reading as a
+   marker struck through the words. Only the weight is wrong, so only the
+   weight changes — the non-scaling-stroke stays, because the scrawls are
+   stretched with preserveAspectRatio="none" and without it the line would
+   thicken unevenly along the two axes.
+
+   .0684em = 7 ÷ 102.4, i.e. it reproduces today's line EXACTLY at and above
+   1384px, where .big--l has already hit its 6.4rem ceiling — nothing changes
+   on a desktop — and tapers with the heading below that. The 2.4px floor never
+   engages in practice (the smallest real value is .0684 × 38.4 = 2.63px at the
+   clamp floor); it is there so a reduced root font-size cannot thin the line to
+   a hair. Scoped to .big--l so it cannot reach the cover's .big--xl, which has
+   its own measured value, or the case-study pages, which have their own file. */
+.big--l .scrawl { stroke-width: max(2.4px, .0684em); }
+
 /* ══════════════════════════════════════════════════════════════════════════
    COVER — the first screen of the site.
    First attempt was a centred two-column card (portrait beside a name and a
@@ -346,14 +375,83 @@ a { color: inherit; }
 
    The first version was a 1.6px stroke at 66% cream over a fully transparent
    fill, and the owner could barely read it: hollow letters filled with dark
-   green give the eye nothing to hold. Now the stroke is 2.4px at full cream and
-   the counters carry a 16% cream wash, so the word reads as a word first and an
-   outline second. */
+   green give the eye nothing to hold. Now the stroke is full cream and the
+   counters carry a 16% cream wash, so the word reads as a word first and an
+   outline second.
+
+   THE WIDTH IS IN em, NOT px — fixed 2026-08-03. It was a flat 2.4px, which is
+   2.02% of the surname at 1134px wide (119px type) and 5.00% of it at 390px
+   (48px type). The type shrinks 60% between those and the outline did not move
+   at all, so on a phone the letters wore an edge two and a half times too heavy
+   and the counters started closing up.
+
+   ANCHORED TO THE CEILING, NOT TO A MEASUREMENT. .big--xl is
+   clamp(3rem, 10.5vw, 9.5rem), so the surname tops out at 152px — 2.4 ÷ 152 =
+   .0158em puts the stroke at exactly the original 2.4px once the type is at
+   full size, and strictly below it everywhere else. The first attempt at this
+   fix anchored to 119px (.0202em) because that was the window that happened to
+   be open, which quietly made the stroke 3.05px at 1440px — 27% HEAVIER than
+   the value the owner approved, on the most common desktop width there is.
+
+   The invariant to keep is "never heavier than the approved state, lighter as
+   the type shrinks". Anchoring to the largest size is the only way to get it:
+   the cover also carries a 17.5svh term (see the .cover__name rule further
+   down), so on a short window the type is smaller than the clamp ceiling even
+   on a wide screen, and no single anchor can be exact at every desktop.
+
+   The 1.1px floor is the other half of the history in the paragraph above:
+   proportional alone puts the phone at 0.76px, and a sub-pixel stroke is how
+   the 1.6px version became unreadable. Below about 1px a stroke stops being a
+   letterform and becomes an artefact of the rasteriser. */
 .cover .out { color: color-mix(in srgb, var(--paper) 82%, transparent); }
 @supports (-webkit-text-stroke: 1px currentColor) {
   .cover .out {
     color: color-mix(in srgb, var(--paper) 16%, transparent);
-    -webkit-text-stroke: 2.4px var(--paper);
+    -webkit-text-stroke-color: var(--paper);
+    -webkit-text-stroke-width: max(1.1px, .0158em);
+  }
+}
+
+/* KINETIC FILL — the hollow surname floods with cream as the cover is covered.
+
+   The eye gets a word that finishes itself. It is keyed to --cp, the same 0 → 1
+   the two lines already splay on, so the drift and the fill are one gesture
+   driven by one number — not two effects that happen to coincide.
+
+   WHY NOT A NEW --scroll AND A NEW rAF. --cp *is* scroll bound to a custom
+   property inside a requestAnimationFrame loop; verdure.js already writes it
+   every frame off the hero's top edge. A second listener would sample the same
+   scroll a second time, and raw scrollY in px is unusable in CSS anyway — it
+   has to be normalised against something, which is exactly what --cp is.
+
+   WHY background-clip AND NOT A PSEUDO-ELEMENT WIPE. A ::after carrying
+   `content: attr(data-text)` duplicates the name into the accessibility tree
+   and puts the owner's own name in two places that can drift apart. This
+   paints one element.
+
+   THIS ONLY EVER ADDS INK. The resting state below is untouched: at --cp 0 the
+   gradient is fully transparent and what is on screen is the 2.4px stroke and
+   16% wash the owner already signed off. So the fill cannot make the name
+   harder to read than it is today — it can only make it more solid. With no JS
+   --cp never leaves 0 and this is inert.
+
+   ×160 so the word is complete at about 60% of the cover's exit, rather than
+   finishing at the instant it leaves the screen — an effect nobody sees
+   finish is not an effect. Gradient stops clamp past 100% on their own. */
+@supports ((background-clip: text) or (-webkit-background-clip: text)) and (-webkit-text-stroke: 1px currentColor) {
+  .cover .out {
+    --fill: calc(var(--cp, 0) * 160%);
+    background-image: linear-gradient(90deg,
+      var(--paper) 0 var(--fill),
+      transparent var(--fill) 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+  }
+  /* Reduced motion gets the finished word, not the unfinished one: the point of
+     the resting state is that it resolves, and someone who has turned motion
+     off should be given the resolution rather than held at the start of it. */
+  @media (prefers-reduced-motion: reduce) {
+    .cover .out { --fill: 100%; }
   }
 }
 
@@ -367,21 +465,33 @@ a { color: inherit; }
   gap: clamp(30px, 5vw, 60px);
 }
 
-/* ── the blueprint grid ───────────────────────────────────────────────────
-   The opening beat of Scene 0 and the thing the whole site's motion language
-   is named after: before any content arrives, the panel rules itself into
-   squares, as if a sheet of graph paper were being laid down.
+/* ── the survey contours ──────────────────────────────────────────────────
+   Replaced the 72px blueprint grid on 2026-08-03 at the owner's request: a
+   square grid is the most generic thing a dark hero can wear, and at the 4%
+   it had to sit at to stay out of the type's way it was doing nothing at all.
 
-   Kept at 4% mint. It has to be felt rather than seen — at any strength where
-   you can actually read the lines, they start competing with the type, and the
-   cover's whole job is the name. */
+   Contour lines instead — two elevation systems, one rising from the upper
+   left and one from the lower right, the way a survey sheet reads. It is the
+   same idea the page already argues in words two screens down ("I draw the
+   system before I build it"): a drawing made BEFORE the ground is built on.
+   Curves also stay out of the way of type in a manner a grid cannot, because
+   nothing in them ever runs parallel to a baseline or a stem.
+
+   TWO SYSTEMS, DELIBERATELY DIFFERENT SPACING (47px vs 63px). Equal spacing
+   would beat against itself into a moiré where the two overlap. Unequal rings
+   read as two hills at different steepness, which is what a real sheet shows.
+
+   Still 5% mint and still masked. Same rule as the grid it replaced: it has to
+   be FELT rather than seen — at any strength where you can read the lines they
+   compete with the name, and the cover's whole job is the name. */
 .cover::before {
   content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image:
-    linear-gradient(to right,  var(--sea) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--sea) 1px, transparent 1px);
-  background-size: 72px 72px;
-  opacity: .04;
+    repeating-radial-gradient(ellipse 42% 34% at 22% 16%,
+      transparent 0 38px, var(--sea) 38px 39px),
+    repeating-radial-gradient(ellipse 52% 40% at 90% 88%,
+      transparent 0 52px, var(--sea) 52px 53px);
+  opacity: .1;
   -webkit-mask-image: radial-gradient(120% 90% at 30% 12%, #000 30%, transparent 78%);
           mask-image: radial-gradient(120% 90% at 30% 12%, #000 30%, transparent 78%);
 }
@@ -482,6 +592,10 @@ a { color: inherit; }
   }
   .cover__name { margin-top: 6px; font-size: min(10.5vw, 9.5rem, 17.5svh); }
   .cover__rule { margin: 16px 0 13px; }
+  /* .cover__seek is trimmed here too, but the rule CANNOT live in this block:
+     the chip's own declarations are further down the file at equal specificity
+     and would win on source order. It is a media query of its own, immediately
+     after them — see the note there. */
   .cover__base { padding-top: 12px; }
   .measure { margin-bottom: 10px; }
 }
@@ -497,11 +611,78 @@ a { color: inherit; }
    solid one. Over the hollow surname at cover scale it reads as the name being
    crossed out, so here it sits under the baseline as an underline instead. */
 .cover__name .mark-wrap > .scrawl { inset: auto -5% -16% -4%; width: 109%; height: 46%; }
+
+/* AND ITS WEIGHT SCALES WITH THE NAME — fixed 2026-08-03, same bug as the
+   outline above and found at the same time.
+
+   .scrawl ships stroke-width: 7 with vector-effect: non-scaling-stroke, so the
+   line is 7 SCREEN pixels at every size. Against the 119px surname that is 5.9%
+   of the type — a fine drawn line. Against the 48px surname on a phone the very
+   same 7px is 14.6% — a marker through the name. The owner read it as the line
+   covering the letters, and measurement agrees on the cause but not the place:
+   the scrawl overlaps the word's box by 65% at BOTH widths, identically. The
+   geometry was never the problem and moving the line would not have fixed it.
+   Only the weight is wrong, and only because it was pinned to pixels.
+
+   Anchored to .big--xl's 152px ceiling for the reason spelt out over the
+   text-stroke rule above: 7 ÷ 152 = .04605em is exactly the original 7px at
+   full size and lighter everywhere below, which is the only direction this
+   change is allowed to move. The 1.8px floor never binds at any width tested
+   (390px gives 2.21px) and exists for a shrunk root font-size.
+
+   The three .big--l scrawls are handled by their own rule below — same bug,
+   different ceiling, so deliberately not the same number as this one. */
+.cover__name .scrawl { stroke-width: max(1.8px, .04605em); }
 .cover__rule {
   height: 1px; border: 0; margin: clamp(20px, 3vw, 30px) 0 18px;
   background: color-mix(in srgb, var(--paper) 26%, transparent);
 }
 .cover__lede { max-width: 46ch; }
+
+/* ── the availability chip ────────────────────────────────────────────────
+   Between the rule and the lede, which is the last place on this panel that is
+   still inside the first eyeful at every size — and the whole point of it is
+   that the .bio row carrying the same fact measured BELOW THE FOLD on every
+   screen tested (y=782 at 1366×768, y=1106 at 390×844). See index.html.
+
+   A row, not a stack: one line of 95 characters fits the type column at 1366
+   and above, so on the screens where the fold is tightest the chip costs one
+   line instead of two. flex-wrap does the rest without a media query — at
+   390px it breaks into two, which is where there is vertical room for it.
+
+   It is quiet on purpose. The name is the hero of this panel and a loud badge
+   next to it would be two things shouting; this has to be FINDABLE, not loud.
+
+   CONTRAST, composited against the chip's own tinted fill and not against the
+   panel: the panel measures rgb(21,50,68) and the 8% mint wash over it lands
+   at rgb(28,63,78), where --sea reads 6.06:1 and the 88% paper mix 7.08:1.
+   Both are small text and both clear 4.5:1. If the fill tint changes,
+   re-measure — the tint lightens the panel and eats the headroom. */
+.cover__seek {
+  display: inline-flex; flex-wrap: wrap; align-items: baseline;
+  gap: 3px clamp(9px, 1.2vw, 14px);
+  margin: 0 0 clamp(15px, 2vw, 22px); padding: 8px 15px 9px;
+  border: 1px solid color-mix(in srgb, var(--sea) 42%, transparent);
+  border-radius: 3px 3px 13px 13px;
+  background: color-mix(in srgb, var(--sea) 8%, transparent);
+}
+.cover__seek b {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: .75rem; letter-spacing: .01em; color: var(--sea);
+}
+.cover__seek span {
+  font-size: 12px; line-height: 1.45;
+  color: color-mix(in srgb, var(--paper) 88%, transparent);
+}
+/* The chip pays its own way on the screens where the fold is tightest. It
+   belongs with the rest of the short-screen trims in the block near the top of
+   the COVER section — and it cannot go there: these declarations are further
+   down the file at equal specificity (one class each) and would win on source
+   order, silently. Same trap as .anno__t in docs/HANDOFF.md §18.6. It stays
+   here, after them, for exactly that reason. */
+@media (min-width: 901px) and (max-height: 940px) {
+  .cover__seek { margin-bottom: 12px; padding: 6px 13px 7px; }
+}
 
 /* the bottom edge of the cover: the facts, full width */
 .cover__base {
@@ -538,11 +719,30 @@ a { color: inherit; }
 
 /* Parallax. --py is written by verdure.js on the <figure> (0 → -34px as the
    cover is covered) and inherits down to here; with JS off it stays 0 and the
-   portrait simply sits still. */
+   portrait simply sits still.
+
+   It moves the IMAGE, not the frame. Moving the frame slid the arch and its
+   shadow around, which is a moving box — the frame is supposed to be a window
+   cut in the panel, and a window does not drift. With the travel on the image
+   the opening stays nailed down and the picture slides behind it.
+
+   That only works if the image is taller than its opening: --py is always
+   negative, so the image only ever rides UP, and the extra height is what
+   keeps the bottom edge of the frame filled at full travel. 40 > 34 with room
+   to spare. object-position: top center already pins the face at the top, so
+   the crop grows downward into the part of the photo nobody is looking at.
+
+   translate is used rather than transform because .js-anim puts
+   `transform: scale(1.06)` on this same image for the entrance — they are
+   separate properties and compose, where two transforms would overwrite. */
 .cover .portrait__frame {
-  transform: translateY(var(--py, 0px)); will-change: transform;
   max-height: 62svh;
   box-shadow: 0 50px 90px -50px rgba(0, 0, 0, .55);
+}
+.cover .portrait__frame img {
+  height: calc(100% + 40px);
+  translate: 0 var(--py, 0px);
+  will-change: translate;
 }
 /* the waiting slot on the dark panel: panel-coloured fill so the arch reads as a cut-out
    with a mint dashed edge. --sea-ink is the readable accent on PAPER and drops
@@ -551,7 +751,9 @@ a { color: inherit; }
 .cover .slot em { color: var(--sea); }
 .cover .slot b { color: var(--paper); }
 .cover .slot code { color: color-mix(in srgb, var(--paper) 78%, transparent); background: rgba(0, 0, 0, .22); }
-@media (prefers-reduced-motion: reduce) { .cover .portrait__frame { transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .cover .portrait__frame img { translate: none; height: 100%; }
+}
 
 /* width:100% is required, not tidy-up. Auto inline margins switch a grid item
    off stretch, so without a definite width the figure shrinks to fit-content —
@@ -593,7 +795,7 @@ a { color: inherit; }
    arrive, so the eye is never asked to choose. Law L2 — overlap, do not queue:
    each beat starts while the one before it is still finishing.
 
-     0ms    the blueprint grid comes up under everything
+     0ms    the survey contours come up under everything
      120ms  the dimension line draws, its readout counting to the width
      220ms  the eyebrow
      320ms  "Teerapab"        ← hero
@@ -898,8 +1100,27 @@ a { color: inherit; }
   background: var(--deep); color: var(--paper);   /* 11.3:1 */
   font-family: var(--font-body); font-weight: 600; font-size: 10px; letter-spacing: .05em;
   padding: 7px 11px; border-radius: 6px;
-  opacity: 0; transition: opacity var(--t2) ease;
+  transition: opacity var(--t2) ease;
 }
+/* The faded start state sits under .js-anim, the same gate .reveal / .up use —
+   house rule 3. It was a bare `opacity: 0` on .anno__t, which is fine while the
+   container queries below are running but reads as text hidden behind script the
+   moment you audit the page with JS off: five labels the audit can only describe
+   as prose waiting on a script that may never arrive.
+   Specificity ties with the [data-a] rules below (two classes each), so those
+   still win on source order — keep this rule above them.
+
+   The second rule is the other half of the same move, and it is NOT redundant.
+   These notes narrate the window GROWING; with no JS it never does, so they
+   annotate a thing that is not happening and the layer has nothing to say. The
+   case that forces the rule: `--g: 1` under prefers-reduced-motion (see the
+   .grow block) is pure CSS, so a reduced-motion visitor with JS off gets a
+   full-width window — and without the .js-anim start state the labels for every
+   breakpoint already passed would stack in that one corner, three deep at
+   900px. The layer is aria-hidden and decorative; dropping it costs nothing and
+   leaves no text with an opacity behind it. */
+.js-anim .anno__t { opacity: 0; }
+html:not(.js-anim) .anno { display: none; }
 @container (min-width: 520px)  { .anno { display: block; } .anno__t[data-a="1"] { opacity: 1; } }
 @container (min-width: 640px)  { .anno__t[data-a="1"] { opacity: 0; } .anno__t[data-a="2"] { opacity: 1; } }
 @container (min-width: 768px)  { .anno__t[data-a="2"] { opacity: 0; } .anno__t[data-a="3"] { opacity: 1; } }
@@ -920,11 +1141,28 @@ a { color: inherit; }
               rgba(13,43,62,.58) 70%, rgba(13,43,62,0) 100%);
   pointer-events: none;
 }
-/* Visible by default, faded in only when there is a scroll driving it. With no
-   JS --p never moves off 0, and keying the caption straight to it left the
-   project's own title invisible on the finished page — the exact rule this
-   project refuses to break. */
-.js-anim .grow__over { opacity: clamp(0, calc((var(--p) - .84) * 8), 1); }
+/* ON FROM THE FIRST FRAME, ON EVERY SCREEN — changed 2026-08-03.
+   This used to ramp: `opacity: clamp(0, calc((var(--p) - .84) * 8), 1)`, so the
+   label only appeared once the window was 84% open. The phone branch below has
+   always forced it to 1, and so does the no-JS case, so the ramp was a
+   desktop-only divergence — and it broke exactly the journey most visitors
+   take. THREE links point at #work (the top bar, the cover cue, and — until
+   today — the chooser's first card), and every one of them lands on the top of
+   this section, where --p is 0 by definition. Which meant: click "Work", get an
+   unlabelled box containing a Thai-language interface with no English anywhere
+   in it, and no way to know it is a rebuilt election system unless you keep
+   scrolling another ~1,660px for the caption to fade up.
+
+   The reflow is still the thing worth watching and the label still does not sit
+   on it: the breakpoint lights, the width readout and the nav/column changes
+   are all in the top half of the card, and this rides the bottom edge.
+
+   MEASURED against the gradient where each line actually sits — the veil's
+   alpha at that height composited over the mock's own rgb(248,249,253) first,
+   not read off the token: .tag in --sea 5.90:1 at the 90% stop · the title in
+   --paper 8.94:1 at 92% · .grow__note in --paper-3 9.01:1 at 96%. Floor is
+   4.5:1 and the tightest of the three has 1.3× of room. */
+.js-anim .grow__over { opacity: 1; }
 .grow__over .big { color: var(--paper); }
 .grow__over .tag { color: var(--sea); margin-bottom: 8px; }
 .grow__note { color: var(--paper-3); font-size: 12px; margin-top: 8px; max-width: 52ch; }
@@ -975,6 +1213,15 @@ a { color: inherit; }
   --o-mid: #A855F7;  --o-soft: #FAF5FF;  --o-soft2: #F3E8FF;  --o-line: #E9D5FF;
   --o-ink: #0F172A;  --o-bg: #F8F9FD;
   --s500: #64748B; --s600: #475569; --s700: #334155; --s800: #1E293B; --s100: #F1F5F9;
+  /* The countdown's RUNNING phase is the one colour in this rebuild that is not
+     the purple theme: src/components/home/OriginalCountdownTimer.js lines
+     105-116 give it bg-red-500 · text-red-600 · text-red-400 · border-red-100 ·
+     shadow rgba(239,68,68,.2). Those are Tailwind's stock red ramp — that repo's
+     tailwind.config.js extends only fontFamily, animation and keyframes, so red
+     is never overridden. red-500 #EF4444 survives here only as the 20% shadow
+     below; red-400 #F87171 is not used at all. Both are contrast failures on
+     this pill — see the notes on .fms__cbadge and .fms__time. */
+  --r-100: #FEE2E2; --r-600: #DC2626;
 
   position: relative; z-index: 0;
   height: 100%; display: flex; flex-direction: column;
@@ -1035,20 +1282,42 @@ a { color: inherit; }
 .fms__left { gap: 10px; }
 .fms__right { gap: 14px; }
 
-/* countdown */
+/* ── countdown · the RUNNING phase ────────────────────────────────────────
+   This pill used to wear the purple theme and say STARTS IN, which contradicted
+   the stats panel a few centimetres to its right: 1,643 ballots are already in
+   and the bar reads 52.7%, so the election is open, not pending. In
+   OriginalCountdownTimer.js that is phase RUNNING, and RUNNING is red. The pill
+   is the only thing here that changes colour — everything else in .fms stays on
+   the Original purple theme, because in the real system only this component
+   swaps palette by phase.
+
+   TWO DELIBERATE DEVIATIONS FROM THE SOURCE, both because the source values
+   fail this repo's 4.5:1 floor for small text. Measured on the pill's own white
+   background, no alpha involved except where noted:
+     · badge — source bg-red-500 #EF4444 under white text measures 3.76:1.
+       Replaced with red-600 #DC2626 → 4.83:1. Not an invented colour: red-600
+       is in the same RUNNING config (it is that phase's textMain).
+     · digits, unit letters and separator — source textSub red-400 #F87171
+       measures 2.77:1 on white, and the separator's opacity-60 takes it to
+       1.84:1. All of them take textMain red-600 instead → 4.83:1. The old
+       purple separator was no better (--o-brand at 55% over white = 2.83:1), so
+       dropping the opacity fixes a pre-existing failure rather than creating
+       one. Hierarchy still reads: the colon is 11px/700 between 17px/800
+       numerals, which is size doing the work instead of contrast. */
 .fms__count {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 5px 16px 5px 5px; border-radius: 999px;
-  background: #fff; border: 1px solid var(--o-soft2);
-  box-shadow: 0 2px 10px rgba(138,38,128,.13);
+  background: #fff; border: 1px solid var(--r-100);
+  /* verbatim from the RUNNING config: shadow-[0_2px_15px_rgba(239,68,68,0.2)] */
+  box-shadow: 0 2px 15px rgba(239, 68, 68, .2);
 }
 .fms__cbadge {
-  padding: 5px 10px; border-radius: 999px; background: var(--o-brand); color: #fff;
+  padding: 5px 10px; border-radius: 999px; background: var(--r-600); color: #fff;
   font-size: 9px; font-weight: 700; letter-spacing: .09em;
 }
-.fms__time { display: inline-flex; align-items: baseline; gap: 3px; color: var(--o-brand); font-size: 11px; font-weight: 700; }
+.fms__time { display: inline-flex; align-items: baseline; gap: 3px; color: var(--r-600); font-size: 11px; font-weight: 700; }
 .fms__time b { font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; }
-.fms__time i { font-style: normal; opacity: .55; padding-inline: 2px; }
+.fms__time i { font-style: normal; padding-inline: 2px; }
 
 /* headline */
 .fms__h1 {
@@ -1142,7 +1411,7 @@ a { color: inherit; }
 .fms__tot { font-size: 22px; font-weight: 800; line-height: 1; color: var(--s700); font-variant-numeric: tabular-nums; }
 .fms__pct i, .fms__tot i { font-style: normal; font-size: 11px; font-weight: 700; color: var(--s500); margin-left: 3px; }
 .fms__bar { display: block; height: 6px; border-radius: 999px; background: var(--s100); overflow: hidden; }
-.fms__bar i { display: block; width: 51.3%; height: 100%; border-radius: 999px; background: #10B981; }
+.fms__bar i { display: block; width: 52.7%; height: 100%; border-radius: 999px; background: #10B981; }
 
 .fms__poster {
   width: 100%; margin: 0; border-radius: 20px; overflow: hidden; background: #fff;
@@ -1220,18 +1489,28 @@ a { color: inherit; }
    TALLY — one screen of numbers between the window and the case study.
 
    Its job is pacing. The page goes from a full-bleed set piece straight into a
-   dense case study, and that hand-off had no breath in it. Four figures under
-   four rules that draw themselves, counting up as they arrive — the same
-   drafting language as the dimension line on the cover.
+   dense case study, and that hand-off had no breath in it. Figures under rules
+   that draw themselves, counting up as they arrive — the same drafting
+   language as the dimension line on the cover.
 
-   No new claims: all four numbers are the ones already in the facts table a
-   screen further down, sourced in docs/HANDOFF.md §5.
+   TWO figures since 2026-08-03, not four. Reason is in index.html above the
+   section; the layout consequence is here: auto-fit means the grid simply
+   resolves to two columns, so nothing needed changing to accommodate the cut.
+   The max-width below is the one thing that did — at 1440 two columns of a
+   1200px .inner are ~570px each holding a 22ch caption, which reads as two
+   items marooned at opposite edges rather than a pair. Capping the track keeps
+   them adjacent. It is stated in ch so it scales with the caption, and
+   auto-fit still gives one column on a phone.
+
+   No new claims: both numbers were already on the page and are sourced in
+   docs/HANDOFF.md §5. Two were removed here, none added.
    ══════════════════════════════════════════════════════════════════════════ */
 
 .tally__grid {
   list-style: none; margin: clamp(28px, 5vw, 56px) 0 0; padding: 0;
   display: grid; gap: clamp(20px, 3vw, 40px);
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  max-width: 54ch;
 }
 .tally__i { position: relative; padding-top: clamp(14px, 2vw, 20px); min-width: 0; }
 .tally__i::after {
@@ -1338,6 +1617,36 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) { .btn:hover { transform: none; } }
 .btns { display: flex; flex-wrap: wrap; gap: 10px; }
 
+/* ── the two résumés ───────────────────────────────────────────────────────
+   Two files for two roles, and the design problem is that a visitor should be
+   able to pick the right one WITHOUT downloading both. So each is a button with
+   a line of prose under it saying what is inside, rather than two identical
+   "Download CV" buttons side by side that force a coin toss.
+
+   The format and the weight live in the link text, inside the <a>, so a screen
+   reader announces them as part of the link — which is when they are useful.
+
+   <i> is not italic here; it is the quiet half of the label — and it is quiet
+   through SIZE AND TRACKING ONLY, never through opacity. The first draft faded
+   it to 72% and measured 3.24:1: the ghost button's label resolves to
+   --sea-ink #0A625A here (5.55:1 on paper), not to --deep as the base rule
+   suggests, so there is almost no headroom to spend. Anything under ~0.9 fails
+   the small-text floor, and 0.9 measures 4.57:1, which is not a margin worth
+   having. Full currentColor: 5.55:1 on paper, 11.27:1 once the button fills on
+   hover. Do not put the opacity back. */
+.dl {
+  list-style: none; margin: clamp(22px, 3vw, 30px) 0 0; padding: 0;
+  display: grid; gap: clamp(16px, 2.4vw, 26px);
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+}
+.dl > li { min-width: 0; display: grid; gap: 9px; justify-items: start; }
+.dl .btn { max-width: 100%; }
+.dl .btn i {
+  font-style: normal; font-weight: 500; font-size: .625rem;
+  letter-spacing: .14em; text-transform: uppercase;
+}
+.dl .small { max-width: 42ch; }
+
 /* ── waiting image slot ────────────────────────────────────────────────────
    Names the file it is waiting for, and is deliberately loud so an unfilled
    slot can never be mistaken for a finished design. */
@@ -1408,7 +1717,10 @@ a { color: inherit; }
 /* only shows on overscroll, but a cream rubber-band under a dark ending is a
    tell that the act was faked */
 body { transition: background-color var(--t3) ease; }
-.act-on body, body.act-on { background: #0D2B3E; }
+/* The rubber-band colour under the very bottom of the page. It tracks whatever
+   the LAST section is: a dark strip under a light ending reads as a rendering
+   fault. Now that .end is paper, so is this. */
+.act-on body, body.act-on { background: #DFE3DA; }
 
 .roles { display: grid; gap: 0; margin-top: clamp(26px, 4vw, 44px); }
 .role {
@@ -1426,10 +1738,60 @@ body { transition: background-color var(--t3) ease; }
   font-family: var(--font-display); font-weight: 800;
   font-size: clamp(1.35rem, 3.2vw, 2.35rem); letter-spacing: -.05em; line-height: 1.08; margin: 0;
 }
-.role--lead .role__t { color: var(--sea-ink); }
+
+/* THE FIRST CHOICE IS THE LOUDEST THING IN THIS SECTION. It used to be the
+   quietest, and measurably so: all three titles were the same size and weight,
+   so colour was the only thing ranking them — and the accent it carried came
+   out at 7.92:1 against the two plain ones at 12.51:1. The option he actually
+   wants was the faintest on the panel.
+
+   So the accent stops doing the ranking. The lead title takes the FULL ink
+   colour, which is the highest contrast available here, and gets a step up in
+   size on top of it. The mint moves to the eyebrow and a marker rule, where it
+   still says "this is the one" without having to be legible at body weight. */
+.role--lead .role__t {
+  color: var(--deep);
+  font-size: clamp(1.55rem, 3.9vw, 2.9rem);
+  letter-spacing: -.055em;
+}
+.role--lead {
+  position: relative;
+  padding-left: clamp(14px, 2vw, 24px);
+  margin-left: calc(clamp(14px, 2vw, 24px) * -1);
+}
+/* the marker: a solid accent rule down the left edge of the row it belongs to */
+.role--lead::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--sea-ink); border-radius: 2px;
+}
+@media (max-width: 860px) { .role--lead { margin-left: 0; } }
+
+/* The evidence link inside each role's prose. It keeps the browser's underline
+   rather than borrowing .pick__skip's draw-on-hover one: that treatment leaves
+   an in-sentence link identified by colour alone until you point at it, which
+   is fine for a "contact details" aside and not fine for the only route out of
+   this section. --sea-ink is redefined by .act-dark to the bright mint and
+   measures 7.92:1 on this panel. */
+.role .small a { color: var(--sea-ink); text-underline-offset: 3px; }
+.role .small a:hover { text-decoration-thickness: 2px; }
 
 .grid2 { display: grid; gap: clamp(20px, 3vw, 40px); grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
 .grid2 > * { min-width: 0; }
+
+/* The row under .grid2. TWO fixed columns, not more auto-fit: .grid2 resolves
+   to four columns at desktop width, so a fifth card would sit alone with three
+   empty columns beside it and a sixth would leave two. These two also are not
+   the same kind of thing as the tool lists above them — one is how he works
+   with AI and the other is which languages he can work in — so a row of their
+   own is honest as well as tidy. 700px is where two columns of prose stop
+   being two columns of prose. */
+.pair {
+  display: grid; gap: clamp(20px, 3vw, 40px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: clamp(20px, 3vw, 40px);
+}
+@media (max-width: 700px) { .pair { grid-template-columns: 1fr; } }
+.pair .small { max-width: 62ch; }
 
 .block h3 {
   font-family: var(--font-display); font-weight: 700; font-size: 1.0625rem;
@@ -1463,26 +1825,36 @@ body { transition: background-color var(--t3) ease; }
 
 /* ── closing ───────────────────────────────────────────────────────────── */
 
-.end { background: var(--deep); color: var(--paper); }
-.end .big { color: var(--paper); }
-.end .big em { color: var(--sea); }
-/* 58% cream over moss composites to 4.5:1 exactly, 55% to 4.2:1 — both too thin
-   a margin for 11px type, so the two smallest labels in this section sit at 64%
-   (5.3:1). Measure these by compositing the alpha over --deep, not by reading
-   the colour alone. */
-.end .tag { color: color-mix(in srgb, var(--paper) 64%, transparent); }
-.end .small { color: color-mix(in srgb, var(--paper) 76%, transparent); }
-.end .small strong { color: var(--paper); }
-.end .btn { background: var(--sea); border-color: var(--sea); color: var(--deep); }
-.end .btn:hover { background: var(--paper); border-color: var(--paper); }
-.end .btn--ghost { background: transparent; color: var(--paper);
-  border-color: color-mix(in srgb, var(--paper) 32%, transparent); }
-.end .btn--ghost:hover { background: var(--paper); color: var(--deep); border-color: var(--paper); }
-.end .scrawl { stroke: var(--sea); }
+/* THE PAGE ENDS ON PAPER, NOT ON INK. The closing block used to be a second
+   dark panel straight after the dark act, which meant the last two thirds of
+   the page were one unbroken slab and the contact details — the one thing a
+   visitor is meant to act on — arrived with no change of light at all.
+
+   Turning it over gives the page somewhere to land, and it is the same move
+   index-motion_2.html makes. Every pair below is flipped, not just the
+   background: this section was written entirely against a dark field.
+
+   Contrast, measured on --paper #DFE3DA:
+     --deep 11.27 · --deep-3 5.37 · --deep-4 5.29 · --sea-ink 5.55
+   --sea is NOT used for text here. It is 1.7:1 on paper and stays decorative,
+   which is the rule the rest of the light half of the site already follows. */
+.end { background: var(--paper); color: var(--deep); }
+.end .big { color: var(--deep); }
+.end .big em { color: var(--sea-ink); }
+.end .tag { color: var(--sea-ink); }
+.end .small { color: var(--deep-3); }
+.end .small strong { color: var(--deep); }
+/* the primary action carries the accent as a FILL, where mint would fail as
+   text but works as a field with paper on top of it */
+.end .btn { background: var(--sea-ink); border-color: var(--sea-ink); color: var(--paper); }
+.end .btn:hover { background: var(--deep); border-color: var(--deep); color: var(--paper); }
+.end .btn--ghost { background: transparent; color: var(--sea-ink); border-color: var(--sea-ink); }
+.end .btn--ghost:hover { background: transparent; color: var(--deep); border-color: var(--deep); }
+.end .scrawl { stroke: var(--sea-deep); }
 .end a { color: inherit; }
-.end .foot { border-top-color: color-mix(in srgb, var(--paper) 20%, transparent); }
-.end .foot small { color: color-mix(in srgb, var(--paper) 64%, transparent); }
-.end .foot a { border-bottom-color: color-mix(in srgb, var(--paper) 26%, transparent); }
+.end .foot { border-top-color: var(--rule); }
+.end .foot small { color: var(--deep-4); }
+.end .foot a { border-bottom-color: color-mix(in srgb, var(--deep) 26%, transparent); }
 
 /* ── end credits ──────────────────────────────────────────────────────────
    A slow ticker under the contact block. It is the one piece of motion on the
@@ -1491,7 +1863,7 @@ body { transition: background-color var(--t3) ease; }
    26s for a full pass: slow enough to read, slow enough to ignore. */
 .ticker {
   overflow: hidden; margin-top: clamp(26px, 4vw, 40px);
-  border-top: 1px solid color-mix(in srgb, var(--paper) 18%, transparent);
+  border-top: 1px solid var(--rule);
   padding-top: clamp(16px, 2.4vw, 22px);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
           mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
@@ -1501,15 +1873,41 @@ body { transition: background-color var(--t3) ease; }
   width: max-content;
   font-family: var(--font-display); font-weight: 700;
   font-size: clamp(1.1rem, 3vw, 2rem); letter-spacing: -.04em;
-  /* 30% looked right and measured 2.30:1 — under the 3:1 floor for large text.
-     It is aria-hidden and decorative, but it still spells out a real person's
-     name and job titles, so it gets held to the same bar as everything else.
-     44% measures 3.35:1 and is still plainly recessive next to the heading
-     above it at 12.5:1. */
-  color: color-mix(in srgb, var(--paper) 44%, transparent);
+  /* Held to the same bar as real text even though it is aria-hidden and
+     decorative, because it still spells out a real person's name and job
+     titles. On the old dark ending this was 44% cream, measured at 3.35:1.
+
+     Flipping to paper does NOT flip the alpha: ink over a light field loses
+     contrast far faster than cream over a dark one. 34% measured 1.97:1, well
+     under the 3:1 floor for large text — the value that matches the old
+     3.35:1 is 56%. Measured, not guessed; the first number written here was
+     an estimate and it was wrong by a factor of nearly two. */
+  color: color-mix(in srgb, var(--deep) 56%, transparent);
   white-space: nowrap;
 }
-.ticker__row em { font-style: normal; color: var(--sea); }
+/* the diamond between items, small and set back so the words carry the row */
+.ticker__row em {
+  font-style: normal; color: var(--sea-deep);
+  font-size: .42em; vertical-align: .32em;
+}
+/* "Available" leads every repeat and is the only part that is news, so it is
+   the only part at full strength — --sea-ink is the one accent that is safe
+   on paper as text (5.55:1), unlike --sea at 1.7:1. */
+.ticker__on {
+  color: var(--sea-ink);
+  position: relative; padding-left: .95em;
+}
+/* the live dot. Decorative, inside an aria-hidden strip, so it carries no
+   meaning a reader could miss — it is the one thing on the page that says
+   "still open" without spending a word on it. */
+.ticker__on::before {
+  content: ''; position: absolute; left: 0; top: 50%; translate: 0 -50%;
+  width: .42em; height: .42em; border-radius: 50%; background: var(--sea-ink);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ticker__on::before { animation: live 2.4s ease-in-out infinite; }
+}
+@keyframes live { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
 @media (prefers-reduced-motion: no-preference) {
   .ticker__row { animation: tick 26s linear infinite; }
 }
@@ -1520,9 +1918,10 @@ body { transition: background-color var(--t3) ease; }
   margin: clamp(20px, 3vw, 30px) 0 0;
   font-family: var(--font-display); font-weight: 600; font-size: .6875rem;
   letter-spacing: .22em; text-transform: uppercase;
-  /* 62% cream on --deep measures 5.6:1 — it is small type, so it clears AA
-     rather than sitting at whatever looked suitably quiet */
-  color: color-mix(in srgb, var(--paper) 62%, transparent);
+  /* Small type, so it clears AA rather than sitting at whatever looked quiet.
+     Was 62% cream on the dark ending (5.6:1); the ending is paper now, so this
+     is --deep-4, a real token at 5.29:1 rather than another alpha to compose. */
+  color: var(--deep-4);
 }
 
 .foot {
@@ -1633,6 +2032,141 @@ body { transition: background-color var(--t3) ease; }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   CURTAIN — the first thing anyone sees. index.html only.
+
+   A solid ink field with a counter, which lifts away and drags the cover up
+   behind it. Came out of index-motion_2.html after four rejected loaders; the
+   surviving idea is that an entrance is TIMING, not illustration.
+
+   --lead is the handshake the cover's entrance hangs on. Default 3600ms: if
+   the loader script never runs or dies mid-way, everything still arrives —
+   late, but the name is never lost behind a dead overlay. curtain.js sets it
+   to 0ms the instant the field starts to lift.
+
+   The curtain does NOT run when arriving from a case study — nav.js already
+   owns that transition and two covers fighting reads as a stutter. See
+   assets/curtain.js.
+   ══════════════════════════════════════════════════════════════════════════ */
+:root { --curtain: cubic-bezier(.85, 0, .15, 1); }
+.js-anim { --lead: 3600ms; }
+
+.loader {
+  position: fixed; inset: 0; z-index: 120;      /* over .bar (100) and nav (110) */
+  background: var(--deep);
+  display: grid; place-items: center;
+  will-change: transform;
+  animation: curtain-failsafe 1ms 5s forwards;
+}
+@keyframes curtain-failsafe { to { visibility: hidden; pointer-events: none; } }
+
+.loader__pct {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(3.6rem, 13vw, 11rem); line-height: 1;
+  letter-spacing: -.05em; color: var(--paper);
+  /* tabular figures or the number physically twitches as it counts: "1" is far
+     narrower than "8", and a centred number would jump on every tick */
+  font-variant-numeric: tabular-nums;
+}
+.loader__pct::after {
+  content: '%'; font-size: .3em; vertical-align: .95em; margin-left: .08em;
+  color: var(--sea); letter-spacing: 0;
+}
+
+/* The number leaves first and fast, then the field lifts. The 180ms gap is the
+   whole trick: move them together and the eye follows the number off the top
+   and misses the reveal. --curtain is an ease-IN-out — slow to commit, hard
+   through the middle, settled at the end, which on a full-screen panel reads
+   as weight. A plain ease-out leaves instantly and reads as a div hiding. */
+.loader--out .loader__pct { opacity: 0; transition: opacity .26s ease; }
+.loader--out { transform: translateY(-100%); transition: transform 1.2s var(--curtain) .18s; }
+.loader--gone { opacity: 0; transition: opacity .05s linear; pointer-events: none; }
+
+/* THE CURTAIN DRAGS THE COVER UP BEHIND IT. The name and the portrait are not
+   waiting to be uncovered — they ride up on the same easing and the same 1.2s,
+   starting 60ms before the field so they are already travelling when it clears
+   them. One gesture, bottom of the screen to the top.
+
+   `translate`, NOT `transform`: .cover__stack already uses transform for the
+   scroll-driven exit (--cp) and the two would overwrite each other.
+   Independent properties compose, so the entrance and the scroll can each own
+   a movement on the same element without knowing about each other. */
+.js-anim .cover__stack { translate: 0 110px;
+  animation: curtain-drag 1.2s var(--curtain) forwards calc(var(--lead) + 120ms); }
+@keyframes curtain-drag { to { translate: 0 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .loader { display: none; }
+  /* translate as well as transform — the entrance and the scroll exit use
+     different properties on this element, and killing only one would leave
+     the cover parked 110px low forever. */
+  .js-anim .cover__stack { translate: none; animation: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MORPH — a rail panel's picture becomes the case study's hero image.
+   Driven by assets/morph.js. Identical block in assets/verdure.css and
+   assets/style.css — CHANGE ONE, CHANGE THE OTHER. The two files are the two
+   ends of one animation; a difference between them reads as a jump halfway.
+
+   This rule is the whole opt-in. It tells the browser to hold the outgoing
+   page's pixels across the navigation instead of tearing them down, which is
+   the thing JS cannot do — document.startViewTransition() only ever works
+   inside one document. Everything below is timing.
+
+   A browser that does not know this at-rule drops it, gets no pageswap event,
+   and keeps the nav.js wipe. Nothing needs to detect anything. */
+@view-transition { navigation: auto; }
+
+/* The backgrounds. Shorter than the image's journey on purpose: the page you
+   are arriving at should have settled by the time the picture lands, so the
+   image is the last thing still moving and therefore the thing you watch. */
+::view-transition-old(root) { animation-duration: var(--t2); }
+::view-transition-new(root) { animation-duration: var(--t3); }
+
+/* The picture itself. --ease-wipe overshoots nothing and decelerates hard, so
+   the frame arrives rather than stops. */
+::view-transition-group(work-media) {
+  animation-duration: var(--t3);
+  animation-timing-function: var(--ease-wipe);
+}
+
+/* Without this the two snapshots are stretched to whatever the group box is at
+   that instant, so a wide cropped panel frame squashes on its way to a taller
+   hero and the whole thing reads as a rubber band. Filling the box and letting
+   object-fit crop keeps both ends undistorted for the entire trip.
+
+   --vt-fit is set by morph.js: cover for the three screenshots, contain for
+   MeguBot's profile card, which is a logo and must not be cropped. */
+::view-transition-old(work-media),
+::view-transition-new(work-media) {
+  width: 100%;
+  height: 100%;
+  object-fit: var(--vt-fit, cover);
+  animation-duration: var(--t3);
+  animation-timing-function: var(--ease-wipe);
+}
+
+/* The arriving hero is the other half of the morph, so it must be fully painted
+   at the instant the browser snapshots it. .is-in cannot do that job: it opens
+   the wipe over --t4, so at capture time the clip is still shut and the panel
+   would fly across the screen and morph into an empty rectangle. This opens it
+   with no transition at all. morph.js adds it in pagereveal and drops it when
+   the transition finishes.
+
+   Same specificity as the .is-in rule it overrides, and deliberately placed
+   after it — later wins, so no !important is needed. Moved above the reveal
+   rules, this silently stops working. */
+.js-anim .wipe.vt-open img { clip-path: inset(0 0 0 0); transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* morph.js already calls skipTransition(); this covers the case where the
+     preference changes between the two documents. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    NAV — the wipe between pages. Built by assets/nav.js; the arriving half is
    an html::before so it can exist before first paint. Identical block in
    assets/verdure.css and assets/style.css — CHANGE ONE, CHANGE THE OTHER.
@@ -1681,8 +2215,16 @@ html.nav-in.nav-out .nav-label { opacity: 0; transition: opacity 260ms ease; }
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ── label swap ───────────────────────────────────────────────────────────
-   Ported verbatim from style.css. data-label needs no second copy in the
-   markup and keeps the duplicate out of the accessibility tree. */
+   Ported verbatim from style.css. data-label carries the INCOMING copy, so the
+   duplicate never reaches the accessibility tree.
+
+   THE OUTGOING COPY MUST BE AN ELEMENT:
+       <span class="swap" data-label="Say hello"><span>the@address</span></span>
+   Hover moves `> span:first-child` up and brings the ::after in behind it. Left
+   as a bare text node — which is how both buttons shipped — there is nothing to
+   move, so the label slides in ON TOP of the text still sitting there and the
+   button shows both at once. It looks like a rendering fault and it is really a
+   missing wrapper. */
 .swap {
   position: relative; display: inline-block; overflow: hidden;
   vertical-align: bottom; padding-block: .14em; margin-block: -.14em;
@@ -1820,22 +2362,31 @@ button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::a
    five-stage diagram that simply does not animate.
    ══════════════════════════════════════════════════════════════════════════ */
 
-.boot {
+.method {
   background: var(--cover-bg); color: var(--paper);
   z-index: 0; justify-content: center; overflow: hidden;
   position: relative;
 }
-/* same drafting grid as the cover, so the two dark screens read as one act */
-.boot::before {
+/* Same survey contours as the cover, so the two dark screens read as one act.
+   Centres are moved and the spacing widened, so it is the same sheet continuing
+   rather than the same tile stamped twice — scrolling from one to the other
+   should feel like panning across a map, not like a repeat. */
+.method::before {
   content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image:
-    linear-gradient(to right,  var(--sea) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--sea) 1px, transparent 1px);
-  background-size: 72px 72px;
-  opacity: .04;
+    repeating-radial-gradient(ellipse 40% 46% at 84% 6%,
+      transparent 0 42px, var(--sea) 42px 43px),
+    repeating-radial-gradient(ellipse 46% 52% at 10% 98%,
+      transparent 0 56px, var(--sea) 56px 57px);
+  opacity: .1;
+  /* The cover has a radial mask concentrating its contours toward the name;
+     this panel has none, so the same 5% that read on the cover vanished here.
+     Matched by eye at 1134px against the cover, not by copying its number. */
+  -webkit-mask-image: radial-gradient(115% 120% at 78% 10%, #000 26%, transparent 82%);
+          mask-image: radial-gradient(115% 120% at 78% 10%, #000 26%, transparent 82%);
 }
-.boot > .inner { position: relative; z-index: 1; }
-.boot .tag { color: var(--sea); }
+.method > .inner { position: relative; z-index: 1; }
+.method .tag { color: var(--sea); }
 
 /* ── the flow ──────────────────────────────────────────────────────────── */
 .flow {
@@ -1901,21 +2452,9 @@ button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::a
    So the diagram is the hero and it is not dimmed at all. The line is its
    CONCLUSION, at a step down in scale, and it earns the frame by following the
    evidence rather than by shouting over it. */
-.boot__line { color: var(--paper); margin: clamp(26px, 4vw, 48px) 0 0; max-width: 20ch; }
+.method__line { color: var(--paper); margin: clamp(26px, 4vw, 48px) 0 0; max-width: 20ch; }
 
-/* the corner block, the way a drawing carries its title block */
-.block-title {
-  position: absolute; right: 0; bottom: 0;
-  display: grid; gap: 2px; text-align: right;
-  padding: 12px 16px;
-  border-left: 1px solid color-mix(in srgb, var(--paper) 22%, transparent);
-  border-top: 1px solid color-mix(in srgb, var(--paper) 22%, transparent);
-  font-family: var(--font-display); font-weight: 600;
-  font-size: .625rem; letter-spacing: .16em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--paper) 72%, transparent);
-}
-.block-title span:first-child { color: var(--paper); }
-.boot > .inner { padding-bottom: clamp(70px, 9vw, 96px); }
+.method > .inner { padding-bottom: clamp(70px, 9vw, 96px); }
 
 @media (max-width: 860px) {
   /* five boxes across a phone is five columns of one word each */
@@ -1924,9 +2463,7 @@ button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::a
   .wire::after { transform-origin: top; }
   .wire::before { right: auto; left: -3px; top: auto; bottom: 0;
     border-left-color: transparent; border-top-color: var(--sea); }
-  .block-title { position: static; text-align: left; border-left: 0; padding-inline: 0;
-    margin-top: clamp(22px, 5vw, 34px); }
-  .boot > .inner { padding-bottom: 0; }
+  .method > .inner { padding-bottom: 0; }
 }
 
 /* the wires draw along their own axis, which differs between the two layouts */
@@ -1975,7 +2512,7 @@ button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::a
    this comment is not claiming they were.
    ══════════════════════════════════════════════════════════════════════════ */
 
-.boot::after, .cover::after, .act-dark::after, .end::after {
+.method::after, .cover::after, .act-dark::after {
   content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image:
     radial-gradient(120% 80% at 50% 40%, transparent 42%, rgba(0, 0, 0, .30) 100%),
@@ -1984,8 +2521,8 @@ button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::a
   mix-blend-mode: soft-light;
   opacity: .5;
 }
-/* .act-dark and .end are plain sections; the pseudo-element needs a frame */
-.act-dark, .end { position: relative; }
+/* .act-dark is a plain section; the pseudo-element needs a frame */
+.act-dark { position: relative; }
 /* and their content has to sit above it */
 .act-dark > .inner, .end > .inner { position: relative; z-index: 1; }
 
@@ -2007,5 +2544,5 @@ button:hover .swap[data-label]::after, button:focus-visible .swap[data-label]::a
 
 @media (prefers-reduced-motion: reduce) {
   /* nothing here animates, but the grain is a texture some people find noisy */
-  .boot::after, .cover::after, .act-dark::after, .end::after { background-image: none; }
+  .method::after, .cover::after, .act-dark::after { background-image: none; }
 }

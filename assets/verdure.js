@@ -54,16 +54,87 @@
   const hero = document.getElementById('top');
   const portrait = document.querySelector('.cover__portrait');
   const bar = document.querySelector('.bar');
-  /* The bar used to watch the cover alone, because the cover was the only dark
-     thing on the page. Now there is a whole dark third act, so it watches every
-     dark section instead: four rects per frame, which is cheaper than asking
-     the document what is under the bar. */
-  const darkSections = Array.from(document.querySelectorAll('.cover, .act-dark, .end'));
+
+  /* ── which sections are dark ───────────────────────────────────────────────
+     The bar used to watch the cover alone, because the cover was the only dark
+     thing on the page. When a dark third act arrived the watch list became a
+     hand-typed set of class names — `.cover, .act-dark, .end` — and a hand-typed
+     list is a claim that goes stale in silence. It did, in BOTH directions:
+
+       · `.end` stayed on the list long after it turned to paper, so the bar
+         spent the whole last screen writing --paper on --paper. Measured
+         2026-08-03: 1.00:1. Contact and the language switch were not dim, they
+         were invisible.
+       · `.method` was never on it although it paints --cover-bg (#153244), so
+         the second screen got the pale band across a dark panel that the
+         comment on .bar--dark in verdure.css calls the one thing that must not
+         happen.
+
+     Deleting `.end` would have fixed the first and left the second, and left the
+     next section to break the same way. So the list is not written any more, it
+     is MEASURED: ask each band once what it actually paints and keep the dark
+     ones. This is not the expensive "what is under the bar" question — that one
+     runs per frame. Per frame this still walks a rect per dark section, still
+     four of them; the style reads happen at startup and on resize only. */
+
   const BAR_H = 58;
-  const overDark = () => darkSections.some(s => {
-    const r = s.getBoundingClientRect();
-    return r.top <= BAR_H + 1 && r.bottom > BAR_H + 1;
-  });
+
+  const lin = c => { c /= 255; return c <= .03928 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4); };
+
+  /* backgroundColor normally resolves to rgb()/rgba(), but a color-mix() — which
+     --cover-bg is — comes back as color(srgb 0…1) in Chromium, hence the scale.
+     A see-through ground counts as light: what shows through is the body, and
+     the body is paper. The threshold is nowhere near a close call — paper is
+     .74 and the two dark grounds are .03 and .02. */
+  const isDark = el => {
+    const s = getComputedStyle(el).backgroundColor;
+    const n = (s.match(/[\d.]+/g) || []).map(Number);
+    if (n.length < 3 || (n.length > 3 && n[3] < .5)) return false;
+    const k = s.startsWith('color(') ? 255 : 1;
+    return .2126 * lin(n[0] * k) + .7152 * lin(n[1] * k) + .0722 * lin(n[2] * k) < .3;
+  };
+
+  /* Only a top-level band can be the thing under a fixed bar; everything else is
+     inside one of them. Scoped to the page's own <main> on purpose — the mock
+     browser inside .grow contains a second <main>, and a loose selector would
+     start measuring the furniture inside the screenshot. */
+  const bands = document.querySelector('main') || document.body;
+  const SKIP = { SCRIPT: 1, TEMPLATE: 1, STYLE: 1, LINK: 1, NOSCRIPT: 1 };
+  let darkSections = [];
+  const classify = () => {
+    darkSections = Array.from(bands.children).filter(el => !SKIP[el.tagName] && isDark(el));
+  };
+  classify();
+  /* Nothing in verdure.css changes these backgrounds at a breakpoint today, so
+     once would do. Redoing it on resize is a handful of style reads inside a
+     frame that is already reflowing, and it means a future media query cannot
+     put this back out of step with the stylesheet. */
+  addEventListener('resize', classify, { passive: true });
+
+  /* Both edges of the bar have to be over dark ground, not just its bottom one.
+     The old test sampled a single line at the bar's bottom edge, which meant
+     that while a dark section's top edge was crossing the bar — a ~58px window
+     of scroll at every light→dark seam — the ink went cream while the words
+     were still sitting on paper. Measured at the .rail → #roles seam on
+     2026-08-03: 1.00:1, the same invisible bar as the .end bug, just brief
+     enough that nobody caught it.
+
+     Two lines instead of one, in the same single pass over the same rects: no
+     extra cost per frame. They do not have to be the SAME dark section, which
+     is what keeps the cover → #method handover from flashing cream between two
+     dark screens. When only one line is covered the bar stays cream — over the
+     top of a dark panel that is a pale band for a moment, which is a cosmetic
+     price; cream on cream is not readable at all. */
+  const overDark = () => {
+    let top = false, bottom = false;
+    for (const s of darkSections) {
+      const r = s.getBoundingClientRect();
+      if (r.top <= 1 && r.bottom > 1) top = true;
+      if (r.top <= BAR_H - 1 && r.bottom > BAR_H - 1) bottom = true;
+      if (top && bottom) return true;
+    }
+    return false;
+  };
   const PARALLAX = 34;   // px of travel across one full screen of scrolling
 
   /* ── entry: start the camera as soon as the shot is worth looking at ──────
@@ -154,9 +225,12 @@
     }
 
     if (cover && hero) {
-      // measured from the HERO, not the cover: the cover is sticky on desktop, so
-      // its own rect stops moving the moment it pins. The hero's top edge is what
-      // actually travels — innerHeight away → 0 as it finishes covering.
+      // measured from the HERO, not the cover. This dates from when the cover
+      // was sticky and its own rect froze the moment it pinned; the pinning is
+      // gone (there is no html.is-pinned anywhere as of 2026-08-03) but the
+      // hero is still the right thing to measure — its top edge is what travels,
+      // innerHeight away → 0 as it finishes covering, and reading it keeps this
+      // independent of however the cover happens to be positioned.
       const top = hero.getBoundingClientRect().top;
       const p = 1 - clamp01(top / Math.max(1, innerHeight));
 
@@ -167,8 +241,12 @@
     }
 
     if (bar) bar.classList.toggle('bar--dark', overDark());
-    // only visible on overscroll, but a cream rubber-band under a dark ending
-    // gives the game away
+    // Only visible on overscroll. The comment here used to say "a cream
+    // rubber-band under a dark ending gives the game away" — that was written
+    // when .end was dark. It is paper now, and .act-on in verdure.css sets
+    // #DFE3DA to match it, so what this guards against today is the opposite:
+    // a NAVY strip under a paper ending. Same rule either way — the rubber-band
+    // has to be whatever the last section is.
     document.body.classList.toggle('act-on', scrollY > 0 &&
       innerHeight + scrollY >= root.scrollHeight - 4);
 
@@ -192,7 +270,7 @@
   onScroll();
 
   /* ── counters ──────────────────────────────────────────────────────────
-     The markup already holds the final string ("3,119", "~1,600"). Read it,
+     The markup already holds the final string ("3,119", "1,643"). Read it,
      count up to it, then write the ORIGINAL string back so no formatting
      difference can survive the animation. */
 
