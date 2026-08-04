@@ -87,7 +87,7 @@
       'และ<a href="#contact">ช่องทางติดต่อ</a>อยู่ท้ายสุดอยู่แล้ว',
 
     /* ── hero ────────────────────────────────────────────────────────────── */
-    '.hero__type .tag--honey': 'ฝึกงานสหกิจศึกษา · 16 พ.ย. 2026 – 7 มี.ค. 2027',
+    '.hero__type .tag--sea': 'ฝึกงานสหกิจศึกษา · 16 พ.ย. 2026 – 7 มี.ค. 2027',
     /* The biggest line on the page, and it was missing from this file until the
        Thai read-through of 2026-08-03 found it — the same blind spot that hid
        the rail head, and the reason __i18nCheck() is not the translation gate.
@@ -175,7 +175,7 @@
     '.anno__t[data-a="4"]': 'เกิน 1024 · เมนูโผล่ออกมา · คอลัมน์เดียวกลายเป็นสอง',
     '.anno__t[data-a="5"]': 'เกิน 1280 · ขนาดตัวอักษรทั้งชุดขยับขึ้นอีกขั้น',
     '.rail__track > li:nth-of-type(1) > .panel__body > .tag': 'ใช้งานจริง · ธ.ค. 2025 – ปัจจุบัน',
-    '.rail__track > li:nth-of-type(1) .tag--honey': 'System Analyst · Core Developer · UI/UX',
+    '.rail__track > li:nth-of-type(1) .tag--sea': 'System Analyst · Core Developer · UI/UX',
     '.rail__track > li:nth-of-type(1) .small': 'ระบบเลือกตั้งสโมสรนักศึกษา คณะวิทยาการจัดการ ม.อ. ที่ผมทำคนเดียวทั้งระบบ ' +
       'โจทย์ที่ยากไม่ใช่การทำให้เว็บกดโหวตได้ แต่คือทำให้ผลคะแนน<strong>พิสูจน์ได้ว่าไม่ถูกแก้</strong> ' +
       'ขณะที่<strong>ไม่มีใครสืบได้ว่าใครเลือกพรรคไหน</strong> · ปิดหีบโดยมี<strong>เคสลงคะแนนซ้ำเป็นศูนย์</strong>',
@@ -186,7 +186,7 @@
 
     /* ── project 02 ──────────────────────────────────────────────────────── */
     '.rail__track > li:nth-of-type(2) > .panel__body > .tag': 'รายวิชา 477-303 BISA&amp;D · ภาคเรียน 2/2568',
-    '.rail__track > li:nth-of-type(2) .tag--honey': 'System Analyst · Full-stack Developer · UI/UX',
+    '.rail__track > li:nth-of-type(2) .tag--sea': 'System Analyst · Full-stack Developer · UI/UX',
     '.rail__track > li:nth-of-type(2) .small': 'นักศึกษาอัปโหลดใบเกรดกับใบลงทะเบียนเป็น PDF ' +
       'แล้วระบบ<strong>อ่านข้อความออกมาเทียบกับโครงสร้างหลักสูตรให้เอง</strong> ' +
       'ว่าหมวดไหนครบแล้ว หมวดไหนยังขาด',
@@ -197,7 +197,7 @@
 
     /* ── project 03 ──────────────────────────────────────────────────────── */
     '.rail__track > li:nth-of-type(3) > .panel__body > .tag': 'รายวิชา 477-302 Cloud Computing Platform · ต.ค. 2025',
-    '.rail__track > li:nth-of-type(3) .tag--honey': 'System Analyst · Cloud Developer · Front-end',
+    '.rail__track > li:nth-of-type(3) .tag--sea': 'System Analyst · Cloud Developer · Front-end',
     '.rail__track > li:nth-of-type(3) .small': 'แชตบอตตอบคำถามนักศึกษา สร้างบน Azure Bot Service ต่อกับ Language Studio ' +
       'แล้วฝังลงหน้าเว็บผ่าน Direct Line API โดยมี Node.js คั่นกลางแลก secret key เป็น token ' +
       '<strong>เพื่อไม่ให้ key หลุดไปอยู่ฝั่ง frontend</strong>',
@@ -208,7 +208,7 @@
 
     /* ── project 04 ──────────────────────────────────────────────────────── */
     '.rail__track > li:nth-of-type(4) > .panel__body > .tag': 'โปรเจคส่วนตัวกับเพื่อน · ยังทำอยู่',
-    '.rail__track > li:nth-of-type(4) .tag--honey': 'System Analyst · เจ้าของฟีเจอร์ · ไม่ได้เป็นคนเขียนโค้ด',
+    '.rail__track > li:nth-of-type(4) .tag--sea': 'System Analyst · เจ้าของฟีเจอร์ · ไม่ได้เป็นคนเขียนโค้ด',
     '.rail__track > li:nth-of-type(4) .small': 'บอตสารพัดประโยชน์ที่เซิร์ฟเวอร์ Discord ของพวกเราใช้กันทุกวัน ' +
       '<strong>ผมออกแบบระบบและฟีเจอร์ เพื่อนเป็นคนเขียนโค้ด</strong> ' +
       'เป็นโปรเจคที่ใกล้เคียงกับงานที่ผมสมัครมากที่สุด',

@@ -259,6 +259,17 @@ a { color: inherit; }
   font-size: .6875rem; letter-spacing: .2em; text-transform: uppercase;
   color: var(--deep-4); margin: 0;
 }
+/* The one accent that may carry text. It marks the two tags on this page worth
+   separating from the rest: the availability window, and the role played on
+   each project in the rail.
+
+   This rule sat unused from e134fa9 until 2026-08-05. That commit moved the
+   palette from cream/moss/honey to navy/sea-green and renamed .tag--honey to
+   .tag--sea HERE, but the markup and the i18n selectors kept the old name — so
+   the stylesheet had a rule nothing used and the HTML had a class with no rule,
+   and the five tags quietly rendered as plain .tag for two palettes running.
+   Nothing errors when a class has no rule, which is why it lasted. If you ever
+   rename a modifier, grep the HTML and i18n.js in the same commit. */
 .tag--sea { color: var(--sea-ink); }
 
 .small { font-size: 13.5px; line-height: 1.62; color: var(--deep-3); margin: 0; }
