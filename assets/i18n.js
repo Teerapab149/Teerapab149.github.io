@@ -22,11 +22,14 @@
    Thai sentences do not end in a full stop; that is the house rule for Thai in
    this repo, and it applies to the site copy too.
 
-   THE EYEBROW NUMBERS RUN 01–08 IN DOM ORDER, not in the order they appear in
+   THE EYEBROW NUMBERS RUN 01–09 IN DOM ORDER, not in the order they appear in
    this file. The Thai strings here are keyed by selector, so their order on the
    page is set by index.html: cover 01 · method 02 · pick 03 · rail 04 · roles 05
-   · skills 06 · background 07 · contact 08. Move a section and BOTH files have
-   to be renumbered together, or one language will contradict the other. */
+   · habits 06 · skills 07 · background 08 · contact 09. Move a section and BOTH
+   files have to be renumbered together, or one language will contradict the
+   other. (#habits was inserted on 2026-08-04 and pushed skills/background/
+   contact from 06/07/08 to 07/08/09 — that renumbering is the whole reason this
+   paragraph exists.) */
 
 (() => {
   'use strict';
@@ -58,7 +61,7 @@
     '.bio > div:nth-child(2) dt': 'มหาวิทยาลัย',
     '.bio > div:nth-child(2) dd': 'มหาวิทยาลัยสงขลานครินทร์ · หาดใหญ่ ตั้งแต่ปี 2023',
     '.bio > div:nth-child(3) dt': 'จบการศึกษา',
-    '.bio > div:nth-child(3) dd': 'คาดว่าปี 2027 · GPAX 3.03',
+    '.bio > div:nth-child(3) dd': 'คาดว่าปี 2027 · GPAX 3.05',
     '.bio > div:nth-child(4) dt': 'กำลังมองหา',
     '.bio > div:nth-child(4) dd': '<strong>ฝึกงานสหกิจศึกษา · 16 พ.ย. 2026 – 7 มี.ค. 2027</strong>' +
       '<br>System Analyst · Business Analyst · Management Trainee',
@@ -237,9 +240,16 @@
        read "สนใจเช่นกัน" and saw themselves as the leftover. The English changed
        for the same reason, and the ORDER did not change in either: CLAUDE.md
        fixes analyst first, Management Trainee second, development third.
-       The <a> in blocks 1 and 3 must survive the switch — they are the only
+       The <a> in every block must survive the switch — they are the only
        links in nine screens of #roles + #cv, so a Thai string without them puts
-       a reader who switched language straight back into the dead end. */
+       a reader who switched language straight back into the dead end.
+
+       2026-08-04: blocks 2 and 3 each carry two role names now, and block 3
+       carries TWO PARAGRAPHS — one per strand — inside .role__body. That is why
+       its key is no longer `.role:nth-child(3) .small`: apply() uses
+       querySelector, which takes the FIRST match only, so a single .small key
+       would have translated the business-development paragraph and left the
+       developer one in English. Keep the two :nth-child keys in DOM order. */
     '.role:nth-child(1) .role__n': 'ตรงกับผมที่สุด',
     '.role:nth-child(1) .small': 'ตรงกับสิ่งที่ผมทำมาจริงที่สุด — ทุกโปรเจคในนี้ผมเริ่มจากเก็บ requirement ' +
       'เขียน use case ออกแบบ ER diagram และวาง business rule ก่อนจะแตะโค้ดบรรทัดแรกเสมอ ' +
@@ -249,16 +259,75 @@
       'ส่วน <a href="megubot.html">MeguBot</a> ผมทำถึงตรงนั้นแล้วส่งต่อให้ dev เลย ' +
       '· ข้อได้เปรียบของผมคือคุยกับ dev รู้เรื่อง เพราะผมเคยเขียนเอง',
     '.role:nth-child(2) .role__n': 'เข้ากับผมได้ดีเช่นกัน',
-    '.role:nth-child(2) .role__t': 'Management Trainee',
+    '.role:nth-child(2) .role__t': 'Project Management Intern<br>Management Trainee',
     '.role:nth-child(2) .small': 'ผมเรียนบริหารธุรกิจ ไม่ใช่วิศวกรรม มุมมองของผมจึงเริ่มจากปัญหาขององค์กรก่อนเสมอ ' +
-      'ในงานกลุ่มผมเป็นคนคุมภาพรวมและประสานงานเอง จึงถนัดงานที่ต้องหมุนหลายฝ่าย',
-    '.role:nth-child(3) .role__n': 'เริ่มงานได้ทันที',
-    '.role:nth-child(3) .small': 'งาน UI ของ<a href="fms-election.html">ระบบเลือกตั้ง</a>คือส่วนที่ผมภูมิใจที่สุด ' +
-      '— ระบบธีม 23 แบบที่สลับได้ทั้งเว็บจากหน้า admin และทุกหน้าออกแบบจากมือถือก่อนเสมอ ' +
-      '· ถ้าตำแหน่งเป็นสายพัฒนา ผมเริ่มงานได้ตั้งแต่วันแรก และการเขียนแบบก่อนลงมือคือสิ่งที่ทำให้โค้ดของผมอยู่ได้ในระยะยาว',
+      '· ในงานกลุ่มผมเป็นคนคุมภาพรวม ตามว่าอะไรติดอยู่ตรงไหน และทำให้หลายฝ่ายขยับไปพร้อมกันได้ ' +
+      '· ส่วนระบบเลือกตั้ง ผมวางงานไว้ให้มันอยู่ได้ต่อโดยไม่มีผม — ' +
+      '<a href="fms-election.html#handover">การส่งต่อ</a> คือสคริปต์ขึ้นปีการศึกษาใหม่ ' +
+      'ปุ่มตรวจความพร้อม 14 ข้อ และเอกสารที่เขียนให้สโมสรซึ่งเปลี่ยนทีมทุกปีและไม่มีใครเขียนโค้ด',
+    /* ป้ายของช่องนี้ต้องคลุมทั้งสองสายโดยไม่บอกสายไหนว่าเป็นตัวสำรอง
+       ส่วน "เริ่มงานได้ตั้งแต่วันแรก" ย้ายไปอยู่ในย่อหน้าของสายพัฒนาแทน ยังพูดครบเหมือนเดิม */
+    '.role:nth-child(3) .role__n': 'พร้อมทั้งสองทาง',
+    '.role:nth-child(3) .role__body p:nth-child(1)':
+      '<strong>Business Development</strong> — ทุกโปรเจคในนี้เริ่มจากปัญหาการทำงานจริงของใครสักคน ' +
+      'ไม่ใช่จากสเปกที่มีคนส่งมาให้ · ในระบบเลือกตั้งแปลว่าผมนั่งคุยกับกรรมการเลือกตั้งและเจ้าหน้าที่คณะ ' +
+      'ซึ่งไม่มีใครเป็นสายเทคนิคเลย จนตกลงกันได้ว่าระบบต้องทำอะไรได้บ้าง และตอนนี้มันคือระบบที่คณะใช้จริง ' +
+      '· และแปลว่าผมออกแบบให้ปีการศึกษา รายชื่อผู้สมัคร และหน้าตาทั้งเว็บเปลี่ยนได้จากหน้า admin ' +
+      'สโมสรที่เปลี่ยนทีมทุกปีและไม่มีใครเขียนโค้ดจึงไม่ต้องจ้างใครมาแก้โค้ดใหม่ทุกปี ' +
+      '· ส่วน<a href="psu-chatbot.html">แชตบอต</a> เพดานคือเงิน ไม่ใช่คน — ' +
+      'เลือกแพ็กเกจที่ถูกที่สุดเท่าที่ยังรันได้ตลอด 24 ชั่วโมง',
+    '.role:nth-child(3) .role__body p:nth-child(2)':
+      '<strong>Front-end · Full-stack</strong> — งาน UI ของ<a href="fms-election.html">ระบบเลือกตั้ง</a>' +
+      'คือส่วนที่ผมภูมิใจที่สุด — ระบบธีม 23 แบบที่สลับได้ทั้งเว็บจากหน้า admin และทุกหน้าออกแบบจากมือถือก่อนเสมอ ' +
+      '· ผมเริ่มงานได้ตั้งแต่วันแรก และการเขียนแบบก่อนลงมือคือสิ่งที่ทำให้โค้ดของผมอยู่ได้ในระยะยาว',
+
+    /* ── habits · what he is like to work with ─────────────────────────────
+       ห้าข้อ และห้าข้อเท่านั้น — เป็นคำตอบของเจ้าของเอง ห้ามเติมข้อที่หก
+       และห้ามใส่คำอย่าง passionate / team player / detail-oriented ทั้งสองภาษา
+       ทุกข้อจบด้วยหลักฐานที่มีอยู่จริงในหน้านี้ ไม่ใช่คำคุณศัพท์
+
+       ทุก key ในบล็อกนี้ scope ด้วย `#habits` และทุก key ของ #cv ข้างล่างถูก
+       เปลี่ยนไป scope ด้วย `#cv` ในรอบเดียวกัน — เพราะ apply() ใช้
+       querySelector ซึ่งคืน match แรกเท่านั้น และ .cv__row แถวแรกของทั้ง
+       document ตอนนี้อยู่ใน section นี้ ไม่ใช่ใน #cv อีกแล้ว
+       ถ้าไม่ scope คำแปลของ #cv จะไปลงแถวของ #habits แบบเงียบ ๆ
+       และ __i18nCheck() จะยังเขียวอยู่ทุกบรรทัด เพราะมันตรวจแค่ว่า selector
+       ยัง match อะไรสักอย่าง ไม่ได้ตรวจว่า match ถูกตัว */
+    '#habits > .inner > .tag': '06 — ผมเป็นคนแบบไหนเวลาทำงาน',
+    '#habits h2': 'ห้านิสัย และที่ที่ตรวจสอบได้ทุกข้อ',
+    '#habits .cv__row:nth-child(1) .cv__when': 'ระบบเลือกตั้ง · PSU Chatbot',
+    '#habits .cv__row:nth-child(1) h3': 'ผมเป็นคนถือภาพรวม และรู้ว่าอะไรติดอยู่ตรงไหน',
+    '#habits .cv__row:nth-child(1) .small': 'PSU Chatbot มีกันสามคน ส่วนงานระบบเป็นของผม ' +
+      'ผมจึงเป็นคนที่รู้ว่าชิ้นไหนรออะไรอยู่ · ส่วนระบบเลือกตั้งไม่มีทีมเลย ' +
+      'ผมทำงานอยู่ระหว่างกรรมการเลือกตั้งกับเจ้าหน้าที่คณะ ซึ่งไม่มีใครเป็นสายเทคนิค ' +
+      'และงานส่วนใหญ่คือทำให้ทั้งสองฝั่งขยับไปทางเดียวกัน',
+    '#habits .cv__row:nth-child(2) .cv__when': 'ระบบเลือกตั้ง',
+    '#habits .cv__row:nth-child(2) h3': 'ส่วนที่เสี่ยงที่สุด ผมรับมาทำเอง',
+    '#habits .cv__row:nth-child(2) .small': 'ในระบบเลือกตั้งคือตัวบัตรลงคะแนน — ' +
+      'ผลต้องพิสูจน์ได้ว่าไม่ถูกแก้ ขณะที่ต้องไม่มีใครสืบได้ว่าใครเลือกใคร สองข้อนี้ดึงกันคนละทาง ' +
+      'และโมเดลนั้นคือส่วนที่ผมต้องทำให้ถูกเอง · เรื่อง concurrency บนเส้นทางลงคะแนนก็เหมือนกัน ' +
+      'คือช่องแคบ ๆ ที่คนคนเดียวอาจถูกนับสองครั้ง · ปิดหีบโดยมีเคสลงคะแนนซ้ำเป็นศูนย์',
+    '#habits .cv__row:nth-child(3) .cv__when': 'ระบบเลือกตั้ง',
+    '#habits .cv__row:nth-child(3) h3': 'ผมมักเห็นปัญหาก่อนจะมีใครมาบอก',
+    '#habits .cv__row:nth-child(3) .small': 'ไม่มีใครสั่งให้ทำระบบเลือกตั้ง ' +
+      'ผมไปดูว่าคณะจัดเลือกตั้งกันยังไง แล้วลงมือทำคำตอบ จนตอนนี้มันคือระบบที่คณะใช้จริง ' +
+      '· อีกเรื่องที่ผมเห็นล่วงหน้าคือสโมสรนักศึกษาเปลี่ยนทีมทุกปีและไม่มีใครเขียนโค้ด ' +
+      'อะไรที่ฝังตายไว้ในโค้ดก็แปลว่าต้องจ้างคนมาแก้ทุกปี',
+    '#habits .cv__row:nth-child(4) .cv__when': 'ระบบเลือกตั้ง',
+    '#habits .cv__row:nth-child(4) h3': 'ติดอะไรแล้วผมขุดจนเข้าใจ ไม่หยุดกลางทาง',
+    '#habits .cv__row:nth-child(4) .small': 'แล้วผมจดมันไว้ · ทุกโปรเจคในนี้มี decision log เขียนไว้ ' +
+      'ปัญหาเดิมจึงไม่กินเวลาผมสองรอบ — ตรงนี้แหละที่ทำให้การนั่งขุดทั้งคืนกลายเป็นของที่ส่งต่อให้คนอื่นได้ ' +
+      '· ระบบเลือกตั้งคือ 587 commit ตลอดเจ็ดเดือน คนเดียว',
+    '#habits .cv__row:nth-child(5) .cv__when': 'ระบบเลือกตั้ง · MeguBot',
+    '#habits .cv__row:nth-child(5) h3': 'ผมทำของให้คนอื่นรับไปใช้ต่อเองได้',
+    '#habits .cv__row:nth-child(5) .small': 'เพราะแบบนั้น ปีการศึกษา รายชื่อผู้สมัคร ' +
+      'และธีมทั้ง 23 แบบของระบบเลือกตั้งจึงเปลี่ยนได้จากหน้า admin ' +
+      'และการส่งต่อคือสคริปต์ขึ้นปีการศึกษาใหม่ ปุ่มตรวจความพร้อม 14 ข้อ ' +
+      'และเอกสารที่เขียนให้คนที่ไม่ได้เขียนโค้ด · MeguBot คือนิสัยเดียวกันในทางกลับ — ' +
+      'ผมออกแบบระบบและฟีเจอร์ แล้วส่งแบบให้เพื่อนเป็นคนเขียนโค้ด',
 
     /* ── skills + cv ─────────────────────────────────────────────────────── */
-    '#cv > .inner > .tag:nth-of-type(1)': '06 — ทักษะ',
+    '#cv > .inner > .tag:nth-of-type(1)': '07 — ทักษะ',
     '#cv h2.big': 'สิ่งที่ได้ใช้จริงในโปรเจคข้างบน',
     '.block:nth-child(1) h3': 'วิเคราะห์ระบบและธุรกิจ',
     '.block:nth-child(1) .tag': 'จุดเริ่มต้นของทุกโปรเจค',
@@ -292,27 +361,30 @@
     '.pair .block:nth-child(2) li:nth-child(1)': 'ไทย — Native',
     '.pair .block:nth-child(2) li:nth-child(2)': 'อังกฤษ — Working Proficiency',
     '.pair .block:nth-child(2) li:nth-child(3)': 'ญี่ปุ่น — Conversational',
-    '#cv > .inner > .tag:nth-of-type(2)': '07 — ประวัติ',
-    '.cv__row:nth-child(1) .cv__when': '2023 – ปัจจุบัน',
-    '.cv__row:nth-child(1) em': 'การศึกษา',
-    '.cv__row:nth-child(1) h3': 'ม.สงขลานครินทร์ · บริหารธุรกิจบัณฑิต',
-    '.cv__row:nth-child(1) .small': 'สาขาระบบสารสนเทศทางธุรกิจ คณะวิทยาการจัดการ · GPAX 3.03 · คาดว่าจบปี 2027',
-    '.cv__row:nth-child(2) .cv__when': 'ต.ค. 2025',
-    '.cv__row:nth-child(2) h3': 'แชตบอตบน Azure ที่ deploy ขึ้นใช้งานจริง',
-    '.cv__row:nth-child(2) .small': 'ออกแบบ conversation flow และสถาปัตยกรรมคลาวด์ภายใต้งบที่จำกัด ' +
+    '#cv > .inner > .tag:nth-of-type(2)': '08 — ประวัติ',
+    /* `#cv` ข้างหน้าทุกบรรทัดต่อจากนี้ไม่ใช่ของประดับ — ตั้งแต่ 2026-08-04 แถว .cv__row
+       แถวแรกของทั้งหน้าอยู่ใน #habits ข้างบน ถ้าถอด scope ออก คำแปลของประวัติ
+       จะไปทับนิสัยข้อที่หนึ่งแทน โดยที่ __i18nCheck() ยังบอกว่าผ่านหมด */
+    '#cv .cv__row:nth-child(1) .cv__when': '2023 – ปัจจุบัน',
+    '#cv .cv__row:nth-child(1) em': 'การศึกษา',
+    '#cv .cv__row:nth-child(1) h3': 'ม.สงขลานครินทร์ · บริหารธุรกิจบัณฑิต',
+    '#cv .cv__row:nth-child(1) .small': 'สาขาระบบสารสนเทศทางธุรกิจ คณะวิทยาการจัดการ · GPAX 3.05 · คาดว่าจบปี 2027',
+    '#cv .cv__row:nth-child(2) .cv__when': 'ต.ค. 2025',
+    '#cv .cv__row:nth-child(2) h3': 'แชตบอตบน Azure ที่ deploy ขึ้นใช้งานจริง',
+    '#cv .cv__row:nth-child(2) .small': 'ออกแบบ conversation flow และสถาปัตยกรรมคลาวด์ภายใต้งบที่จำกัด ' +
       'จบด้วยการ deploy ขึ้น Azure VM พร้อม HTTPS · รองคณบดีซึ่งเป็นอาจารย์ประจำวิชาชวนให้ไปทำแชตบอตของคณะต่อ ' +
       'แต่ตอนนั้นผมงานล้นมือเลยไม่ได้ตามเรื่องต่อ',
-    '.cv__row:nth-child(3) .cv__when': 'ธ.ค. 2025 – ปัจจุบัน',
-    '.cv__row:nth-child(3) h3': 'ระบบเลือกตั้งของสโมสรนักศึกษา',
-    '.cv__row:nth-child(3) .small': 'เก็บ requirement กับคณะกรรมการเลือกตั้ง ออกแบบ threat model ฐานข้อมูล ' +
+    '#cv .cv__row:nth-child(3) .cv__when': 'ธ.ค. 2025 – ปัจจุบัน',
+    '#cv .cv__row:nth-child(3) h3': 'ระบบเลือกตั้งของสโมสรนักศึกษา',
+    '#cv .cv__row:nth-child(3) .small': 'เก็บ requirement กับคณะกรรมการเลือกตั้ง ออกแบบ threat model ฐานข้อมูล ' +
       'และวิธีเก็บบัตรลงคะแนน · นำเข้าผู้มีสิทธิ์ 3,119 คนผ่าน API ของมหาวิทยาลัยโดยไม่มีข้อมูลผิดพลาด',
-    '.cv__row:nth-child(4) .cv__when': 'ภาคเรียน 2/2568',
-    '.cv__row:nth-child(4) h3': 'ระบบติดตามหน่วยกิตที่อ่านทรานสคริปต์เอง',
-    '.cv__row:nth-child(4) .small': 'ออกแบบ use case, context diagram และ ER diagram ก่อนลงมือ ' +
+    '#cv .cv__row:nth-child(4) .cv__when': 'ภาคเรียน 2/2568',
+    '#cv .cv__row:nth-child(4) h3': 'ระบบติดตามหน่วยกิตที่อ่านทรานสคริปต์เอง',
+    '#cv .cv__row:nth-child(4) .small': 'ออกแบบ use case, context diagram และ ER diagram ก่อนลงมือ ' +
       'แล้วพัฒนาเป็นเว็บแอป Next.js + TypeScript ที่มีทั้งฝั่งนักศึกษาและฝั่งผู้ดูแลหลักสูตร',
 
     /* ── contact ─────────────────────────────────────────────────────────── */
-    '#contact .tag': '08 — ติดต่อ',
+    '#contact .tag': '09 — ติดต่อ',
     /* The English heading changed from a second claim about sitting between
        two worlds — which the roles section already makes — to an invitation.
        The Thai follows the same turn: it asks, it does not re-assert. */
@@ -320,20 +392,26 @@
     '#contact p.small': 'ผมกำลังมองหา<strong>ฝึกงานสหกิจศึกษา ตั้งแต่ 16 พฤศจิกายน 2026 ถึง 7 มีนาคม 2027</strong> ' +
       'ในตำแหน่ง <strong>System Analyst</strong>, <strong>Business Analyst</strong> หรือ ' +
       '<strong>Management Trainee</strong> · ยินดีคุยรายละเอียดทุกโปรเจคแบบเจาะลึก เปิดโค้ดให้ดูได้',
-    /* ── the two résumés ───────────────────────────────────────────────────
+    /* ── the three résumés ─────────────────────────────────────────────────
        The <i> carries the format and the weight and has to survive the switch:
        it is inside the <a>, so it is part of what a screen reader announces
        before someone commits to a download.
        "CV" is left as CV in Thai — it is what people write and say here, and
        "ประวัติย่อ" beside a file called Teerapab-Boonsri-CV-… reads as two names
        for one thing. The role names stay English for the reason the cover and
-       the contact paragraph already state theirs in English. */
-    '.dl > li:nth-child(1) .btn': 'CV — System Analyst (PDF) <i>125 KB</i>',
+       the contact paragraph already state theirs in English.
+       2026-08-04: a third file (Business Development), and 125 KB → 126 KB on
+       all three. If the KB in index.html is ever re-measured, it has to be
+       re-typed here too — the number lives in two files and nothing checks it. */
+    '.dl > li:nth-child(1) .btn': 'CV — System Analyst (PDF) <i>126 KB</i>',
     '.dl > li:nth-child(1) .small': 'น้ำหนักไปทางลงมือสร้าง — Next.js, React, Prisma, PostgreSQL, Docker และ Azure ' +
       'พร้อมระบบที่ผม deploy ขึ้นใช้จริง',
-    '.dl > li:nth-child(2) .btn': 'CV — Business Analyst (PDF) <i>125 KB</i>',
-    '.dl > li:nth-child(2) .small': 'น้ำหนักไปทางวิเคราะห์ — การเก็บ requirement การทำงานกับผู้มีส่วนได้ส่วนเสีย ' +
-      'และ cost-benefit · และเป็นฉบับเดียวที่มีหัวข้อภาษา',
+    '.dl > li:nth-child(2) .btn': 'CV — Business Analyst (PDF) <i>126 KB</i>',
+    '.dl > li:nth-child(2) .small': 'น้ำหนักไปทางวิเคราะห์ — การเก็บ requirement การเขียน functional spec ' +
+      'และการทำงานกับผู้มีส่วนได้ส่วนเสีย · คือเอกสารที่ต้องมาก่อนโค้ดบรรทัดแรก',
+    '.dl > li:nth-child(3) .btn': 'CV — Business Development (PDF) <i>126 KB</i>',
+    '.dl > li:nth-child(3) .small': 'น้ำหนักไปทางเหตุผลเชิงธุรกิจ — ปัญหาการทำงานจริงที่มองเห็นก่อน ' +
+      'cost-benefit ที่อยู่เบื้องหลังการตัดสินใจ และงานที่ถูกรับไปใช้จริง',
     /* The availability strip. One selector for the whole row rather than one
        per span, because this file applies a selector to the FIRST match only
        and the row is written out four times over — a per-span rule would turn

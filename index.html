@@ -152,7 +152,7 @@
       </div>
       <div class="rise" style="--d:880ms">
         <dt>Graduating</dt>
-        <dd>Expected 2027 · GPAX 3.03</dd>
+        <dd>Expected 2027 · GPAX 3.05</dd>
       </div>
       <div class="rise" style="--d:940ms">
         <dt>Looking for</dt>
@@ -644,12 +644,29 @@
          the block written for them. Ranking the reader is not the same as
          ranking the work.
 
-         Each block also carries ONE inline link to the project that proves it.
+         Each block also carries an inline link to the project that proves it.
          Before this, #roles and #cv together were nine screens with no anchor
          in them at all: a reader convinced by this section had nowhere to go
          but back. The links are not decoration — MeguBot is the project where
-         he was the analyst and not the developer, and the voting system is the
-         UI the third block is about. -->
+         he was the analyst and not the developer, the handover section is the
+         part of the voting system that is about planning past yourself, and the
+         voting system's UI is what the developer strand is about.
+
+         2026-08-04: BLOCKS 2 AND 3 EACH HOLD TWO ROLE NAMES NOW. The order of
+         the three blocks did not change and still must not. Block 3 is the one
+         to be careful with: Business Development and front-end development have
+         nothing to do with each other, and one paragraph covering both would
+         read as an application being sprayed at anything going — which would
+         undo the whole point of a section that claims he knows what he wants.
+         So the third block states TWO offers with a named strand each, and
+         every claim in the business-development strand is already made
+         somewhere else on this site: the committee and the non-technical
+         faculty staff (fms-election.html §01), the annual handover to a council
+         that writes no code (§01 card 04 and §07), and the hard budget ceiling
+         (psu-chatbot.html §01 card 02). Nothing was invented for it. -->
+    <!-- .role is a three-column grid — label · title · prose — so the third
+         block's second paragraph is wrapped in .role__body. A bare sibling <p>
+         would wrap onto a new grid row and land under the label column. -->
     <div class="roles">
       <div class="role role--lead up">
         <p class="role__n">Where I fit best</p>
@@ -665,28 +682,145 @@
       </div>
       <div class="role up">
         <p class="role__n">Also a strong fit</p>
-        <h3 class="role__t">Management Trainee</h3>
+        <h3 class="role__t">Project Management Intern<br>Management Trainee</h3>
         <p class="small">
           I study business administration, not engineering, so my view always starts from the
-          organisation's problem. In group projects I am the one holding the overall picture and
-          coordinating, which is why work that needs several parties moving at once suits me.
+          organisation's problem. In group projects I am the one holding the overall picture,
+          tracking what is blocked and keeping several parties moving at once. On the voting system
+          I planned the work to outlive me: <a href="fms-election.html#handover">the handover</a> is
+          a year-rollover script, a 14-check readiness pass and documentation written for a council
+          that changes every year and writes no code.
         </p>
       </div>
       <div class="role up">
-        <p class="role__n">Can start on day one</p>
-        <h3 class="role__t">Front-end · Full-stack<br>Web Developer</h3>
-        <!-- The last sentence used to read "I can do it today; my long-term
-             goal is simply systems analysis", which told a development team
-             they were a stopover. The fact it was reaching for — that he
-             analyses before he builds — is an argument FOR hiring him to build,
-             so it is now stated that way round. Nothing was promised that the
-             rest of the page does not already show. -->
-        <p class="small">
-          The UI of <a href="fms-election.html">the voting system</a> is the part I am proudest of —
-          a 23-theme system switchable site-wide from the admin page, and every screen designed
-          mobile-first. If the role is development I can start on day one, and the drawing I do
-          first is what keeps the code standing up later.
-        </p>
+        <!-- The label has to cover both strands without telling either one it is
+             second. "Can start on day one" was written for the development
+             strand alone; the availability it claimed has moved into that
+             strand's own paragraph, where it is still stated in full. -->
+        <p class="role__n">Ready either way</p>
+        <h3 class="role__t">Business Development<br>Front-end · Full-stack<br>Web Developer</h3>
+        <!-- The developer strand's last sentence used to read "I can do it
+             today; my long-term goal is simply systems analysis", which told a
+             development team they were a stopover. The fact it was reaching for
+             — that he analyses before he builds — is an argument FOR hiring him
+             to build, so it is now stated that way round. Nothing was promised
+             that the rest of the page does not already show. -->
+        <div class="role__body">
+          <p class="small">
+            <strong>Business development.</strong> Every project here started from somebody's
+            operational problem, not from a spec I was handed. On the voting system that meant
+            sitting with the election committee and the faculty staff — none of them technical —
+            until we agreed what it had to do, and it is now the system the faculty runs. It also
+            meant designing the year, the candidate list and the whole look of the site to be
+            changed from an admin page, so a council that turns over annually and writes no code is
+            not paying someone to edit code every year. On
+            <a href="psu-chatbot.html">the chatbot</a> the ceiling was money rather than people:
+            pick the cheapest tier that would still stay up around the clock.
+          </p>
+          <p class="small">
+            <strong>Front-end and full-stack.</strong> The UI of
+            <a href="fms-election.html">the voting system</a> is the part I am proudest of — a
+            23-theme system switchable site-wide from the admin page, and every screen designed
+            mobile-first. I can start on day one, and the drawing I do first is what keeps the code
+            standing up later.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 7b · habits — what he is like once the work starts ══════════════════
+     ADDED 2026-08-04 ON THE OWNER'S OWN INSTRUCTION: the site had no soft-skill
+     section at all. FIVE ITEMS, AND ONLY FIVE — they are the five things he
+     answered when asked, in his own words, and a sixth must not be invented.
+     Nothing here says passionate, team player, fast learner, detail-oriented or
+     hard-working: every row states a behaviour and then names the place on this
+     site where it can be checked, which is what the left column is for.
+
+     It sits between #roles and #cv so the dark act stays one continuous block —
+     #roles · #habits · #cv are all .act-dark, and #contact is still the light
+     landing. Inserting it anywhere else would have split the act in two.
+
+     WHY .cv AND NOT A NEW COMPONENT. Five is the number that breaks every grid
+     on this page: .grid2 is repeat(auto-fit, minmax(230px,1fr)) and resolves to
+     four columns at desktop, so a fifth card sits alone; .pair is a fixed two.
+     .cv__row is a full-width ledger row, so five of them cannot orphan at any
+     width, and it already stacks to one column at 700px. Zero new CSS.
+     The left column is .cv__when, which holds a date in #cv and the evidence's
+     source here — the same JOB, an index you read down the edge, which is why
+     the class is reused rather than duplicated.
+
+     ⚠ ITS ONE COST, AND IT IS PAID IN i18n.js: this section now holds the FIRST
+     .cv__row in the document, and i18n.js applies each selector to the first
+     match only. Every `.cv__row:nth-child(n)` key in that file was rescoped to
+     `#cv .cv__row:nth-child(n)` in the same commit. If a .cv ledger is ever
+     added ABOVE this one, do the same again — nothing warns you. -->
+<section class="stage stage--auto act-dark" id="habits">
+  <div class="inner">
+    <p class="tag up">06 — What I am like to work with</p>
+    <h2 class="big big--m lm up" style="--d:60ms;margin:14px 0 clamp(26px,4vw,44px)">Five habits, and where you can check each one</h2>
+
+    <div class="cv">
+      <div class="cv__row up">
+        <p class="cv__when">FMS Election · PSU Chatbot</p>
+        <div class="cv__what">
+          <h3>I hold the whole picture, and I know what is stuck</h3>
+          <p class="small">
+            On the PSU Chatbot there were three of us and the system was mine, so I was the one who
+            knew which piece was waiting on which. On the voting system there was no team at all: I
+            worked between the election committee and the faculty staff, none of them technical, and
+            a lot of the job was keeping both sides moving towards the same thing.
+          </p>
+        </div>
+      </div>
+      <div class="cv__row up">
+        <p class="cv__when">FMS Election</p>
+        <div class="cv__what">
+          <h3>The riskiest part is the one I take</h3>
+          <p class="small">
+            On the voting system that was the ballot itself. The result has to be provably unaltered
+            and nobody may be traceable to their vote, and those two pull against each other — that
+            model was mine to get right. So was the concurrency on the voting path, the narrow window
+            where one person could be counted twice. It closed with zero double-voting cases.
+          </p>
+        </div>
+      </div>
+      <div class="cv__row up">
+        <p class="cv__when">FMS Election</p>
+        <div class="cv__what">
+          <h3>I usually see the problem before anyone hands it to me</h3>
+          <p class="small">
+            Nobody asked for the voting system. I looked at how the faculty was running its election,
+            started building the answer, and it is now the system the faculty runs. The second thing I
+            saw was further out: a student council changes team every year and writes no code, so
+            anything fixed in the source would cost them a developer annually.
+          </p>
+        </div>
+      </div>
+      <div class="cv__row up">
+        <p class="cv__when">FMS Election</p>
+        <div class="cv__what">
+          <h3>When something blocks me I stay on it until I understand it</h3>
+          <p class="small">
+            And then I write it down. Every project here carries a written decision log, so the same
+            wall never costs me twice — that is the part that turns a stubborn evening into something
+            I can hand to the next person. The voting system is 587 commits over seven months, alone.
+          </p>
+        </div>
+      </div>
+      <div class="cv__row up">
+        <p class="cv__when">FMS Election · MeguBot</p>
+        <div class="cv__what">
+          <h3>I build things so somebody else can carry them</h3>
+          <p class="small">
+            That is why the voting system's year, candidate list and all 23 themes change from an
+            admin page, and why the handover is a year-rollover script, a 14-check readiness pass and
+            documentation written for people who write no code. MeguBot is the same habit pointed the
+            other way: I designed the system and the features, then handed the drawing to a friend who
+            wrote the code.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -695,7 +829,7 @@
 <!-- ══ 8 · skills + cv ═════════════════════════════════════════════════════ -->
 <section class="stage stage--auto act-dark" id="cv">
   <div class="inner">
-    <p class="tag up">06 — Skills</p>
+    <p class="tag up">07 — Skills</p>
     <h2 class="big big--m lm up" style="--d:60ms;margin:14px 0 clamp(26px,4vw,44px)">What I actually used in the projects above</h2>
 
     <div class="grid2">
@@ -744,7 +878,8 @@
            of a contract.
            It is not cut, because the thing it describes is real and is the CV's
            own words: "AI-Assisted Development · Prompt Engineering" is a line
-           under Tools & Productivity in both PDFs linked from #contact. Stated
+           under Tools & Productivity in the System Analyst and Business Analyst
+           PDFs linked from #contact. Stated
            as a skill, in the skills section, it is the same information without
            the flinch. No figures: the decision log's length is not counted
            here, so it is not claimed here. -->
@@ -770,14 +905,14 @@
       </div>
     </div>
 
-    <p class="tag up" style="margin-top:clamp(46px,7vw,84px)">07 — Background</p>
+    <p class="tag up" style="margin-top:clamp(46px,7vw,84px)">08 — Background</p>
     <div class="cv" style="margin-top:18px">
       <div class="cv__row up">
         <p class="cv__when">2023 – present</p>
         <div class="cv__what">
           <em>Education</em>
           <h3>Prince of Songkla University · BBA</h3>
-          <p class="small">Business Information Systems, Faculty of Management Sciences · GPAX 3.03 · expected graduation 2027</p>
+          <p class="small">Business Information Systems, Faculty of Management Sciences · GPAX 3.05 · expected graduation 2027</p>
         </div>
       </div>
       <div class="cv__row up">
@@ -826,7 +961,7 @@
 <!-- ══ 9 · contact ═════════════════════════════════════════════════════════ -->
 <section class="stage end" id="contact">
   <div class="inner">
-    <p class="tag up">08 — Contact</p>
+    <p class="tag up">09 — Contact</p>
     <h2 class="big big--l lm up" style="--d:60ms;margin:16px 0 26px">
       Let's start with<br>the <span class="mark-wrap">problem<svg class="scrawl" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M50 78C16 66 18 30 62 19 114 6 216 6 262 19c28 8 32 38-2 52-48 18-164 20-214 7"/></svg></span>
     </h2>
@@ -843,30 +978,51 @@
       <a class="btn btn--ghost" href="tel:+66620986667"><span class="swap" data-label="Call me"><span>(+66) 62-098-6667</span></span></a>
     </div>
 
-    <!-- TWO CVs, AND THE POINT IS THAT YOU CAN TELL THEM APART WITHOUT
-         DOWNLOADING BOTH. They are genuinely different documents, not one file
-         with two titles: the System Analyst version weights implementation
-         (Next.js, React, Prisma, PostgreSQL, Docker) and the Business Analyst
-         version weights elicitation and cost-benefit — and only that one
-         carries the language section. So each link says what is inside it.
+    <!-- THREE CVs, AND THE POINT IS THAT YOU CAN TELL THEM APART WITHOUT
+         DOWNLOADING ALL THREE. They are genuinely different documents, not one
+         file with three titles: the System Analyst version weights
+         implementation (Next.js, React, Prisma, PostgreSQL, Docker), the
+         Business Analyst version weights elicitation, functional specs and
+         stakeholder work, and the Business Development version weights the
+         commercial reading — the problem spotted, the cost-benefit, the thing
+         getting adopted. So each link says what is inside it.
+
+         2026-08-04: the Business Development file is new, and the other two were
+         REPLACED IN PLACE under their existing filenames on purpose, so the
+         links already live on the site and in the GitHub profile README keep
+         working. Do not "tidy" the filenames.
+
+         The Business Analyst line used to end "and the only one with the
+         language section". That was true of two files and has not been verified
+         against three, so it is gone rather than left to rot. The Languages card
+         up in #cv still credits that CV by name, which is where the claim
+         belongs anyway.
 
          Format and weight are IN THE LINK TEXT, not in a title attribute: a
-         screen reader reads the link, and "PDF, 125 KB" is the part that
+         screen reader reads the link, and "PDF, 126 KB" is the part that
          decides whether someone on a phone taps it. download= keeps them out of
-         the browser's PDF viewer, and the paths are bare filenames because both
-         files sit at the repo root next to this page. -->
+         the browser's PDF viewer, and the paths are bare filenames because all
+         three files sit at the repo root next to this page.
+         126 KB is measured, not rounded up from the old 125: the three files are
+         129,033 / 129,469 / 130,015 bytes. -->
     <ul class="dl up" style="--d:210ms">
       <li>
         <a class="btn btn--ghost" href="Teerapab-Boonsri-CV-System-Analyst.pdf" download>
-          CV — System Analyst (PDF) <i>125 KB</i>
+          CV — System Analyst (PDF) <i>126 KB</i>
         </a>
         <p class="small">Weighted towards building: Next.js, React, Prisma, PostgreSQL, Docker and Azure, with the systems I deployed.</p>
       </li>
       <li>
         <a class="btn btn--ghost" href="Teerapab-Boonsri-CV-Business-Analyst.pdf" download>
-          CV — Business Analyst (PDF) <i>125 KB</i>
+          CV — Business Analyst (PDF) <i>126 KB</i>
         </a>
-        <p class="small">Weighted towards analysis: requirements elicitation, stakeholder work, cost-benefit — and the only one with the language section.</p>
+        <p class="small">Weighted towards analysis: requirements elicitation, functional specifications and stakeholder work — the documents that come before a line of code.</p>
+      </li>
+      <li>
+        <a class="btn btn--ghost" href="Teerapab-Boonsri-CV-Business-Development.pdf" download>
+          CV — Business Development (PDF) <i>126 KB</i>
+        </a>
+        <p class="small">Weighted towards the business case: the operational problem spotted first, the cost-benefit behind the choice, and the work that ended up adopted and in use.</p>
       </li>
     </ul>
 

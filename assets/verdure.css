@@ -1772,6 +1772,16 @@ body { transition: background-color var(--t3) ease; }
    is fine for a "contact details" aside and not fine for the only route out of
    this section. --sea-ink is redefined by .act-dark to the bright mint and
    measures 7.92:1 on this panel. */
+/* The third row holds two unrelated strands (business development · front-end),
+   so its prose column is two paragraphs, not one. .role is a three-column grid
+   — label · title · prose — and a bare second <p> would be auto-placed on a new
+   grid row underneath the label column. This wrapper keeps both in the third
+   column; the spacing between them is the existing `.small + .small` rule, so
+   there is no second number to keep in sync. min-width: 0 because a grid item's
+   automatic minimum size is its content, and the track is already minmax(0,1fr)
+   — without it a long unbreakable word could push the row wider than the grid. */
+.role__body { min-width: 0; }
+
 .role .small a { color: var(--sea-ink); text-underline-offset: 3px; }
 .role .small a:hover { text-decoration-thickness: 2px; }
 
