@@ -34,7 +34,14 @@
   font-family: var(--font-display); font-weight: 600; font-size: .6875rem;
   letter-spacing: .2em; color: var(--deep-4); font-variant-numeric: tabular-nums; margin: 0;
 }
-.rail__count b { color: var(--sea-ink); font-size: .9375rem; }
+/* Both declarations exist to overrule an inherited value, not to style afresh.
+   <b> takes `bolder` from the UA, which against the parent's 600 resolves to
+   900 — a weight index.html never loads, so the browser was synthesising it and
+   this one number sat fatter than every other glyph on the page. And letter-
+   spacing in em is resolved against the element's OWN size, so the parent's
+   .2em at 11px arrived here as 2.2px against 15px, i.e. .147em: a value nobody
+   chose. Restating it keeps the label and the figure tracking alike. */
+.rail__count b { color: var(--sea-ink); font-size: .9375rem; font-weight: 700; letter-spacing: .2em; }
 
 .rail__track {
   display: flex; gap: clamp(16px, 2.4vw, 30px);

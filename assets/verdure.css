@@ -1837,6 +1837,13 @@ body { transition: background-color var(--t3) ease; }
 .cv__what h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.0625rem; letter-spacing: -.02em; margin: 0 0 4px; }
 .cv__what em { font-style: normal; color: var(--sea-ink); font-size: 11.5px; letter-spacing: .06em;
   text-transform: uppercase; display: block; margin-bottom: 6px; }
+/* The row is full-bleed by design — that is what stops five items from leaving
+   an orphan the way an auto-fit grid would. The prose inside it is not: without
+   this it ran the whole 974px column, measured 2026-08-05, which is roughly
+   twice a comfortable line and it lands in the dark act where the text is
+   smallest and the ground is darkest. 62ch is not a new number; it is what
+   .pair .small already uses a few hundred lines up. */
+.cv__what .small { max-width: 62ch; }
 
 .note {
   margin-top: 26px; padding: 20px 22px;
